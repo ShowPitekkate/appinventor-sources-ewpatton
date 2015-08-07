@@ -69,7 +69,7 @@ import java.util.Map;
  * @author markf@google.com (Mark Friedman)
  * @author lizlooney@google.com (Liz Looney)
  */
-public final class YaFormEditor extends SimpleEditor implements FormChangeListener, ComponentDatabaseChangeListener {
+public final class YaFormEditor extends SimpleEditor implements FormChangeListener, ComponentDatabaseChangeListener, IDesigner {
 
   private static class FileContentHolder {
     private String content;
@@ -133,15 +133,13 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
 
   private static final int OLD_PROJECT_YAV = 150; // Projects older then this have no authURL
 
-<<<<<<< HEAD
+
   private final Map<String, MockComponent> componentMap = new HashMap<String, MockComponent>();
 
   static {
     exportJavascript();
   }
 
-=======
->>>>>>> latest-blockly/feature/blockly-update
   /**
    * Creates a new YaFormEditor.
    *
