@@ -138,7 +138,5 @@
 
   <add-linker name="std" />
 
-  <add-linker name="std" />
-
 </module>
 
