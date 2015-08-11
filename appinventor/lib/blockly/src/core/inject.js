@@ -423,6 +423,8 @@ Blockly.init_ = function() {
       }
       var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
       Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
+      Blockly.mainWorkspace.getMiniWorskpaceCanvas().setAttribute('transform', 
+                                                            translation);
       Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
                                                            translation);
     }

@@ -125,6 +125,7 @@ Blockly.Workspace.prototype.createDom = function() {
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+  this.svgMiniWorkspaceCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.fireChangeEvent();
   return this.svgGroup_;
@@ -183,6 +184,14 @@ Blockly.Workspace.prototype.addWarningIndicator = function(getMetrics) {
  */
 Blockly.Workspace.prototype.getCanvas = function() {
   return this.svgBlockCanvas_;
+};
+
+/**
+ * Get the SVG element that forms the drawing surface.
+ * @return {!Element} SVG element.
+ */
+Blockly.Workspace.prototype.getMiniWorkspaceCanvas = function() {
+  return this.svgMiniWorkspaceCanvas_;
 };
 
 /**

@@ -124,9 +124,9 @@ Blockly.MiniWorkspace.prototype.renderWorkspace = function (folder, xml, height,
     this.block_.expandedFolder_ = false;
     this.workspace_ = folder.workspace;
     this.shape_ = folder.svg_.svgPath_;
-    var canvas = Blockly.mainWorkspace.getCanvas();
-    canvas.appendChild(this.createDom_());
-
+    //var canvas = Blockly.mainWorkspace.getCanvas();
+    //canvas.appendChild(this.createDom_());
+    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(this.createDom_());
     //this.setAnchorLocation(0, 0);
 
     this.svgGroupBack_.setAttribute('transform','translate(-5,-25)');
@@ -485,8 +485,9 @@ Blockly.MiniWorkspace.prototype.MiniWorkspaceHeaderMouseMove_ = function(e) {
 };
 
 Blockly.MiniWorkspace.prototype.promote_ = function() {
-    var svgGroup = this.svgGroup_.parentNode;
-    svgGroup.appendChild(this.svgGroup_);
+    //var svgGroup = this.svgGroup_.parentNode;
+    //svgGroup.appendChild(this.svgGroup_);
+    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(this.svgGroup_);
     this.block_.promote();
 };
 
