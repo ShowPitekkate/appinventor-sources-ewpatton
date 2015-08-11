@@ -503,7 +503,8 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
       element = element.parentNode;
     // [Devid] getCanvas() on collapsed miniworkspaces returns null 
     // causing blocks to move when reloading the page
-    } while (element && (element != this.workspace.getCanvas() && 
+    } while (element && element != Blockly.mainWorkspace.getMiniWorkspaceCanvas() &&
+      (element != this.workspace.getCanvas() && 
       (this.workspace == Blockly.mainWorkspace || this.workspace.getCanvas() != null)));
   }
   return {x: x, y: y};
@@ -679,15 +680,17 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
         var y = this_.startDragY ;
         this_.svg_.getRootElement().setAttribute('transform',
           'translate(' + x + ', ' + y + ')');
-        if(this_.comment){
+        /*TODOif(this_.comment){
           this_.comment.computeIconLocation();
-        }
+        }*/
         // The block was in a miniworkspace
         if(this_.startWorkspace != Blockly.mainWorkspace) {
           this_.startWorkspace.moveBlock(this_);
           this_.startWorkspace = null;
         }
       }
+    } else {
+      this_.workspace.stopPromoteDragged(this_);
     }
 
 
@@ -1022,8 +1025,8 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
 
     if (Blockly.Block.dragMode_ == 2) {
       // [Shirley 4/11] - everytime a block is clicked, it is put in the mainWorkspace
-      if (this_.workspace.isMW) {
-        var transformMatrix = Blockly.mainWorkspace.moveOutOfFolder(this_);
+      var transformMatrix = Blockly.mainWorkspace.moveOutOfFolder(this_);
+      if (transformMatrix) {
         this_.startDragX += transformMatrix[0];
         this_.startDragY += transformMatrix[1];
       }

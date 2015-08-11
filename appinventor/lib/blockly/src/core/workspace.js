@@ -594,7 +594,8 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
 Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
   // this is used everytime a block is clicked - if it's in main, don't move it
   if (block.workspace == Blockly.mainWorkspace) {
-      return;
+    block.workspace.promoteDragged(block);
+    return;
   }
 
   //Move block into the right place in the main workspace
@@ -607,11 +608,12 @@ Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
   }
   newWorkspace.addTopBlock(block);
   //surgically removes all svg associated with block from old workspace canvas
-  var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
+  //var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
   block.workspace = newWorkspace;
   // Changes the focused workspace 
   Blockly.focusedWorkspace_ = newWorkspace;
-  newWorkspace.getCanvas().appendChild(svgGroup);
+  //newWorkspace.getCanvas().appendChild(svgGroup);
+  Blockly.mainWorkspace.promoteDragged(block);
 
   var translate_ = oldWorkspace.getTranslate();
   var dx = miniWorkspaceOrigin.x + parseInt(translate_[0]);
@@ -679,6 +681,16 @@ Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
 
   return [dx,dy];
 
+};
+
+Blockly.Workspace.prototype.promoteDragged = function(block){
+    var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
+    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(svgGroup);
+};
+
+Blockly.Workspace.prototype.stopPromoteDragged = function(block){
+    var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
+    block.workspace.getCanvas().appendChild(svgGroup);
 };
 
 Blockly.Workspace.prototype.moveChild = function(block){
