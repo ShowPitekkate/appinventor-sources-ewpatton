@@ -486,6 +486,7 @@ Blockly.MiniWorkspace.unbindDragEvents_ = function() {
         Blockly.unbindEvent_(Blockly.MiniWorkspace.onMouseMoveWrapper_);
         Blockly.MiniWorkspace.onMouseMoveWrapper_ = null;
     }
+    Blockly.fireUiEvent(window, 'resize');
 };
 
 Blockly.MiniWorkspace.prototype.MiniWorkspaceHeaderMouseMove_ = function(e) {
