@@ -374,7 +374,7 @@ Blockly.MiniWorkspace.prototype.resizeMiniWorkspace = function(height, width){
     
     Blockly.fireUiEvent(this.svgGroup_,'resize');
 
-    this.positionMiniWorkspace_ ();
+    this.positionMiniWorkspace_();
     this.scrollbar.resize();
 }
 

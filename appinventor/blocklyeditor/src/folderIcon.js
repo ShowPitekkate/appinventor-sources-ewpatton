@@ -98,8 +98,8 @@ Blockly.FolderIcon.prototype.setVisible = function(visible) {
 
         miniworkspace.svgGroup_.setAttribute('visibility','visible');
         //TODO Firefox has problems with hidden elements
-        miniworkspace.resizeMiniWorkspace(miniworkspace.height_ - 2 * Blockly.Bubble.BORDER_WIDTH, 
-            miniworkspace.width_ - 2 * Blockly.Bubble.BORDER_WIDTH);
+        /*TODOminiworkspace.resizeMiniWorkspace(miniworkspace.height_ - 2 * Blockly.Bubble.BORDER_WIDTH, 
+            miniworkspace.width_ - 2 * Blockly.Bubble.BORDER_WIDTH);*/
         Blockly.focusedWorkspace_ = this.block_.miniworkspace;
 
         miniworkspace.promote_();

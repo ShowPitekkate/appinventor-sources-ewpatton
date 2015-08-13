@@ -301,6 +301,7 @@ Blockly.Block.terminateDrag_ = function() {
   if (Blockly.Block.dragMode_ == 2) {
     // Terminate a drag operation.
     if (selected) {
+      selected.stopPromoteDragged();
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
       var dx = xy.x - selected.startDragX;
@@ -689,10 +690,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
           this_.startWorkspace = null;
         }
       }
-    } else {
-      this_.workspace.stopPromoteDragged(this_);
     }
-
 
     if (Blockly.selected && Blockly.highlightedConnection_) {
       // Connect two blocks together.
@@ -1025,11 +1023,12 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
 
     if (Blockly.Block.dragMode_ == 2) {
       // [Shirley 4/11] - everytime a block is clicked, it is put in the mainWorkspace
-      var transformMatrix = Blockly.mainWorkspace.moveOutOfFolder(this_);
-      if (transformMatrix) {
+      if (this_.workspace.isMW) {
+        var transformMatrix = Blockly.mainWorkspace.moveOutOfFolder(this_);
         this_.startDragX += transformMatrix[0];
         this_.startDragY += transformMatrix[1];
       }
+      this_.promoteDragged();
       // Unrestricted dragging.
       //  console.log("drag " + this_.startDragX+ " "+ this_.startDragY+ " "+dx+" "+dy);
       var x = this_.startDragX + dx;
@@ -2202,5 +2201,15 @@ Blockly.Block.prototype.renderDown = function() {
     }
   }
   // [lyn, 04/08/14] Because renderDown is recursive, doesn't make sense to track its time here.
+};
+Blockly.Block.prototype.stopPromoteDragged = function(){
+  var svgGroup = goog.dom.removeNode(this.svg_.svgGroup_);
+  this.workspace.getCanvas().appendChild(svgGroup);
+};
+Blockly.Block.prototype.promoteDragged = function(){
+  if(this.svg_.svgGroup_.parentNode != Blockly.mainWorkspace.getMiniWorkspaceCanvas()){
+    var svgGroup = goog.dom.removeNode(this.svg_.svgGroup_);
+    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(svgGroup);
+  }
 };
 
