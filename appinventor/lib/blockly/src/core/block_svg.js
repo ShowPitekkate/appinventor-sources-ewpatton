@@ -563,7 +563,11 @@ Blockly.BlockSvg.prototype.renderHere = function() {
   var parentBlock = this.block_.getParent();
   if (!parentBlock) {
     // Top-most block.  Fire an event to allow scrollbars to resize.
-    Blockly.fireUiEvent(window, 'resize');
+    if(this.block_.workspace.isMW) {
+      Blockly.fireUiEvent(this.block_.workspace.svgGroup_, 'resize');
+    } else {
+      Blockly.fireUiEvent(window, 'resize');
+    }
   }
   var stop = new Date().getTime();
   var timeDiff = stop-start;

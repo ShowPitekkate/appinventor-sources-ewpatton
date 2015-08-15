@@ -313,6 +313,9 @@ Blockly.Block.terminateDrag_ = function() {
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
+      if(selected.startWorkspace && selected.startWorkspace.isMW) {
+        Blockly.fireUiEvent(selected.startWorkspace.svgGroup_, 'resize');
+      }
       Blockly.fireUiEvent(window, 'resize');
     }
   }
@@ -673,23 +676,25 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
   Blockly.doCommand(function() {
     Blockly.terminateDrag_();
     if (Blockly.selectedFolder_) {
-      // If the miniworkspace is valid
+      // [Devid] Move the block only if the miniworkspace is valid
       if(Blockly.selectedFolder_.miniworkspace.isValid) {
         Blockly.selectedFolder_.miniworkspace.moveBlock(this_);
+      // Otherwise move the block in the previous postion
       } else {
         var x = this_.startDragX ;
         var y = this_.startDragY ;
         this_.svg_.getRootElement().setAttribute('transform',
           'translate(' + x + ', ' + y + ')');
-        /*TODOif(this_.comment){
+        //TODO
+        if(this_.comment){
           this_.comment.computeIconLocation();
-        }*/
+        }
         // The block was in a miniworkspace
         if(this_.startWorkspace != Blockly.mainWorkspace) {
           this_.startWorkspace.moveBlock(this_);
-          this_.startWorkspace = null;
         }
       }
+      this_.startWorkspace = null;
     }
 
     if (Blockly.selected && Blockly.highlightedConnection_) {

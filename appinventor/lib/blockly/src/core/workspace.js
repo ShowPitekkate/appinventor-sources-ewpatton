@@ -553,6 +553,10 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
     }
     block.mutator.computeIconLocation();
   }
+  
+  if(newWorkspace.isMW) {
+    Blockly.fireUiEvent(newWorkspace.svgGroup_,'resize');
+  }
   // [Devid] Recursively moves the connections of this block and 
   // his descendant between workspaces
   function moveConnections(currBlock) {
