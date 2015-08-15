@@ -464,7 +464,13 @@ Blockly.onKeyDown_ = function(e) {
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
         if (Blockly.selected.confirmDeletion()){
+          var workspace = Blockly.selected.workspace;
           Blockly.selected.dispose(true, true);
+          if(workspace.isMW) {
+            Blockly.fireUiEvent(workspace.svgGroup_, 'resize');
+          } else {
+            Blockly.fireUiEvent(window, 'resize');
+          }
         }
         Blockly.hideChaff()
       }

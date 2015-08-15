@@ -230,6 +230,9 @@ Blockly.Folder.terminateDrag_ = function() {
             goog.Timer.callOnce(
                 selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
             // Fire an event to allow scrollbars to resize.
+            if(selected.startWorkspace && selected.startWorkspace.isMW) {
+                Blockly.fireUiEvent(selected.startWorkspace.svgGroup_, 'resize');
+            }
             Blockly.fireUiEvent(window, 'resize');
         }
     }
