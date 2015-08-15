@@ -200,9 +200,9 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
         {'height': Blockly.MiniWorkspace.DEFAULT_HEIGHT +'px', 'width': Blockly.MiniWorkspace.DEFAULT_WIDTH+'px'}, this.svgGroup_);
     Blockly.bindEvent_(this.svgBlockCanvasOuter_, 'mousedown', this, this.miniWorkspaceMouseDown_);
     
-    Blockly.createSvgElement('rect',
+    /*Blockly.createSvgElement('rect',
         {'class': 'blocklyFolderBackground',
-            'height': '100%', 'width': '100%'}, this.svgBlockCanvasOuter_);
+            'height': '100%', 'width': '100%'}, this.svgBlockCanvasOuter_);*/
 
     this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgBlockCanvasOuter_);
 
@@ -258,12 +258,12 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
         'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
         'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3}, this.resizeGroup_);
 
+    // Shadow of the mw in the svgBlockCanvas_, used to influence the mainWorkspace size
     this.svgPlaceholder_ = Blockly.createSvgElement('rect', 
         {'visibility': 'hidden'}, null);
 
     return {'dom': this.svgGroup_, 'placeholder': this.svgPlaceholder_};
 };
-
 
 Blockly.MiniWorkspace.prototype.addTopBlock = function(block) {
     block.workspace == this;
@@ -325,9 +325,12 @@ Blockly.MiniWorkspace.prototype.updateTitle = function () {
 Blockly.MiniWorkspace.prototype.resizeTitle = function () {
     var titleTranslate_ = this.svgTitle_.getAttribute("transform");
     titleTranslate_ = titleTranslate_.split("(")[1].split(")")[0].split(",");
-
     var headerWidth = this.svgBlockCanvasOuter_.getBBox().width - 
-        parseInt(titleTranslate_[0]) - Blockly.Bubble.BORDER_WIDTH*2;
+        parseInt(titleTranslate_[0]) - Blockly.Bubble.BORDER_WIDTH*2;    
+    if(headerWidth <= 0) {
+        return;
+    }
+
     this.svgTitle_.innerHTML = this.block_.getFolderName();
 
     while(this.svgTitle_.getBBox().width > headerWidth) {
