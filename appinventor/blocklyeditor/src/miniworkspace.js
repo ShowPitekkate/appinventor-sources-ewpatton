@@ -204,7 +204,7 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
 
     this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgBlockCanvasOuter_);
 
-    Blockly.bindEvent_(this.svgBlockCanvas_, 'mousedown', this, this.miniWorkspaceMouseDown_);
+    Blockly.bindEvent_(this.svgBlockCanvasOuter_, 'mousedown', this, this.miniWorkspaceMouseDown_);
     Blockly.bindEvent_(this.svgBlockCanvas_, 'blocklyWorkspaceChange', this,
       function(e) {
         e.stopPropagation();
