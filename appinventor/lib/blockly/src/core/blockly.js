@@ -356,7 +356,7 @@ Blockly.onMouseDown_ = function(e) {
       e.target.nodeName.toLowerCase() == 'svg';
   var isTargetMiniWorkspace = e.target && e.target.nodeName &&
       e.target.nodeName.toLowerCase() == 'rect' &&
-      e.target.getAttribute('class').toLowerCase() == 'blocklyfolderbackground';
+      e.target.getAttribute('class').toLowerCase() == 'blocklymutatorbackground';
   if (!Blockly.readOnly && Blockly.selected && (isTargetSvg || isTargetMiniWorkspace)) {
     // Clicking on the document clears the selection.
     Blockly.selected.unselect();
@@ -423,8 +423,9 @@ Blockly.onMouseMove_ = function(e) {
     var clientY =  e.clientY;
     if(Blockly.clickedWorkspace_.isMW) {
       var mwxy = Blockly.clickedWorkspace_.getCoordinates();
-      clientX -= mwxy.x - Blockly.clickedWorkspace_.getMetrics().viewLeft;
-      clientY -= mwxy.y - Blockly.clickedWorkspace_.getMetrics().viewTop;
+      var mwmetrics = Blockly.clickedWorkspace_.getMetrics();
+      clientX -= mwxy.x - mwmetrics.viewLeft;
+      clientY -= mwxy.y - mwmetrics.viewTop;
     }
     var dx = clientX - Blockly.clickedWorkspace_.startDragMouseX;
     var dy = clientY - Blockly.clickedWorkspace_.startDragMouseY;

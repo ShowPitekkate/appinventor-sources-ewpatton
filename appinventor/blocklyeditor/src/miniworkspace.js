@@ -165,10 +165,6 @@ Blockly.MiniWorkspace.prototype.renderWorkspace = function (folder, xml, height,
 
 //TODO
 Blockly.MiniWorkspace.prototype.disposeWorkspace = function () {
-    /*for (var i = 1; i < 5; i++) {
-        console.log(i+" "+this.connectionDBList[i].length);
-    }*/
-
     Blockly.MiniWorkspace.unbindDragEvents_();
     while (this.topBlocks_.length > 0) {
         this.topBlocks_[0].dispose();
@@ -198,7 +194,6 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
 
     this.svgBlockCanvasOuter_ = Blockly.createSvgElement('svg', 
         {'height': Blockly.MiniWorkspace.DEFAULT_HEIGHT +'px', 'width': Blockly.MiniWorkspace.DEFAULT_WIDTH+'px'}, this.svgGroup_);
-    Blockly.bindEvent_(this.svgBlockCanvasOuter_, 'mousedown', this, this.miniWorkspaceMouseDown_);
     
     /*Blockly.createSvgElement('rect',
         {'class': 'blocklyFolderBackground',
@@ -216,9 +211,10 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
         {'class': 'blocklyDraggable', 'x': 0, 'y': 0,
             'rx': Blockly.Bubble.BORDER_WIDTH, 'ry': Blockly.Bubble.BORDER_WIDTH},
         svgGroupEmboss);
-    this.svgBlockCanvasOuterBack_ =Blockly.createSvgElement('rect',
+    this.svgBlockCanvasOuterBack_ = Blockly.createSvgElement('rect',
         {'class':'blocklyMutatorBackground',
             'height': Blockly.MiniWorkspace.DEFAULT_HEIGHT +'px', 'width': Blockly.MiniWorkspace.DEFAULT_WIDTH+'px'}, svgGroupEmboss);
+    Blockly.bindEvent_(this.svgBlockCanvasOuterBack_, 'mousedown', this, this.miniWorkspaceMouseDown_);
     this.svgTitle_ = Blockly.createSvgElement('text',{
         'class':'blocklyText'},this.svgGroup_);
     this.svgTitle_.innerHTML=this.block_.getFolderName();
@@ -470,7 +466,6 @@ Blockly.MiniWorkspace.prototype.miniWorkspaceMouseDown_ = function (e) {
         // When focused on an HTML text input widget, don't trap any events.
         return;
     }
-
     Blockly.focusedWorkspace_ = this;
     Blockly.onMouseDown_.call(this, e);
 
