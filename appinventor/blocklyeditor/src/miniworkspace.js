@@ -127,8 +127,9 @@ Blockly.MiniWorkspace.prototype.renderWorkspace = function (folder, xml, height,
     this.shape_ = folder.svg_.svgPath_;
     //var canvas = Blockly.mainWorkspace.getCanvas();
     //canvas.appendChild(this.createDom_());
-    Blockly.mainWorkspace.getCanvas().appendChild(this.createPlaceholder_());
-    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(this.createDom_());
+    var MWDom = this.createDom_();
+    Blockly.mainWorkspace.getCanvas().appendChild(MWDom.placeholder);
+    Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(MWDom.dom);
     //this.setAnchorLocation(0, 0);
     this.svgGroupBack_.setAttribute('transform','translate(-5,-25)');
     this.svgGroup_.setAttribute('visibility','hidden');
@@ -257,13 +258,10 @@ Blockly.MiniWorkspace.prototype.createDom_ = function () {
         'x1': resizeSize * 2 / 3, 'y1': resizeSize - 1,
         'x2': resizeSize - 1, 'y2': resizeSize * 2 / 3}, this.resizeGroup_);
 
-    return this.svgGroup_;
-};
-
-Blockly.MiniWorkspace.prototype.createPlaceholder_ = function() {
     this.svgPlaceholder_ = Blockly.createSvgElement('rect', 
         {'visibility': 'hidden'}, null);
-    return this.svgPlaceholder_;
+
+    return {'dom': this.svgGroup_, 'placeholder': this.svgPlaceholder_};
 };
 
 
