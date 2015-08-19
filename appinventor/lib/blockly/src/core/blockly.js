@@ -372,13 +372,8 @@ Blockly.onMouseDown_ = function(e) {
     // Record the current mouse position.
     Blockly.clickedWorkspace_.startDragMouseX = e.clientX;
     Blockly.clickedWorkspace_.startDragMouseY = e.clientY;
-    if(Blockly.clickedWorkspace_.isMW) {
-      var mwxy = Blockly.clickedWorkspace_.getCoordinates();
-      Blockly.clickedWorkspace_.startDragMouseX -= mwxy.x - Blockly.clickedWorkspace_.getMetrics().viewLeft;
-      Blockly.clickedWorkspace_.startDragMouseY -= mwxy.y - Blockly.clickedWorkspace_.getMetrics().viewTop;
-    }
     Blockly.clickedWorkspace_.startDragMetrics =
-    Blockly.clickedWorkspace_.getMetrics();
+        Blockly.clickedWorkspace_.getMetrics();
     Blockly.clickedWorkspace_.startScrollX = Blockly.clickedWorkspace_.scrollX;
     Blockly.clickedWorkspace_.startScrollY = Blockly.clickedWorkspace_.scrollY;
 
@@ -419,16 +414,8 @@ Blockly.onMouseUp_ = function(e) {
 Blockly.onMouseMove_ = function(e) {
   if (Blockly.clickedWorkspace_ && Blockly.clickedWorkspace_.dragMode) {
     Blockly.removeAllRanges();
-    var clientX =  e.clientX;
-    var clientY =  e.clientY;
-    if(Blockly.clickedWorkspace_.isMW) {
-      var mwxy = Blockly.clickedWorkspace_.getCoordinates();
-      var mwmetrics = Blockly.clickedWorkspace_.getMetrics();
-      clientX -= mwxy.x - mwmetrics.viewLeft;
-      clientY -= mwxy.y - mwmetrics.viewTop;
-    }
-    var dx = clientX - Blockly.clickedWorkspace_.startDragMouseX;
-    var dy = clientY - Blockly.clickedWorkspace_.startDragMouseY;
+    var dx = e.clientX - Blockly.clickedWorkspace_.startDragMouseX;
+    var dy = e.clientY - Blockly.clickedWorkspace_.startDragMouseY;
     var metrics = Blockly.clickedWorkspace_.startDragMetrics;
     var x = Blockly.clickedWorkspace_.startScrollX + dx;
     var y = Blockly.clickedWorkspace_.startScrollY + dy;
@@ -441,7 +428,7 @@ Blockly.onMouseMove_ = function(e) {
 
     // Move the scrollbars and the page will scroll automatically.
     Blockly.clickedWorkspace_.scrollbar.set(-x - metrics.contentLeft,
-                                        -y - metrics.contentTop);
+                                            -y - metrics.contentTop);
     e.stopPropagation();
   }
 };
