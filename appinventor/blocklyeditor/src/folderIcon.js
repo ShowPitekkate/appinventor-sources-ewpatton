@@ -86,25 +86,11 @@ Blockly.FolderIcon.prototype.setVisible = function(visible) {
     if (visible == this.isVisible()) {
         // No change.
         return;
-    }
-    var miniworkspace = this.block_.miniworkspace;
-    //If th mw is not rendered, create an empty miniworkspace
-    if(!miniworkspace.rendered_ && !miniworkspace.isInFlyout){
-        miniworkspace.renderWorkspace(this.block_);
-    }
-
-    if (visible) {
-        miniworkspace.moveNearPseudoBlock();
-
-        miniworkspace.svgGroup_.setAttribute('visibility','visible');
-        //TODO Firefox has problems with hidden elements
-        /*TODOminiworkspace.resizeMiniWorkspace(miniworkspace.height_ - 2 * Blockly.Bubble.BORDER_WIDTH, 
-            miniworkspace.width_ - 2 * Blockly.Bubble.BORDER_WIDTH);*/
+    }    
+    this.block_.miniworkspace.setVisible(visible);
+    if(visible) {
         Blockly.focusedWorkspace_ = this.block_.miniworkspace;
-
-        miniworkspace.promote_();
     } else {
-        miniworkspace.svgGroup_.setAttribute('visibility','hidden');
         Blockly.focusedWorkspace_ = Blockly.mainWorkspace;
     }
     this.block_.expandedFolder_ = visible;
