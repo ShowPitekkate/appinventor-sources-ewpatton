@@ -130,8 +130,6 @@ Blockly.Folder.prototype.fill = function(workspace, prototypeName) {
     this.workspace = workspace;
 
     this.isInFlyout = workspace.isFlyout;
-    // This is missing from our latest version
-    //workspace.addTopBlock(this);
 
     // Copy the type-specific functions and data from the prototype.
     if (prototypeName) {
@@ -216,7 +214,6 @@ Blockly.Folder.terminateDrag_ = function() {
     }
     var selected = Blockly.selected;
     if (Blockly.Folder.dragMode_ == 2) {
-        console.log("terminate");
         // Terminate a drag operation.
         if (selected) {
             // Update the connection locations.
@@ -242,6 +239,10 @@ Blockly.Folder.terminateDrag_ = function() {
     Blockly.Folder.dragMode_ = 0;
 };
 
+/**
+ * Removes the folder from ALL_FOLDERS.
+ * @param {Blockly.Folder} folder to remove.
+ */
 Blockly.Folder.prototype.removeFromAllFolders = function(folder) {
     var found = false;
 
@@ -255,6 +256,10 @@ Blockly.Folder.prototype.removeFromAllFolders = function(folder) {
     }
 };
 
+/**
+ * Returns the index of this folder in ALL_FOLDERS.
+ * @return {number} index of this folder in ALL_FOLDER.
+ */
 Blockly.Folder.prototype.indexOfFolder = function () {
     for (var f, x = 0; f = Blockly.ALL_FOLDERS[x]; x++) {
         if (f == this) {
@@ -265,8 +270,8 @@ Blockly.Folder.prototype.indexOfFolder = function () {
 };
 
 /**
- * Give this block a mini workspace.
- * @param {Blockly.MiniWorkspace} miniworkspace A mini workspace.
+ * Give this block an icon to expand/collapse a miniworkspace.
+ * @param {Blockly.FolderIcon} folderIcon a new folderIcon.
  */
 Blockly.Folder.prototype.setFolderIcon = function(folderIcon) {
     if (this.folderIcon && this.folderIcon !== folderIcon) {
@@ -279,74 +284,6 @@ Blockly.Folder.prototype.setFolderIcon = function(folderIcon) {
             folderIcon.createIcon();
         }
     }
-};
-
-Blockly.Folder.prototype.isOverFolder = function(e) {
-    if (this.expandedFolder_){
-        var mouseXY = Blockly.mouseToSvg(e);
-        var folderXY = Blockly.getSvgXY_(this.miniworkspace.svgGroup_);
-        var width = this.miniworkspace.width_;
-        var height = this.miniworkspace.height_;
-        var over = (mouseXY.x > folderXY.x) &&
-            (mouseXY.x < folderXY.x + width) &&
-            (mouseXY.y > folderXY.y) &&
-            (mouseXY.y < folderXY.y + height);
-        return over;
-    } else {
-        return false;
-    }
-};
-
-Blockly.Folder.prototype.isAncestorOf = function(folder) {
-    var current = folder;
-    while(current){
-        if(current == this){
-            return true;
-        } else {
-            current = current.workspace.block_;
-        }
-    }
-    return false;
-};
-
-Blockly.Folder.prototype.promote = function() {
-    var index = this.indexOfFolder();
-    var found = false;
-    if (index != -1){
-        found = true;
-        Blockly.ALL_FOLDERS.splice(0, 0, Blockly.ALL_FOLDERS.splice(index, 1)[0]);
-    }
-
-    if (!found) {
-        throw 'Folder not present in ALL_FOLDERS.';
-    }
-};
-
-/**
- * Duplicate this folder and its mini workspace
- * @return {!Blockly.Block} The duplicate.
- * @private
- */
-Blockly.Folder.prototype.duplicate_ = function() {
-    // Create a duplicate via XML.
-    var xmlBlock = Blockly.Xml.blockToDom_(this);
-    //Blockly.Xml.deleteNext(xmlBlock);
-    var folderXML = Blockly.Xml.workspaceToDom(this.miniworkspace);
-
-    var newBlock = Blockly.Xml.domToBlock((this.workspace), xmlBlock);
-    newBlock.miniworkspace.renderWorkspace(newBlock, folderXML);
-    // Move the duplicate next to the old block.
-
-    var xy = this.getRelativeToSurfaceXY();
-    if (Blockly.RTL) {
-        xy.x -= Blockly.SNAP_RADIUS;
-    } else {
-        xy.x += Blockly.SNAP_RADIUS;
-    }
-    xy.y += Blockly.SNAP_RADIUS * 2;
-    newBlock.moveBy(xy.x, xy.y);
-    newBlock.select();
-    return newBlock;
 };
 
 /**
@@ -401,16 +338,98 @@ Blockly.Folder.isLegalName = function(name, workspace, opt_exclude) {
 };
 
 /**
+ * Returns true if the mouse is over this block's miniworkspace.
+ * @param {Event} e a mouse event 
+ * @return {boolean} true if the mouse is over the mw, otherwise false.
+ */
+Blockly.Folder.prototype.isOverFolder = function(e) {
+    if (this.expandedFolder_){
+        var mouseXY = Blockly.mouseToSvg(e);
+        var folderXY = Blockly.getSvgXY_(this.miniworkspace.svgGroup_);
+        var width = this.miniworkspace.width_;
+        var height = this.miniworkspace.height_;
+        var over = (mouseXY.x > folderXY.x) &&
+            (mouseXY.x < folderXY.x + width) &&
+            (mouseXY.y > folderXY.y) &&
+            (mouseXY.y < folderXY.y + height);
+        return over;
+    } else {
+        return false;
+    }
+};
+
+/**
+ * Check if this Folder is this folder block is an ancestor of the 
+ * folder block passed by parameter.
+ * @param {Blockly.Folder} folder to compare.
+ * @return {boolean} true if this block is an ancestor of the parameter
+ */
+Blockly.Folder.prototype.isAncestorOf = function(folder) {
+    var current = folder;
+    while(current){
+        if(current == this){
+            return true;
+        } else {
+            current = current.workspace.block_;
+        }
+    }
+    return false;
+};
+
+/**
+ * Move this block's miniworkspace to the top of ALL_FOLDER.
+ */
+Blockly.Folder.prototype.promote = function() {
+    var index = this.indexOfFolder();
+    var found = false;
+    if (index != -1){
+        found = true;
+        Blockly.ALL_FOLDERS.splice(0, 0, Blockly.ALL_FOLDERS.splice(index, 1)[0]);
+    }
+
+    if (!found) {
+        throw 'Folder not present in ALL_FOLDERS.';
+    }
+};
+
+/**
+ * Duplicate this folder and its miniworkspace
+ * @return {!Blockly.Block} The duplicate.
+ * @private
+ */
+Blockly.Folder.prototype.duplicate_ = function() {
+    // Create a duplicate via XML.
+    var xmlBlock = Blockly.Xml.blockToDom_(this);
+    //Blockly.Xml.deleteNext(xmlBlock);
+    var folderXML = Blockly.Xml.workspaceToDom(this.miniworkspace);
+
+    var newBlock = Blockly.Xml.domToBlock((this.workspace), xmlBlock);
+    newBlock.miniworkspace.renderWorkspace(newBlock, folderXML);
+    // Move the duplicate next to the old block.
+
+    var xy = this.getRelativeToSurfaceXY();
+    if (Blockly.RTL) {
+        xy.x -= Blockly.SNAP_RADIUS;
+    } else {
+        xy.x += Blockly.SNAP_RADIUS;
+    }
+    xy.y += Blockly.SNAP_RADIUS * 2;
+    newBlock.moveBy(xy.x, xy.y);
+    newBlock.select();
+    return newBlock;
+};
+
+/**
  * Show a confirmation dialog if users intend to delete more that #DELETION_THRESHOLD blocks.
- * @returns {Boolean} true if there are less than #DELETION_THRESHOLD blocks to delete or the user
+ * @returns {boolean} true if the miniworkspace contains 0 blocks to delete or the user
  * confirms deletion.
  */
 Blockly.Folder.prototype.confirmDeletion = function(){
-    if(this.miniworkspace.topBlocks_.length == 0 ){
+    if(this.miniworkspace.getTopBlocks().length == 0 ){
         return true;
     }
-    var txt = (this.miniworkspace.getAllBlocks().length > 1) ? 
-            Blockly.Msg.WARNING_DELETE_FOLDER_BLOCKS : Blockly.Msg.WARNING_DELETE_FOLDER_BLOCK;
+    var txt = ((this.miniworkspace.getAllBlocks().length == 1) ? 
+            Blockly.Msg.WARNING_DELETE_FOLDER_BLOCK : Blockly.Msg.WARNING_DELETE_FOLDER_BLOCKS);
     return confirm(Blockly.Msg.WARNING_DELETE_FOLDER
             .replace('%1',this.miniworkspace.getAllBlocks().length)
             .replace('%2', txt));

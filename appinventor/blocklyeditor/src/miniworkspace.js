@@ -7,7 +7,7 @@ goog.require('Blockly.ScrollbarPair');
 
 /**
  * Class for a mini workspace. 
- * @extends {Blockly.Icon}
+ * @extends {Blockly.Workspace}
  * @constructor
  */
 Blockly.MiniWorkspace = function(folder, getMetrics, setMetrics) {
@@ -130,7 +130,7 @@ Blockly.MiniWorkspace.setWorkspaceMetrics_ = function(xyRatio) {
 };
 
 /**
- * Create the trash can elements.
+ * Create the DOM of this miniworkspace.
  * @return {!Object} The miniworkspace's SVG group and the placeholder.
  * @private
  */
