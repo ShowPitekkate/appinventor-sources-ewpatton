@@ -733,7 +733,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
     }
 
     if (Blockly.selectedFolder_) {
-      Blockly.selectedFolder_.miniworkspace.unhighlight_();
+      Blockly.selectedFolder_.miniworkspace.unhighlight();
       Blockly.selectedFolder_ = null;
     }
 
@@ -1065,7 +1065,7 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         //remove highlighting if necessary
         if (Blockly.selectedFolder_ &&
             Blockly.selectedFolder_ != overFolder ) {
-          Blockly.selectedFolder_.miniworkspace.unhighlight_();
+          Blockly.selectedFolder_.miniworkspace.unhighlight();
           Blockly.selectedFolder_ = null;
         }
         //add highlighting if necessary
@@ -1073,7 +1073,7 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
           Blockly.selectedFolder_ = overFolder;
           Blockly.selectedFolder_.miniworkspace.isValid = 
             !(this_.type == "folder" && (overFolder && this_.isAncestorOf(overFolder)));
-          Blockly.selectedFolder_.miniworkspace.highlight_(Blockly.selectedFolder_.miniworkspace.isValid);
+          Blockly.selectedFolder_.miniworkspace.highlight();
         }
       }
       // Check to see if any of this block's connections are within range of
