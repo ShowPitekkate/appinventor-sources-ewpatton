@@ -563,8 +563,9 @@ Blockly.BlockSvg.prototype.renderHere = function() {
   var parentBlock = this.block_.getParent();
   if (!parentBlock) {
     // Top-most block.  Fire an event to allow scrollbars to resize.
+    // [Devid] If the block is in a mw, fires the resize event on its mw
     if(this.block_.workspace.isMW) {
-      Blockly.fireUiEvent(this.block_.workspace.svgGroup_, 'resize');
+      this.block_.workspace.fireResizeEvent();
     } else {
       Blockly.fireUiEvent(window, 'resize');
     }

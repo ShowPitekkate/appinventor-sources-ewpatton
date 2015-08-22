@@ -404,7 +404,9 @@ Blockly.WarningHandler.setBlockError = function(message){
   this.setErrorIconText(message);
 }
 
-// Check a disposed block for any errors or warnings and update state accordingly.
+/**
+ * Check a disposed block for any errors or warnings and update state accordingly.
+ */
 Blockly.WarningHandler.checkDisposedBlock = function(){
   if(this.warning) {
     this.setWarningText(null);
@@ -455,7 +457,9 @@ Blockly.WarningHandler.checkEmptySockets = function(){
   }
 }
 
-//Check if the block is a root block that isn't a procedure definition, variable declaration, event or folder
+/**
+ * Check if the block is a root block that isn't a procedure definition, variable declaration, event or folder
+ */
 Blockly.WarningHandler.checkBlockAtRoot = function(){
   var rootBlock = this.getRootBlock();
   if(this == rootBlock && this.blockType != "event" && this.type !="global_declaration" &&
@@ -474,7 +478,9 @@ Blockly.WarningHandler.checkBlockAtRoot = function(){
   }
 }
 
-//Check to see if the repl (Companion App) reported any errors.
+/**
+ * Check to see if the repl (Companion App) reported any errors.
+ */
 Blockly.WarningHandler.checkReplErrors = function() {
     if (this.replError) {
         this.setErrorIconText(this.replError);

@@ -895,6 +895,7 @@ Blockly.Blocks['procedures_callnoreturn'] = {
     option.text = Blockly.Msg.LANG_PROCEDURES_HIGHLIGHT_DEF;
     var name = this.getFieldValue('PROCNAME');
     // [Devid] var workspace = this.workspace;
+    // The proc definition search must start from the mainWorkspace
     option.callback = function() {
       var def = Blockly.Procedures.getDefinition(name, Blockly.mainWorkspace);
       def && def.select();

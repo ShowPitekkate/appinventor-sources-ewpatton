@@ -496,6 +496,7 @@ Blockly.TypeBlock.createAutoComplete_ = function(inputText){
       block.render();
       var blockSelected = Blockly.selected;
       var selectedX, selectedY, selectedXY;
+      // [Devid] Avoid trying connecting to a block if it is a folder
       if (blockSelected && blockSelected.type != 'folder') {
         selectedXY = blockSelected.getRelativeToSurfaceXY();
         selectedX = selectedXY.x;

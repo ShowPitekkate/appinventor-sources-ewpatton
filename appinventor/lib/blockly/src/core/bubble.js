@@ -55,7 +55,6 @@ Blockly.Bubble = function(workspace, content, shape,
   this.shape_ = shape;
   
   var canvas = workspace.getBubbleCanvas();
-  //var canvas = workspace.getCanvas(); //THIS SHOULDN'T BE DONE
   canvas.appendChild(this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
 
   this.setAnchorLocation(anchorX, anchorY);

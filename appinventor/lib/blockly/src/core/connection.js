@@ -328,10 +328,11 @@ Blockly.Connection.prototype.moveTo = function(x, y) {
   }
   this.x_ = x;
   this.y_ = y;
-  // Insert it into its new location in the database.
-    if (!this.dbList_) {
-        this.dbList_ = this.sourceBlock_.workspace.workspace_.connectionDBList;
-    }
+  // [Shirley] Insert it into its new location in the database.
+  if (!this.dbList_) {
+    console.log('we');
+    this.dbList_ = this.sourceBlock_.workspace.workspace_.connectionDBList;
+  }
   this.dbList_[this.type].addConnection_(this);
 };
 
@@ -417,12 +418,13 @@ Blockly.Connection.prototype.closest = function(maxLimit, dx, dy, folder) {
   // Determine the opposite type of connection.
   var oppositeType = Blockly.OPPOSITE_TYPE[this.type];
   var db = this.dbList_[oppositeType];
+
+  // [Shirley] Calculate the folder delta
   var folderdx = 0;
   var folderdy = 0;
-
   if (folder) {
     db = folder.miniworkspace.connectionDBList[oppositeType];
-    var folderOrigin = Blockly.getRelativeXY_(folder.miniworkspace.svgGroup_);
+    var folderOrigin = folder.miniworkspace.getCoordinates();
     var translate_ = folder.miniworkspace.getTranslate();
     folderdx = folderOrigin.x + parseInt(translate_[0]);
     folderdy = folderOrigin.y + parseInt(translate_[1]);

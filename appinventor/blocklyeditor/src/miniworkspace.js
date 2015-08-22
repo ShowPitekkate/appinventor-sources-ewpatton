@@ -458,6 +458,13 @@ Blockly.MiniWorkspace.prototype.spreadChangeEvent = function() {
 };
 
 /**
+ * Fires a resize event on this svgGroup_ to allow the scrollbar to resize
+ */
+Blockly.MiniWorkspace.prototype.fireResizeEvent = function () {
+    Blockly.fireUiEvent(this.svgGroup_, 'resize');
+};
+
+/**
  * Handle a mouse-down on miniworkspace's resize corner.
  * @param {!Event} e Mouse down event.
  * @private
