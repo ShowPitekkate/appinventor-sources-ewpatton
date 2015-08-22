@@ -1,8 +1,14 @@
 
-goog.provide('Blockly.AIFolder');
+/**
+ * @fileoverview Editable field for the folder's name.
+ */
+ goog.provide('Blockly.AIFolder');
 
 
-// Used to rename a folder and its miniworkspace
+/**
+ * Used to rename a folder and its miniworkspace
+ * @param {string} newname the new name
+ */
 Blockly.AIFolder.renameFolder = function (newName) {
   // this is bound to field_textinput object
   var oldName = this.text_;
@@ -19,6 +25,10 @@ Blockly.AIFolder.renameFolder = function (newName) {
   return newName;
 };
 
+/**
+ * Gets every folder block except the one passed by parameter
+ * @param {Blockly.Block} block the block to ignore
+ */
 Blockly.AIFolder.getAllFolderBlocksExcept = function (block) {
   var topBlocks = Blockly.mainWorkspace.getTopBlocks();
   var blockArray = [];

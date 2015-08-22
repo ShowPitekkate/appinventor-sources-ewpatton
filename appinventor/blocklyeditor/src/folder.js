@@ -19,8 +19,7 @@
  */
 
 /**
- * @fileoverview The class representing one block.
- * @author fraser@google.com (Neil Fraser)
+ * @fileoverview The class representing one folder block.
  */
 'use strict';
 

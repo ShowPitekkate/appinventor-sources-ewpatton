@@ -10,12 +10,12 @@ Blockly.Blocks['folder'] = {
             Blockly.Msg.LANG_FOLDERS_FOLDER, this);
         this.appendDummyInput()
             .appendField(new Blockly.FieldTextInput(name, Blockly.AIFolder.renameFolder), 'NAME');
-            //.appendField(new Blockly.FieldTextBlockInput('FOLDER NAME'), 'TEXT');
         this.setFolderIcon(new Blockly.FolderIcon());
     },
     decompose: function(workspace){
         return Blockly.decompose(workspace,'folder',this);
     },
+    //Returns the name of the folder
     getFolderName: function(){
         return this.getFieldValue('NAME');
     },

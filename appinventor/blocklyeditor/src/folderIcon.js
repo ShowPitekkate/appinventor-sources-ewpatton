@@ -1,4 +1,8 @@
-'use strict';
+/**
+ * @fileoverview The class representing one folder icon.
+ */
+
+ 'use strict';
 
 goog.provide('Blockly.FolderIcon');
 goog.require('Blockly.Folder');

@@ -1,3 +1,7 @@
+/**
+ * @fileoverview The class representing one miniworkspace.
+ */
+
 'use strict';
 
 goog.provide('Blockly.MiniWorkspace');
