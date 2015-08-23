@@ -320,11 +320,10 @@ Blockly.latestClick = { x: 0, y: 0 };
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
-  if(this.isMW) {
-    Blockly.focusedWorkspace_ = this;
-  } else {
-    Blockly.focusedWorkspace_ = Blockly.mainWorkspace;
-  }
+  // [Devid] if 'this' refers to a miniworkspace we set it as the focusedWorkspace
+  // otherwise the focused workspace is the mainWorkspace
+  Blockly.focusedWorkspace_ = (this.isMW) ? this : Blockly.mainWorkspace;
+
 
   Blockly.latestClick = { x: e.clientX, y: e.clientY }; // Might be needed?
   Blockly.svgResize();

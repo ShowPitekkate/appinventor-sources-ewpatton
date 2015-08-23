@@ -301,6 +301,7 @@ Blockly.Block.terminateDrag_ = function() {
   if (Blockly.Block.dragMode_ == 2) {
     // Terminate a drag operation.
     if (selected) {
+      // [Devid] Don't promote this block anymore
       selected.stopPromoteDragged();
       // Update the connection locations.
       var xy = selected.getRelativeToSurfaceXY();
@@ -313,8 +314,9 @@ Blockly.Block.terminateDrag_ = function() {
       goog.Timer.callOnce(
           selected.bumpNeighbours_, Blockly.BUMP_DELAY, selected);
       // Fire an event to allow scrollbars to resize.
+      // [Devid] If the block was in a miniworkspace, resize it
       if(selected.startWorkspace && selected.startWorkspace.isMW) {
-        Blockly.fireUiEvent(selected.startWorkspace.svgGroup_, 'resize');
+        selected.startWorkspace.fireResizeEvent();
       }
       Blockly.fireUiEvent(window, 'resize');
     }
@@ -391,6 +393,7 @@ Blockly.Block.prototype.dispose = function(healStack, animate,
     this.workspace = null;
   }
 
+  // [Shirley] If this is a folder remove it from the list of folders
   if(this.type == 'folder' && !this.isInFlyout){
         this.removeFromAllFolders();
   }
@@ -505,11 +508,9 @@ Blockly.Block.prototype.getRelativeToSurfaceXY = function() {
       x += xy.x;
       y += xy.y;
       element = element.parentNode;
-    // [Devid] getCanvas() on collapsed miniworkspaces returns null 
-    // causing blocks to move when reloading the page
-    } while (element && element != Blockly.mainWorkspace.getMiniWorkspaceCanvas() &&
-      (element != this.workspace.getCanvas() && 
-      (this.workspace == Blockly.mainWorkspace || this.workspace.getCanvas() != null)));
+    // [Devid] When a block is dragged is putted into the svgMiniWorkspaceCanvas_
+    } while (element && element != this.workspace.getCanvas()
+      && element != Blockly.mainWorkspace.getMiniWorkspaceCanvas());
   }
   return {x: x, y: y};
 };
@@ -622,6 +623,7 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
     var xy = this.getRelativeToSurfaceXY();
     this.startDragX = xy.x;
     this.startDragY = xy.y;
+    // [Devid] Sets the start workspace
     this.startWorkspace = this.workspace;
     // Record the current mouse position.
     this.startDragMouseX = e.clientX;
@@ -651,8 +653,10 @@ Blockly.Block.prototype.onMouseDown_ = function(e) {
 
   // [Devid] If the block is in a miniworkspace or the main workspace
   if(this.workspace == Blockly.mainWorkspace || this.workspace.isMW) {
+    // If this is a folder and its mw is expanded, we set its mw as focusedWorkspace
     if(this.type == 'folder' && this.expandedFolder_){
       Blockly.focusedWorkspace_ = this.miniworkspace;
+    // Otherwise we set this block's workspace a focusedWorkspace
     } else {
       Blockly.focusedWorkspace_ = this.workspace;
     }
@@ -675,8 +679,11 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
   Blockly.resetWorkspaceArrangements();
   Blockly.doCommand(function() {
     Blockly.terminateDrag_();
+
+    // [Devid] If there is a selectedFolder it means that we have
+    // released the block on a miniworkspace
     if (Blockly.selectedFolder_) {
-      // [Devid] Move the block only if the miniworkspace is valid
+      //Move the block only if the miniworkspace is valid
       if(Blockly.selectedFolder_.miniworkspace.isValid) {
         Blockly.selectedFolder_.miniworkspace.moveBlock(this_);
       // Otherwise move the block in the previous postion
@@ -732,6 +739,7 @@ Blockly.Block.prototype.onMouseUp_ = function(e) {
       Blockly.highlightedConnection_ = null;
     }
 
+    // [Shirley] Unhighlight the selectedFolder
     if (Blockly.selectedFolder_) {
       Blockly.selectedFolder_.miniworkspace.unhighlight();
       Blockly.selectedFolder_ = null;
@@ -1033,27 +1041,24 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         this_.startDragX += transformMatrix[0];
         this_.startDragY += transformMatrix[1];
       }
+      // [Devid] Promote this block over the others blocks and the miniworkspaces
       this_.promoteDragged();
       // Unrestricted dragging.
-      //  console.log("drag " + this_.startDragX+ " "+ this_.startDragY+ " "+dx+" "+dy);
       var x = this_.startDragX + dx;
       var y = this_.startDragY + dy;
-
-        //console.log("drag2 "+x+" "+y);
       this_.svg_.getRootElement().setAttribute('transform',
           'translate(' + x + ', ' + y + ')');
       // Drag all the nested bubbles.
       for (var i = 0; i < this_.draggedBubbles_.length; i++) {
         var commentData = this_.draggedBubbles_[i];
-        // [Devid] this desn't keep the bubble connected to the block while moving
-        // from a mini workspace to the mainWorkspace
-        //commentData.bubble.setIconLocation(commentData.x + dx,
-        //    commentData.y + dy);
+        // [Devid] This keeps the bubble connected to the block while moving
+        // it from a mini workspace to the mainWorkspace
         commentData.bubble.computeIconLocation();
       }
-      // [Devid] do only for block not in a mutator
+
+      // [Devid] Do only for block not in a mutator
       if(this_.workspace == Blockly.mainWorkspace || this_.workspace.isMW){
-        //find the folder the block is over
+        // Find the folder the block is over
         var overFolder = null;
         for (var i = 0; i < Blockly.ALL_FOLDERS.length; i++) {
           if (Blockly.ALL_FOLDERS[i].isOverFolder(e)) {
@@ -1061,14 +1066,13 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
             break;
           }
         }
-
-        //remove highlighting if necessary
+        // Remove highlighting if necessary
         if (Blockly.selectedFolder_ &&
             Blockly.selectedFolder_ != overFolder ) {
           Blockly.selectedFolder_.miniworkspace.unhighlight();
           Blockly.selectedFolder_ = null;
         }
-        //add highlighting if necessary
+        // Add red/green highlighting if necessary
         if (overFolder && overFolder != Blockly.selectedFolder_) {
           Blockly.selectedFolder_ = overFolder;
           Blockly.selectedFolder_.miniworkspace.isValid = 
@@ -1076,6 +1080,7 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
           Blockly.selectedFolder_.miniworkspace.highlight();
         }
       }
+
       // Check to see if any of this block's connections are within range of
       // another block's connection.
       var myConnections = this_.getConnections_(false);
@@ -1084,6 +1089,7 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
       var radiusConnection = Blockly.SNAP_RADIUS;
       for (var i = 0; i < myConnections.length; i++) {
         var myConnection = myConnections[i];
+        // [Shirley] Added Blockly.selectedFolder_ as parameter
         var neighbour = myConnection.closest(radiusConnection, dx, dy, Blockly.selectedFolder_);
         if (neighbour.connection) {
           closestConnection = neighbour.connection;
@@ -1099,7 +1105,6 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         Blockly.highlightedConnection_ = null;
         Blockly.localConnection_ = null;
       }
-
       // Add connection highlighting if needed.
       if (closestConnection &&
           closestConnection != Blockly.highlightedConnection_) {
@@ -1107,8 +1112,6 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         Blockly.highlightedConnection_ = closestConnection;
         Blockly.localConnection_ = localConnection;
       }
-
-
       // Flip the trash can lid if needed.
       if (this_.workspace.trashcan && this_.isDeletable()) {
         this_.workspace.trashcan.onMouseMove(e);
@@ -2207,14 +2210,24 @@ Blockly.Block.prototype.renderDown = function() {
   }
   // [lyn, 04/08/14] Because renderDown is recursive, doesn't make sense to track its time here.
 };
-Blockly.Block.prototype.stopPromoteDragged = function(){
-  var svgGroup = goog.dom.removeNode(this.svg_.svgGroup_);
-  this.workspace.getCanvas().appendChild(svgGroup);
-};
+
+/**
+ * Moves this block into the svgMiniWorkspaceCanvas so that it appear on top of every
+ * block and miniworkspace when it is dragged
+ */
 Blockly.Block.prototype.promoteDragged = function(){
   if(this.svg_.svgGroup_.parentNode != Blockly.mainWorkspace.getMiniWorkspaceCanvas()){
     var svgGroup = goog.dom.removeNode(this.svg_.svgGroup_);
     Blockly.mainWorkspace.getMiniWorkspaceCanvas().appendChild(svgGroup);
   }
 };
+
+/**
+ * Moves this block back into its workspace's svgBlockCanvas
+ */
+Blockly.Block.prototype.stopPromoteDragged = function(){
+  var svgGroup = goog.dom.removeNode(this.svg_.svgGroup_);
+  this.workspace.getCanvas().appendChild(svgGroup);
+};
+
 
