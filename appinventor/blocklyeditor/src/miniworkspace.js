@@ -590,7 +590,6 @@ Blockly.MiniWorkspace.prototype.miniWorkspaceMouseDown_ = function (e) {
         // When focused on an HTML text input widget, don't trap any events.
         return;
     }
-    Blockly.focusedWorkspace_ = this;
     Blockly.onMouseDown_.call(this, e);
 
     // This event has been handled.  No need to bubble up to the document.

@@ -378,12 +378,7 @@ Blockly.init_ = function() {
   // understand a concept of focus on the SVG image.
 
   // [Devid] Sets the currently focused miniworkspace before handling the click
-  //Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
-  Blockly.bindEvent_(Blockly.svg, 'mousedown', null, 
-    function(e){
-      Blockly.focusedWorkspace_ = Blockly.mainWorkspace;
-      Blockly.onMouseDown_.call(Blockly.mainWorkspace, e);
-    });
+  Blockly.bindEvent_(Blockly.svg, 'mousedown', null, Blockly.onMouseDown_);
   Blockly.bindEvent_(Blockly.svg, 'mousemove', null, Blockly.onMouseMove_);
   Blockly.bindEvent_(Blockly.svg, 'contextmenu', null, Blockly.onContextMenu_);
   Blockly.bindEvent_(Blockly.WidgetDiv.DIV, 'contextmenu', null,
@@ -423,6 +418,7 @@ Blockly.init_ = function() {
       }
       var translation = 'translate(' + Blockly.mainWorkspace.scrollX + ', 0)';
       Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
+      // [Devid] Also translate the miniworkspaces surface
       Blockly.mainWorkspace.getMiniWorskpaceCanvas().setAttribute('transform', 
                                                             translation);
       Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',

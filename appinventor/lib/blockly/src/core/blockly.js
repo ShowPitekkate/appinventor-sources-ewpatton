@@ -211,15 +211,8 @@ Blockly.selectedFolder_ = null;
 
 /**
  * Currently focused workspace.
- * Used to paste blocks 
  */
 Blockly.focusedWorkspace_ = null;
-
-/**
- * Currently clicked workspace.
- * Used to scroll workspaces
- */
-Blockly.clickedWorkspace_ = null;
 
 /**
  * Is Blockly in a read-only, non-editable mode?
@@ -327,7 +320,12 @@ Blockly.latestClick = { x: 0, y: 0 };
  * @private
  */
 Blockly.onMouseDown_ = function(e) {
-  Blockly.clickedWorkspace_ = this;
+  if(this.isMW) {
+    Blockly.focusedWorkspace_ = this;
+  } else {
+    Blockly.focusedWorkspace_ = Blockly.mainWorkspace;
+  }
+
   Blockly.latestClick = { x: e.clientX, y: e.clientY }; // Might be needed?
   Blockly.svgResize();
   Blockly.terminateDrag_();  // In case mouse-up event was lost.
@@ -338,7 +336,8 @@ Blockly.onMouseDown_ = function(e) {
   }
 
   //Closes mutators
-  var blocks = Blockly.clickedWorkspace_.getAllBlocks();
+  var blocks = Blockly.focusedWorkspace_.getAllBlocks();
+
   var numBlocks = blocks.length;
   var temp_block = null;
   for(var i =0; i<numBlocks; i++){
@@ -354,6 +353,7 @@ Blockly.onMouseDown_ = function(e) {
 
   var isTargetSvg = e.target && e.target.nodeName &&
       e.target.nodeName.toLowerCase() == 'svg';
+  // [Devid] OnMouseDown is used for miniworkspaces too, so we also have to check if the target is a miniworkspace
   var isTargetMiniWorkspace = e.target && e.target.nodeName &&
       e.target.nodeName.toLowerCase() == 'rect' &&
       e.target.getAttribute('class').toLowerCase() == 'blocklymutatorbackground';
@@ -365,17 +365,17 @@ Blockly.onMouseDown_ = function(e) {
     // Right-click.
     Blockly.showContextMenu_(e);
   } else if ((Blockly.readOnly || isTargetSvg || isTargetMiniWorkspace) &&
-             Blockly.clickedWorkspace_.scrollbar) {
+             Blockly.focusedWorkspace_.scrollbar) {
     // If the workspace is editable, only allow dragging when gripping empty
     // space.  Otherwise, allow dragging when gripping anywhere.
-    Blockly.clickedWorkspace_.dragMode = true;
+    Blockly.focusedWorkspace_.dragMode = true;
     // Record the current mouse position.
-    Blockly.clickedWorkspace_.startDragMouseX = e.clientX;
-    Blockly.clickedWorkspace_.startDragMouseY = e.clientY;
-    Blockly.clickedWorkspace_.startDragMetrics =
-        Blockly.clickedWorkspace_.getMetrics();
-    Blockly.clickedWorkspace_.startScrollX = Blockly.clickedWorkspace_.scrollX;
-    Blockly.clickedWorkspace_.startScrollY = Blockly.clickedWorkspace_.scrollY;
+    Blockly.focusedWorkspace_.startDragMouseX = e.clientX;
+    Blockly.focusedWorkspace_.startDragMouseY = e.clientY;
+    Blockly.focusedWorkspace_.startDragMetrics =
+        Blockly.focusedWorkspace_.getMetrics();
+    Blockly.focusedWorkspace_.startScrollX = Blockly.focusedWorkspace_.scrollX;
+    Blockly.focusedWorkspace_.startScrollY = Blockly.focusedWorkspace_.scrollY;
 
     // If this is a touch event then bind to the mouseup so workspace drag mode
     // is turned off and double move events are not performed on a block.
@@ -395,15 +395,14 @@ Blockly.onMouseDown_ = function(e) {
  */
 Blockly.onMouseUp_ = function(e) {
   Blockly.setCursorHand_(false);
-  if(Blockly.clickedWorkspace_){
-    Blockly.clickedWorkspace_.dragMode = false;
-  }
+  Blockly.focusedWorkspace_.dragMode = false;
+  
   // Unbind the touch event if it exists.
   if (Blockly.onTouchUpWrapper_) {
     Blockly.unbindEvent_(Blockly.onTouchUpWrapper_);
     Blockly.onTouchUpWrapper_ = null;
   }
-  Blockly.clickedWorkspace_ = null;
+  //Blockly.focusedWorkspace_ = null;
 };
 
 /**
@@ -412,13 +411,13 @@ Blockly.onMouseUp_ = function(e) {
  * @private
  */
 Blockly.onMouseMove_ = function(e) {
-  if (Blockly.clickedWorkspace_ && Blockly.clickedWorkspace_.dragMode) {
+  if (Blockly.focusedWorkspace_.dragMode) {
     Blockly.removeAllRanges();
-    var dx = e.clientX - Blockly.clickedWorkspace_.startDragMouseX;
-    var dy = e.clientY - Blockly.clickedWorkspace_.startDragMouseY;
-    var metrics = Blockly.clickedWorkspace_.startDragMetrics;
-    var x = Blockly.clickedWorkspace_.startScrollX + dx;
-    var y = Blockly.clickedWorkspace_.startScrollY + dy;
+    var dx = e.clientX - Blockly.focusedWorkspace_.startDragMouseX;
+    var dy = e.clientY - Blockly.focusedWorkspace_.startDragMouseY;
+    var metrics = Blockly.focusedWorkspace_.startDragMetrics;
+    var x = Blockly.focusedWorkspace_.startScrollX + dx;
+    var y = Blockly.focusedWorkspace_.startScrollY + dy;
     x = Math.min(x, -metrics.contentLeft);
     y = Math.min(y, -metrics.contentTop);
     x = Math.max(x, metrics.viewWidth - metrics.contentLeft -
@@ -427,7 +426,7 @@ Blockly.onMouseMove_ = function(e) {
                  metrics.contentHeight);
 
     // Move the scrollbars and the page will scroll automatically.
-    Blockly.clickedWorkspace_.scrollbar.set(-x - metrics.contentLeft,
+    Blockly.focusedWorkspace_.scrollbar.set(-x - metrics.contentLeft,
                                             -y - metrics.contentTop);
     e.stopPropagation();
   }
@@ -452,10 +451,12 @@ Blockly.onKeyDown_ = function(e) {
     try {
       if (Blockly.selected && Blockly.selected.isDeletable()) {
         if (Blockly.selected.confirmDeletion()){
+          // [Devid] we save the block's workspace before deleting the block
           var workspace = Blockly.selected.workspace;
           Blockly.selected.dispose(true, true);
+          // [Devid] deleting a block with a key should resize the workspace where the block was
           if(workspace.isMW) {
-            Blockly.fireUiEvent(workspace.svgGroup_, 'resize');
+            workspace.fireResizeEvent();
           } else {
             Blockly.fireUiEvent(window, 'resize');
           }
@@ -485,9 +486,8 @@ Blockly.onKeyDown_ = function(e) {
     if (e.keyCode == 86) {
       // 'v' for paste.
       if (Blockly.clipboard_) {
-        //Blockly.mainWorkspace.paste(Blockly.clipboard_);
         // [Devid] Paste into the focused workspace, always in a visible position
-        var xmlBlock = Blockly.clipboard_.xml.cloneNode(true);
+        var xmlBlock = Blockly.clipboard_.cloneNode(true);
         var metrics = Blockly.focusedWorkspace_.getMetrics();
         var x = 25 + metrics.viewLeft;
         var y = 25 + metrics.viewTop;
@@ -520,8 +520,7 @@ Blockly.copy_ = function(block) {
   var xy = block.getRelativeToSurfaceXY();
   xmlBlock.setAttribute('x', Blockly.RTL ? -xy.x : xy.x);
   xmlBlock.setAttribute('y', xy.y);
-  //Blockly.clipboard_ = xmlBlock;
-  Blockly.clipboard_ = {xml: xmlBlock, workspace: block.workspace};
+  Blockly.clipboard_ = xmlBlock;
 };
 
 /**
@@ -982,6 +981,7 @@ Blockly.setMainWorkspaceMetrics_ = function(xyRatio) {
       (Blockly.mainWorkspace.scrollX + metrics.absoluteLeft) + ',' +
       (Blockly.mainWorkspace.scrollY + metrics.absoluteTop) + ')';
   Blockly.mainWorkspace.getCanvas().setAttribute('transform', translation);
+  // [Devid] Sets the translation to the miniworkspacecanvas too
   Blockly.mainWorkspace.getMiniWorkspaceCanvas().setAttribute('transform', 
                                                         translation);
   Blockly.mainWorkspace.getBubbleCanvas().setAttribute('transform',
