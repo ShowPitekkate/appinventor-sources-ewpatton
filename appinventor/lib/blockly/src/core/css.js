@@ -353,7 +353,6 @@ Blockly.Css.CONTENT = [
   '  outline: none;',
   '  width: 100%',
   '}',
-
   '.blocklyContextMenuBackground,',
   '.blocklyMutatorBackground {',
   '  fill: #fff;',

@@ -141,16 +141,16 @@ Blockly.Xml.blockToDom_ = function(block) {
     element.setAttribute('editable', false);
   }
 
-  // [Devid] Special case for folders
+  // [Devid] If the block is a folder appends to it, its miniworkspace
   if (block.type == "folder") {
     var folder = Blockly.Xml.workspaceToDom(block.miniworkspace);
-
     element.setAttribute('height', block.miniworkspace.height_ - (2 * Blockly.Bubble.BORDER_WIDTH));
     element.setAttribute('width', block.miniworkspace.width_ - (2 * Blockly.Bubble.BORDER_WIDTH));
     for (var x = 0, b; b = folder.childNodes[x];){
       element.appendChild(b);
     }
   }
+
   var nextBlock = block.getNextBlock();
   if (nextBlock) {
     var container = goog.dom.createDom('next', null,
@@ -355,8 +355,8 @@ Blockly.Xml.domToBlockInner = function(workspace, xmlBlock, opt_reuseBlock) {
     block.fill(workspace, prototypeName);
     block.parent_ = parentBlock;
   } else {
+      // [Shirley] here block is actually a Blockly.Folder() instance
       if (prototypeName == "folder") {
-        //here block is actually a Blockly.Folder() instance
         block = Blockly.Folder.obtain(workspace,prototypeName);
       } else {
         block = Blockly.Block.obtain(workspace, prototypeName);
@@ -386,10 +386,11 @@ Blockly.Xml.domToBlockInner = function(workspace, xmlBlock, opt_reuseBlock) {
   if (editable) {
     block.setEditable(editable == 'true');
   }
-            
+  
+  // [Devid] If the block is a folder, create its miniworkspace          
   if (prototypeName == "folder" && !block.isInFlyout) {
     var folderXML = goog.dom.createDom('xml');
-    // TODO children[0] is the field with the name
+    // children[0] is the field with the name
     while(xmlBlock.children.length > 1) {
       folderXML.appendChild(xmlBlock.children[1]);
     }

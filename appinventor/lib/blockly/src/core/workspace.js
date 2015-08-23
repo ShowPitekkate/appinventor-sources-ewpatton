@@ -125,6 +125,7 @@ Blockly.Workspace.prototype.createDom = function() {
   */
   this.svgGroup_ = Blockly.createSvgElement('g', {}, null);
   this.svgBlockCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
+  // [Devid] New canvas for miniworkspaces
   this.svgMiniWorkspaceCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.svgBubbleCanvas_ = Blockly.createSvgElement('g', {}, this.svgGroup_);
   this.fireChangeEvent();
@@ -141,6 +142,7 @@ Blockly.Workspace.prototype.dispose = function() {
     this.svgGroup_ = null;
   }
   this.svgBlockCanvas_ = null;
+  // [Devid] Unlink from the miniwrkspace canvas
   this.svgMiniWorkspaceCanvas_ = null;
   this.svgBubbleCanvas_ = null;
   if (this.trashcan) {
@@ -188,7 +190,7 @@ Blockly.Workspace.prototype.getCanvas = function() {
 };
 
 /**
- * Get the SVG element that forms the drawing surface.
+ * [Devid] Get the SVG element that forms the miniworkspace surface.
  * @return {!Element} SVG element.
  */
 Blockly.Workspace.prototype.getMiniWorkspaceCanvas = function() {
@@ -252,7 +254,7 @@ Blockly.Workspace.prototype.getTopBlocks = function(ordered) {
   // Copy the topBlocks_ list.
   var blocks = [].concat(this.topBlocks_);
   
-  // [Devid] Retrieve the topBlocks_ of the folder's miniworkspaces  
+  // [Devid] Retrieves also the topBlocks_ of every miniworkspace  
   for(var b in blocks){
     if(blocks[b].type == "folder"){
       blocks = blocks.concat(blocks[b].miniworkspace.getTopBlocks());
@@ -436,7 +438,7 @@ Blockly.Workspace.prototype.fireChangeEvent = function() {
   if (workspace.fireChangeEventPid_) {
     window.clearTimeout(workspace.fireChangeEventPid_);
   }
-  var canvas = workspace.svgBlockCanvas_;
+  var canvas = workspace.getCanvas();
   if (canvas) {
     workspace.fireChangeEventPid_ = window.setTimeout(function() {
         Blockly.fireUiEvent(canvas, 'blocklyWorkspaceChange');
@@ -499,21 +501,24 @@ Blockly.Workspace.prototype.remainingCapacity = function() {
 // Export symbols that would otherwise be renamed by Closure compiler.
 Blockly.Workspace.prototype['clear'] = Blockly.Workspace.prototype.clear;
 
-// Shirley's brand new function, this is only used by Shirley folder functions.
-// oldworkspace: block.workspace
-// newworkspace: this
-// oldworkspace and newworkspace will always be different when called!
+/** 
+ * Shirley's brand new function, this is only used by Shirley folder functions
+ * when a block is move into a miniworkspace.
+ * @param {Blockly.block} block block to move
+ */
 Blockly.Workspace.prototype.moveBlock = function(block) {
-
   this.moveIntoFolder(block);
   this.moveChild(block);
 };
 
-//newWorkspace.moveIntoFolder(block)
+/** 
+ * [Shirley] Move a block from the Blockly.mainWorkspace into a miniworkspace
+ * @param {Blockly.block} block block to move
+ */
 Blockly.Workspace.prototype.moveIntoFolder = function (block) {
   // The oldWorkspace will always be the mainWorkspace
   var oldWorkspace = Blockly.mainWorkspace;
-  // newWorkspace will always be this
+  // newWorkspace will always be this miniworkspace
   var newWorkspace = this;
 
   // Move the Block into the right place in the folder
@@ -524,7 +529,7 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
   //surgically removes all svg associated with block from old workspace canvas
   var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
   block.workspace = newWorkspace;
-  // Changes the focused workspace 
+  // Change the focused workspace 
   Blockly.focusedWorkspace_ = newWorkspace;
   this.getCanvas().appendChild(svgGroup);
 
@@ -537,6 +542,7 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
       'translate(' + x + ', ' + y + ')');
 
   moveConnections(block);
+
   if(block.comment){
     if(block.comment.bubble_){
       var svgGrup = goog.dom.removeNode(block.comment.bubble_.bubbleGroup_);
@@ -555,10 +561,10 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
   }
   
   if(newWorkspace.isMW) {
-    Blockly.fireUiEvent(newWorkspace.svgGroup_,'resize');
+    newWorkspace.fireResizeEvent();
   }
   // [Devid] Recursively moves the connections of this block and 
-  // his descendant between workspaces
+  // its descendant between workspaces
   function moveConnections(currBlock) {
     // remove, change x & y, add
     if (currBlock.outputConnection) {
@@ -595,7 +601,10 @@ Blockly.Workspace.prototype.moveIntoFolder = function (block) {
 
 };
 
-//newWorkspace.moveOutOfFolder(block)
+/** 
+ * [Shirley] Move a block from a miniworkspace into the mainWorkspa
+ * @param {Blockly.block} block block to move
+ */
 Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
   // this is used everytime a block is clicked - if it's in main, don't move it
   if (block.workspace == Blockly.mainWorkspace) {
@@ -611,12 +620,9 @@ Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
     oldWorkspace.removeTopBlock(block);
   }
   newWorkspace.addTopBlock(block);
-  //surgically removes all svg associated with block from old workspace canvas
-  //var svgGroup = goog.dom.removeNode(block.svg_.svgGroup_);
   block.workspace = newWorkspace;
   // Changes the focused workspace 
   Blockly.focusedWorkspace_ = newWorkspace;
-  //newWorkspace.getCanvas().appendChild(svgGroup);
 
   var translate_ = oldWorkspace.getTranslate();
   var dx = miniWorkspaceOrigin.x + parseInt(translate_[0]);
@@ -686,6 +692,10 @@ Blockly.Workspace.prototype.moveOutOfFolder = function (block) {
 
 };
 
+/**
+ * Moves all the child of the block into this workspace
+ * @param {Blockly.Block} block the parent
+ */
 Blockly.Workspace.prototype.moveChild = function(block){
   for (var cb = 0; cb < block.childBlocks_.length; cb++) {
     var childBlock = block.childBlocks_[cb];
@@ -694,6 +704,10 @@ Blockly.Workspace.prototype.moveChild = function(block){
   }
 }
 
+/**
+ * Returns values of the translation of the svgBlockCanvas
+ * @return {Object} x and y translation of the svgBlockCanvas
+ */
 Blockly.Workspace.prototype.getTranslate = function () {
     var translate = this.getCanvas().getAttribute("transform");
     translate = translate.split("(")[1].split(")")[0];
