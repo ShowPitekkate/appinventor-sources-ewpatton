@@ -1042,7 +1042,9 @@ Blockly.Block.prototype.onMouseMove_ = function(e) {
         this_.startDragY += transformMatrix[1];
       }
       // [Devid] Promote this block over the others blocks and the miniworkspaces
-      this_.promoteDragged();
+      if(this_.workspace == Blockly.mainWorkspace || this_.workspace.isMW) {
+        this_.promoteDragged();
+      }
       // Unrestricted dragging.
       var x = this_.startDragX + dx;
       var y = this_.startDragY + dy;
