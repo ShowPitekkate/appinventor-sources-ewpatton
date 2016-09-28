@@ -1,5 +1,5 @@
 // -*- mode: java; c-basic-offset: 2; -*-
-// Copyright 2012 Massachusetts Institute of Technology. All rights reserved.
+// Copyright © 2012-2016 Massachusetts Institute of Technology. All rights reserved.
 
 /**
  * @license
@@ -8,38 +8,72 @@
  *
  * @author mckinney@mit.edu (Andrew F. McKinney)
  * @author sharon@google.com (Sharon Perl)
+ * @author ewpatton@mit.edu (Evan W. Patton)
  */
 
 'use strict';
 
-goog.provide('Blockly.BlocklyEditor');
+goog.provide('AI.Blockly.BlocklyEditor');
 
-goog.require('Blockly.Drawer');
+goog.require('AI.Blockly.Drawer');
+
+// App Inventor extensions to Blockly
 goog.require('Blockly.TypeBlock');
 
-Blockly.BlocklyEditor.startup = function(documentBody, formName) {
-  var typeblock_config = {
-    frame: 'ai_frame',
-    typeBlockDiv: 'ai_type_block',
-    inputText: 'ac_input_text'
-  };
+if (Blockly.BlocklyEditor === undefined) {
+  Blockly.BlocklyEditor = {};
+}
 
-  //This is what Blockly's init function does when passing options.
-  //We are overriding the init process so putting it here
-  goog.mixin(Blockly, {
+Blockly.configForTypeBlock = {
+  frame: 'ai_frame',
+  typeBlockDiv: 'ai_type_block',
+  inputText: 'ac_input_text'
+};
+
+Blockly.BlocklyEditor.prestart = function() {
+  Blockly.mainWorkspace = new Blockly.WorkspaceSvg(new Blockly.Options({
+    readOnly: false,
     collapse : true,
-    hasScrollbars: true,
-    hasTrashcan: true,
-    hasBackpack: true,
+    scrollbars: true,
+    trashcan: true,
+    backpack: true,
     comments: true,
     disable: true,
-    configForTypeBlock: typeblock_config
+    media: './media/',
+    warningIndicator: true,
+    configForTypeBlock: Blockly.configForTypeBlock,
+    grid: {spacing: '20', length: '5', snap: true, colour: '#ccc'},
+    zoom: {controls: true, wheel: true, scaleSpeed: 1.1}
+  }));
+}
+
+Blockly.BlocklyEditor.startup = function(documentBody, formName) {
+  // Consider moving this to blocklyeditor/src/blockly.js
+  var workspace = Blockly.inject(documentBody, {
+    readOnly: false,
+    collapse : true,
+    scrollbars: true,
+    trashcan: true,
+    backpack: true,
+    comments: true,
+    disable: true,
+    media: './media/',
+    warningIndicator: true,
+    configForTypeBlock: Blockly.configForTypeBlock,
+    grid: {spacing: '20', length: '5', snap: true, colour: '#ccc'},
+    zoom: {controls: true, wheel: true, scaleSpeed: 1.1}
+  });
+  workspace.drawer_ = new Blockly.Drawer(workspace, {
+      scrollbars: true
+    });
+  workspace.backpack_ = new Blockly.Backpack(workspace);
+  workspace.addChangeListener(function(event) {
+    var block = Blockly.getMainWorkspace().getBlockById(event.blockId);
+    if ( block && event.name == Blockly.ComponentBlock.COMPONENT_SELECTOR ) {
+      block.rename(event.oldValue, event.newValue);
+    }
   });
 
-  Blockly.inject(documentBody);
-
-  Blockly.Drawer.createDom();
-  Blockly.Drawer.init();
   //This would also be done in Blockly init, but we need to do it here cause of
   //the different init process in drawer (it'd be undefined at the time it hits
   //init in Blockly)
@@ -138,10 +172,10 @@ Blockly.BlocklyEditor.startup = function(documentBody, formName) {
 
   /******************************************************************************/
 
-  Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(), 'blocklyWorkspaceChange', this,
+  Blockly.getMainWorkspace().addChangeListener(
       function() {
-        if (window.parent.BlocklyPanel_blocklyWorkspaceChanged){
-          window.parent.BlocklyPanel_blocklyWorkspaceChanged(Blockly.BlocklyEditor.formName);
+        if (top.BlocklyPanel_blocklyWorkspaceChanged){
+          top.BlocklyPanel_blocklyWorkspaceChanged(Blockly.BlocklyEditor.formName);
         }
         // [lyn 12/31/2013] Check for duplicate component event handlers before
         // running any error handlers to avoid quadratic time behavior.
@@ -152,7 +186,7 @@ Blockly.BlocklyEditor.startup = function(documentBody, formName) {
 Blockly.BlocklyEditor.render = function() {
   var start = new Date().getTime();
   Blockly.Instrument.initializeStats("Blockly.BlocklyEditor.render");
-  Blockly.mainWorkspace.render();
+  Blockly.getMainWorkspace().render();
   Blockly.WarningHandler.checkAllBlocksForWarningsAndErrors();
   var stop = new Date().getTime();
   var timeDiff = stop - start;
@@ -197,7 +231,7 @@ Blockly.Block.prototype.customContextMenu = function(options) {
     if (window.parent.ReplState.state != Blockly.ReplMgr.rsState.CONNECTED) {
       dialog = new goog.ui.Dialog(null, true);
       dialog.setTitle(Blockly.Msg.CAN_NOT_DO_IT);
-      dialog.setContent(Blockly.Msg.CONNECT_TO_DO_IT);
+      dialog.setTextContent(Blockly.Msg.CONNECT_TO_DO_IT);
       dialog.setButtonSet(new goog.ui.Dialog.ButtonSet().
         addButton(goog.ui.Dialog.ButtonSet.DefaultButtons.OK,
           false, true));
