@@ -6,6 +6,7 @@
 
 package com.google.appinventor.client;
 
+import com.google.gwt.i18n.client.LocalizableResource;
 import com.google.gwt.i18n.client.Messages;
 
 /**
@@ -6259,5 +6260,18 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Reload")
   @Description("")
   String reloadWindow();
+
+  @DefaultMessage("Share Project")
+  @Description("")
+  String shareProjectMenuItem();
+
+  @DefaultMessage("Share project with...")
+  @Description("Caption of share project dialbox")
+  String shareProjectWizardCaption();
+
+  @DefaultMessage("Email: ")
+  @Description("Label for a text box that allows user to enter the email address of the user "+
+      "whom they want to share project with.")
+  String shareProjectEmailLabel();
 
 }
