@@ -7,13 +7,12 @@
 package com.google.appinventor.server.storage;
 
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.annotation.Cached;
-import com.googlecode.objectify.annotation.Parent;
-import com.googlecode.objectify.annotation.Indexed;
-import com.googlecode.objectify.annotation.Unindexed;
+import com.googlecode.objectify.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.Id;
 
@@ -32,6 +31,12 @@ import javax.persistence.Id;
  *
  */
 public class StoredData {
+  public enum Permission{
+    OWNER,
+    READ,
+    WRITE,
+    NONE
+  }
   // The UserData class is an entity root, and the parent of UserFileData
   // and UserProjectData
   @Unindexed
@@ -69,6 +74,7 @@ public class StoredData {
   @Cached
   @Unindexed
   static final class ProjectData {
+
     // Auto-generated unique project id
     @Id Long id;
 
@@ -98,7 +104,9 @@ public class StoredData {
 
     long galleryId;  // this is the galleryId of this project (if published)
     long attributionId;  // if this project was initiated from the gallery, this is
-       // the id of the gallery app that was copied for remix
+    // the id of the gallery app that was copied for remix
+    @Serialized
+    Map<String, Permission> userPermission = new HashMap<>(); // This stores the permission information, user id to perm
   }
 
   // Project properties specific to the user

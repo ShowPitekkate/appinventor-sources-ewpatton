@@ -96,6 +96,16 @@ public final class TextValidators {
   }
 
   /**
+   * Checks whether the argument is a valid email address format.
+   * @param email The email address
+   * @return {@code true} if the email has valid email address format.
+   */
+  public static boolean checkValidEmail(String email){
+    return email.matches("\"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[" +
+        "0-9]{1,3}\\\\.[0-9]{1,3}\\\\])|(([a-zA-Z\\\\-0-9]+\\\\.)+[a-zA-Z]{2,}))$\"");
+  }
+
+  /**
    * Checks whether the argument is a legal identifier, specifically,
    * a non-empty string starting with a letter and followed by any number of
    * (unaccented English) letters, digits, or underscores.

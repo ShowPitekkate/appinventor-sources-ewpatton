@@ -16,6 +16,7 @@ import com.google.appinventor.server.project.CommonProjectService;
 import com.google.appinventor.server.project.youngandroid.YoungAndroidProjectService;
 import com.google.appinventor.server.storage.StorageIo;
 import com.google.appinventor.server.storage.StorageIoInstanceHolder;
+import com.google.appinventor.server.storage.StoredData;
 import com.google.appinventor.shared.rpc.BlocksTruncatedException;
 import com.google.appinventor.shared.rpc.InvalidSessionException;
 import com.google.appinventor.shared.rpc.RpcResult;
@@ -651,6 +652,12 @@ public class ProjectServiceImpl extends OdeRemoteServiceServlet implements Proje
   @Override
   public void log(String message) {
     LOG.warning(message);
+  }
+
+  @Override
+  public void shareProject(String userId, long projectId, String otherEmail, int perm) {
+    getProjectRpcImpl(userId, projectId).shareProject(userId, projectId,
+        otherEmail, StoredData.Permission.values()[perm]);
   }
 
   private void validateSessionId(String sessionId) throws InvalidSessionException {
