@@ -326,4 +326,12 @@ public interface ProjectService extends RemoteService {
    */
   void log(String message);
 
+  /**
+   * Share a project with others by email.
+   * @param userId the user id of the owner of the project
+   * @param projectId the project id
+   * @param otherEmail the email of other user
+   * @param perm permission
+   */
+  void shareProject(String userId, long projectId, String otherEmail, int perm);
 }

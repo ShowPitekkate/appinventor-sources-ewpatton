@@ -656,4 +656,7 @@ public interface StorageIo {
   List<AdminUser> searchUsers(String partialEmail);
   void storeUser(AdminUser user) throws AdminInterfaceException;
 
+  // project user permission
+  StoredData.Permission getPermission(String userId, long projectId);
+  void addPermission(String userId, long projectId, StoredData.Permission perm);
 }

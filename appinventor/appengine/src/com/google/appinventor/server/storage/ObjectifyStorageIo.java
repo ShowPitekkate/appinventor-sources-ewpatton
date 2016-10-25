@@ -2836,6 +2836,63 @@ public class ObjectifyStorageIo implements  StorageIo {
     }
   }
 
+  @Override
+  public StoredData.Permission getPermission(final String userId, final long projectId) {
+    final Result<StoredData.Permission> result = new Result<>();
+    try{
+      runJobWithRetries(new JobRetryHelper() {
+        @Override
+        public void run(Objectify datastore) throws ObjectifyException, IOException {
+          ProjectData pd = datastore.find(projectKey(projectId));
+          if (pd.userPermission.containsKey(userId)) {
+            result.t = pd.userPermission.get(userId);
+          }else {
+            result.t = StoredData.Permission.NONE;
+          }
+        }
+      }, false);
+    } catch (ObjectifyException e){
+      throw CrashReport.createAndLogError(LOG, null, null, e);
+    }
+    return result.t;
+  }
+
+  @Override
+  public void addPermission(final String userId, final long projectId,
+                            final StoredData.Permission perm) {
+    try{
+      // if perm is not owner, we need to create new UserProjectData for the user
+      if(perm!= StoredData.Permission.OWNER){
+        runJobWithRetries(new JobRetryHelper() {
+          @Override
+          public void run(Objectify datastore) throws ObjectifyException, IOException {
+            ProjectData pd = datastore.find(projectKey(projectId));
+            if(!pd.userPermission.containsKey(userId)){
+              UserProjectData upd = new UserProjectData();
+              upd.projectId = projectId;
+              upd.userKey = userKey(userId);
+              upd.settings = pd.settings;
+              upd.state = UserProjectData.StateEnum.CLOSED;
+              datastore.put(upd);
+            }
+          }
+        }, true);
+      }
+
+      // Change project permission
+      runJobWithRetries(new JobRetryHelper() {
+        @Override
+        public void run(Objectify datastore) throws ObjectifyException, IOException {
+          ProjectData pd = datastore.find(projectKey(projectId));
+          pd.userPermission.put(userId, perm);
+          datastore.put(pd);
+        }
+      }, true);
+    }catch (ObjectifyException e){
+      throw CrashReport.createAndLogError(LOG, null, null, e);
+    }
+  }
+
 }
 
 

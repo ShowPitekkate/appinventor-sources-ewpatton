@@ -25,12 +25,7 @@ import com.google.appinventor.client.tracking.Tracking;
 import com.google.appinventor.client.utils.Downloader;
 import com.google.appinventor.client.widgets.DropDownButton;
 import com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
-import com.google.appinventor.client.wizards.DownloadUserSourceWizard;
-import com.google.appinventor.client.wizards.KeystoreUploadWizard;
-import com.google.appinventor.client.wizards.ProjectUploadWizard;
-import com.google.appinventor.client.wizards.TemplateUploadWizard;
-import com.google.appinventor.client.wizards.ComponentImportWizard;
-import com.google.appinventor.client.wizards.ComponentUploadWizard;
+import com.google.appinventor.client.wizards.*;
 import com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard;
 import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.common.version.GitBuildId;
@@ -59,6 +54,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.google.appinventor.client.Ode.MESSAGES;
 
@@ -72,6 +68,7 @@ public class TopToolbar extends Composite {
   private static final String WIDGET_NAME_DOWNLOAD_KEYSTORE = "DownloadKeystore";
   private static final String WIDGET_NAME_UPLOAD_KEYSTORE = "UploadKeystore";
   private static final String WIDGET_NAME_DELETE_KEYSTORE = "DeleteKeystore";
+  private static final String WIDGET_NAME_SHARE = "ShareProject";
   private static final String WIDGET_NAME_SAVE = "Save";
   private static final String WIDGET_NAME_SAVE_AS = "SaveAs";
   private static final String WIDGET_NAME_CHECKPOINT = "Checkpoint";
@@ -144,6 +141,7 @@ public class TopToolbar extends Composite {
     // Should the UI be in read only mode?
     isReadOnly = Ode.getInstance().isReadOnly();
 
+    OdeLog.log("Add to file Item");
     // File -> {New Project; Save; Save As; Checkpoint; |; Delete this Project; My Projects;}
     fileItems.add(new DropDownItem(WIDGET_NAME_MY_PROJECTS, MESSAGES.projectMenuItem(),
         new SwitchToProjectAction()));
@@ -158,6 +156,8 @@ public class TopToolbar extends Composite {
       fileItems.add(new DropDownItem(WIDGET_NAME_DELETE, MESSAGES.deleteProjectButton(),
           new DeleteAction()));
       fileItems.add(null);
+      fileItems.add(new DropDownItem(WIDGET_NAME_SHARE, MESSAGES.shareProjectMenuItem(),
+          new ShareAction()));
       fileItems.add(new DropDownItem(WIDGET_NAME_SAVE, MESSAGES.saveMenuItem(),
           new SaveAction()));
       fileItems.add(new DropDownItem(WIDGET_NAME_SAVE_AS, MESSAGES.saveAsMenuItem(),
@@ -309,6 +309,13 @@ public class TopToolbar extends Composite {
       new NewYoungAndroidProjectWizard(null).center();
       // The wizard will switch to the design view when the new
       // project is created.
+    }
+  }
+
+  private class ShareAction implements Command {
+    @Override
+    public void execute() {
+      new ShareProjectWizard().center();
     }
   }
 
@@ -917,6 +924,7 @@ public class TopToolbar extends Composite {
    * of "Delete" and "Download Source").
    */
   public void updateFileMenuButtons(int view) {
+    OdeLog.wlog("Update file menu Button, view is "+view);
     if (isReadOnly) {
       // This may be too simple
       return;
@@ -928,6 +936,7 @@ public class TopToolbar extends Composite {
       fileDropDown.setItemEnabled(MESSAGES.exportAllProjectsMenuItem(),
           Ode.getInstance().getProjectManager().getProjects().size() > 0);
       fileDropDown.setItemEnabled(MESSAGES.exportProjectMenuItem(), false);
+      fileDropDown.setItemEnabled(MESSAGES.shareProjectMenuItem(), false);
       fileDropDown.setItemEnabled(MESSAGES.saveMenuItem(), false);
       fileDropDown.setItemEnabled(MESSAGES.saveAsMenuItem(), false);
       fileDropDown.setItemEnabled(MESSAGES.checkpointMenuItem(), false);
@@ -938,6 +947,7 @@ public class TopToolbar extends Composite {
       fileDropDown.setItemEnabled(MESSAGES.exportAllProjectsMenuItem(),
           Ode.getInstance().getProjectManager().getProjects().size() > 0);
       fileDropDown.setItemEnabled(MESSAGES.exportProjectMenuItem(), true);
+      fileDropDown.setItemEnabled(MESSAGES.shareProjectMenuItem(), true);
       fileDropDown.setItemEnabled(MESSAGES.saveMenuItem(), true);
       fileDropDown.setItemEnabled(MESSAGES.saveAsMenuItem(), true);
       fileDropDown.setItemEnabled(MESSAGES.checkpointMenuItem(), true);
