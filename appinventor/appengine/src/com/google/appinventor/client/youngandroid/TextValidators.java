@@ -101,8 +101,7 @@ public final class TextValidators {
    * @return {@code true} if the email has valid email address format.
    */
   public static boolean checkValidEmail(String email){
-    return email.matches("\"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\\\[[0-9]{1,3}\\\\.[0-9]{1,3}\\\\.[" +
-        "0-9]{1,3}\\\\.[0-9]{1,3}\\\\])|(([a-zA-Z\\\\-0-9]+\\\\.)+[a-zA-Z]{2,}))$\"");
+    return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,6}$");
   }
 
   /**
