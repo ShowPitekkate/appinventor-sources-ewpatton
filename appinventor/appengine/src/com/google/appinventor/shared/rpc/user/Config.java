@@ -34,6 +34,7 @@ public class Config implements IsSerializable, Serializable {
   private String referenceComponentsUrl;
   private String firebaseURL;   // Default Firebase URL
   private int noop;            // No-op interval
+  private String blocklyShareUrl;
 
   public Config() {
   }
@@ -174,4 +175,11 @@ public class Config implements IsSerializable, Serializable {
     this.noop = noop;
   }
 
+  public void setBlocklyShareUrl(String blocklyShareUrl) {
+    this.blocklyShareUrl = blocklyShareUrl;
+  }
+
+  public String getBlocklyShareUrl() {
+    return blocklyShareUrl;
+  }
 }

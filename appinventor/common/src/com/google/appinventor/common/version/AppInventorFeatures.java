@@ -115,4 +115,12 @@ public final class AppInventorFeatures {
   }
 
 
+  /**
+   * If set to true, the project is sharable and real-time collaboration is enabled.
+   *
+   * @return true to enable group collaboration.
+   */
+  public static boolean enableGroupProject(){
+    return true;
+  }
 }
