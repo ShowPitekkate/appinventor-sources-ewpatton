@@ -1533,10 +1533,11 @@ public class ObjectifyStorageIo implements  StorageIo {
     try {
       runJobWithRetries(new JobRetryHelper() {
         FileData fd;
-
+        ProjectData pd;
         @Override
         public void run(Objectify datastore) throws ObjectifyException {
           Key<FileData> key = projectFileKey(projectKey(projectId), fileName);
+          pd = datastore.find(projectKey(projectId));
           fd = (FileData) memcache.get(key.getString());
           if (fd == null) {
             fd = datastore.find(projectFileKey(projectKey(projectId), fileName));
@@ -1554,7 +1555,8 @@ public class ObjectifyStorageIo implements  StorageIo {
           Preconditions.checkState(fd != null);
 
           if (fd.userId != null && !fd.userId.equals("")) {
-            if (!fd.userId.equals(userId)) {
+            // TODO(dxy): Check Write permission on each user.
+            if (!fd.userId.equals(userId) && !pd.userPermission.containsKey(userId)) {
               throw CrashReport.createAndLogError(LOG, null,
                 collectUserProjectErrorInfo(userId, projectId),
                 new UnauthorizedAccessException(userId, projectId, null));
@@ -1784,7 +1786,7 @@ public class ObjectifyStorageIo implements  StorageIo {
         @Override
         public void run(Objectify datastore) {
           Key<FileData> fileKey = projectFileKey(projectKey(projectId), fileName);
-          
+          pd.t = datastore.find(projectKey(projectId));
           fd.t = (FileData) memcache.get(fileKey.getString());
           if (fd.t == null) {
             fd.t = datastore.find(fileKey);
@@ -1797,9 +1799,11 @@ public class ObjectifyStorageIo implements  StorageIo {
     }
     // read the blob/GCS File outside of the job
     FileData fileData = fd.t;
+    ProjectData projectData = pd.t;
     if (fileData != null) {
       if (fileData.userId != null && !fileData.userId.equals("")) {
-        if (!fileData.userId.equals(userId)) {
+        // TODO(dxy): Check Read permission for each user
+        if (!fileData.userId.equals(userId) && !projectData.userPermission.containsKey(userId)) {
           throw CrashReport.createAndLogError(LOG, null,
             collectUserProjectErrorInfo(userId, projectId),
             new UnauthorizedAccessException(userId, projectId, null));
