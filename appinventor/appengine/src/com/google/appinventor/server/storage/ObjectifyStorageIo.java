@@ -1778,11 +1778,13 @@ public class ObjectifyStorageIo implements  StorageIo {
     validateGCS();
     final Result<byte[]> result = new Result<byte[]>();
     final Result<FileData> fd = new Result<FileData>();
+    final Result<ProjectData> pd = new Result<>();
     try {
       runJobWithRetries(new JobRetryHelper() {
         @Override
         public void run(Objectify datastore) {
           Key<FileData> fileKey = projectFileKey(projectKey(projectId), fileName);
+          
           fd.t = (FileData) memcache.get(fileKey.getString());
           if (fd.t == null) {
             fd.t = datastore.find(fileKey);

@@ -58,20 +58,20 @@ public class ShareProjectWizard extends Wizard{
       @Override
       public void execute() {
         String email = emailTextbox.getText();
-        if(TextValidators.checkValidEmail(email)){
-          String userId = Ode.getInstance().getUser().getUserId();
-          long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
-          Window.alert(projectId+"");
-          Ode.getInstance().getProjectService().shareProject(userId, projectId,
-              email, 1, new OdeAsyncCallback<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                  Window.alert("Success");
-                }
-              });
-        }else {
-          Window.alert("Invalid email address!");
-        }
+//        if(TextValidators.checkValidEmail(email)){
+        String userId = Ode.getInstance().getUser().getUserId();
+        long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
+        Window.alert(projectId+"");
+        Ode.getInstance().getProjectService().shareProject(userId, projectId,
+            email, 1, new OdeAsyncCallback<Void>() {
+              @Override
+              public void onSuccess(Void aVoid) {
+                Window.alert("Success");
+              }
+            });
+//        }else {
+//          Window.alert("Invalid email address!");
+//        }
       }
     });
   }
