@@ -144,7 +144,10 @@
     "./src/generators/yail/procedures.js",
 
     // Repl
-    "./src/replmgr.js"
+    "./src/replmgr.js",
+
+    // Group collaboration
+    "./src/socket.io.js"
     ],
 
   // This must be specified because datetimesymbols.js from the Closure Library

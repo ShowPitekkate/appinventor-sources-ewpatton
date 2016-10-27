@@ -6,6 +6,7 @@
 
 package com.google.appinventor.server;
 
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.server.flags.Flag;
 import com.google.appinventor.server.storage.StorageIo;
 import com.google.appinventor.server.storage.StorageIoInstanceHolder;
@@ -62,6 +63,9 @@ public class UserInfoServiceImpl extends OdeRemoteServiceServlet implements User
     config.setFirebaseURL(Flag.createFlag("firebase.url", "").get());
     config.setNoop(Flag.createFlag("session.noop", 0).get());
 
+    if(AppInventorFeatures.enableGroupProject()) {
+      config.setBlocklyShareUrl(Flag.createFlag("blockly.share.url", "").get());
+    }
     // Check to see if we need to upgrade this user's project to GCS
     storageIo.checkUpgrade(userInfoProvider.getUserId());
     return config;
