@@ -192,6 +192,8 @@ public class TopPanel extends Composite {
     accountButton = new DropDownButton(WIDGET_NAME_USER, " " , userItems, true);
     accountButton.setItemEnabled(WIDGET_NAME_MESSAGES, false);
     accountButton.setStyleName("ode-TopPanelButton");
+    // Set id to retrieve user email
+    accountButton.getElement().setId("userEmail");
 
     // Language
     List<DropDownItem> languageItems = Lists.newArrayList();
