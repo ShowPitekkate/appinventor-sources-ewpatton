@@ -147,7 +147,8 @@
     "./src/replmgr.js",
 
     // Group collaboration
-    "./src/socket.io.js"
+    "./src/socket.io.js",
+    "./src/collaboration.js"
     ],
 
   // This must be specified because datetimesymbols.js from the Closure Library
