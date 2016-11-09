@@ -21,6 +21,9 @@ Blockly.Collaboration = function(workspace, channel){
     console.log("new collaboration established, channel is "+channel+" user is "+uuid);
     socket.emit("channel", channel);
 
+    var colors = ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#cab2d6', '#6a3d9a'];
+    var userColorMap = new Map();
+    var userCount = 0;
     socket.on(this.channel, function(msg){
         var msgJSON = JSON.parse(msg);
         var userFrom = msgJSON["user"];
@@ -29,7 +32,19 @@ Blockly.Collaboration = function(workspace, channel){
         if(userFrom != uuid){
              var newEvent = Blockly.Events.fromJson(msgJSON["event"], workspace);
              Blockly.Events.disable();
+             console.log(newEvent); //blockId
              newEvent.run(true);
+             var color = '';
+             if(userColorMap.has(userFrom)){
+                color = userColorMap.get(userFrom);
+             }else{
+                color = colors[userCount];
+                userCount += 1;
+                userColorMap.set(userFrom, color);
+             }
+             var block = Blockly.mainWorkspace.getBlockById(newEvent.blockId);
+             block.svgGroup_.className += ' blockOtherSelected';
+             block.svgPath_.setAttribute('stroke', color);
              Blockly.Events.enable();
         }
     });
@@ -54,4 +69,6 @@ function generateUUID(){
         return v.toString(16);
     });
 }
+
+
 
