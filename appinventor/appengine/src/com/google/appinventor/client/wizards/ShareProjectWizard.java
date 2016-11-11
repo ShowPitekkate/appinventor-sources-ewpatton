@@ -58,7 +58,6 @@ public class ShareProjectWizard extends Wizard{
       @Override
       public void execute() {
         String email = emailTextbox.getText();
-//        if(TextValidators.checkValidEmail(email)){
         String userId = Ode.getInstance().getUser().getUserId();
         long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
         Window.alert(projectId+"");
@@ -69,9 +68,6 @@ public class ShareProjectWizard extends Wizard{
                 Window.alert("Success");
               }
             });
-//        }else {
-//          Window.alert("Invalid email address!");
-//        }
       }
     });
   }

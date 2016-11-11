@@ -92,3 +92,4 @@ Blockly.confirmDeletion = function(callback) {
 Blockly.preinitMainWorkspace_ = function(options) {
   Blockly.mainWorkspace = new Blockly.WorkspaceSvg(options);
 }
+
