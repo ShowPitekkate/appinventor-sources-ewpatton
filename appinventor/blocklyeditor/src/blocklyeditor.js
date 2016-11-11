@@ -61,8 +61,6 @@ Blockly.BlocklyEditor.startup = function(documentBody, formName) {
 
   console.log("Create workspace collaboration");
   workspace.collaboration = new Blockly.Collaboration(workspace, window.location.hash);
-
-
   //This would also be done in Blockly init, but we need to do it here cause of
   //the different init process in drawer (it'd be undefined at the time it hits
   //init in Blockly)
