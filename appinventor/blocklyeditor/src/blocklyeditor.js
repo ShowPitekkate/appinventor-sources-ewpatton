@@ -82,7 +82,7 @@ Blockly.BlocklyEditor.startup = function(documentBody, formName) {
   //the different init process in drawer (it'd be undefined at the time it hits
   //init in Blockly)
   if (!Blockly.readOnly)
-    Blockly.TypeBlock(typeblock_config);
+    Blockly.TypeBlock(Blockly.configForTypeBlock);
 
   Blockly.BlocklyEditor.formName = formName;
 
