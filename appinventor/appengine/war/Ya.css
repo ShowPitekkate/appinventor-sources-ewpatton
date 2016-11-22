@@ -2379,3 +2379,9 @@ textarea::-webkit-input-placeholder {
   height: 0;
   clear: both;
 }
+
+/** Collaboration-related elements style **/
+.collaboration-user-box{
+  width: 25px;
+  height: 25px;
+}

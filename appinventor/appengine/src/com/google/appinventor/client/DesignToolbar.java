@@ -38,6 +38,7 @@ import com.google.gwt.core.client.Scheduler;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -517,4 +518,17 @@ public class DesignToolbar extends Toolbar {
     return currentView;
   }
 
+  public void addJoinedUser(String username, String color){
+    Label user = new Label();
+    user.setStyleName("collaboration-user-box");
+    user.getElement().getStyle().setBackgroundColor(color);
+    user.setTitle(username);
+
+    rightButtons.add(user);
+  }
+
+  private static native void exportMethodToJavascript()/*-{
+    $wnd.DesignToolbar_addJoinedUser =
+      $entry(@com.google.appinventor.client.DesignToolbar::addJoinedUser(Ljava/lang/String;Ljava/lang/String;));
+  -*/;
 }
