@@ -2384,4 +2384,5 @@ textarea::-webkit-input-placeholder {
 .collaboration-user-box{
   width: 25px;
   height: 25px;
+  margin-left: 4px;
 }

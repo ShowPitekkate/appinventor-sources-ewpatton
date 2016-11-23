@@ -36,9 +36,11 @@ import com.google.common.collect.Maps;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.Scheduler;
 
+import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
@@ -151,11 +153,14 @@ public class DesignToolbar extends Toolbar {
   // on the device.
   public static LinkedList<String> pushedScreens = Lists.newLinkedList();
 
+  private static HorizontalPanel joinedUserLabel = new HorizontalPanel();
+  private static Map<String, Label> joinedUserMap = Maps.newHashMap();
   /**
    * Initializes and assembles all commands into buttons in the toolbar.
    */
   public DesignToolbar() {
     super();
+    exportMethodToJavascript();
 
     isReadOnly = Ode.getInstance().isReadOnly();
 
@@ -176,6 +181,9 @@ public class DesignToolbar extends Toolbar {
       addButton(new ToolbarItem(WIDGET_NAME_REMOVEFORM, MESSAGES.removeFormButton(),
           new RemoveFormAction()));
     }
+
+    joinedUserList.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+    rightButtons.add(joinedUserList);
 
     addButton(new ToolbarItem(WIDGET_NAME_SWITCH_TO_FORM_EDITOR,
         MESSAGES.switchToFormEditorButton(), new SwitchToFormEditorAction()), true);
@@ -518,17 +526,26 @@ public class DesignToolbar extends Toolbar {
     return currentView;
   }
 
-  public void addJoinedUser(String username, String color){
+  // TODO(dxy): Change to session id to allow different sessions from the same user.
+  public static void addJoinedUser(String username, String color){
     Label user = new Label();
     user.setStyleName("collaboration-user-box");
     user.getElement().getStyle().setBackgroundColor(color);
     user.setTitle(username);
 
-    rightButtons.add(user);
+    joinedUserLabel.add(user);
+    joinedUserMap.put(username, user);
+  }
+
+  public static void removeJoinedUser(String username){
+    joinedUserMap.get(username).removeFromParent();
+    joinedUserMap.remove(username);
   }
 
   private static native void exportMethodToJavascript()/*-{
     $wnd.DesignToolbar_addJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::addJoinedUser(Ljava/lang/String;Ljava/lang/String;));
-  -*/;
+    $wnd.DesignToolbar_removeJoinedUser =
+      $entry(@com.google.appinventor.client.DesignToolbar::removeJoinedUser(Ljava/lang/String;));
+  }-*/;
 }
