@@ -316,7 +316,7 @@ public abstract class CommonProjectService {
    * @param projectId the project id
    * @param otherEmail the email address of other user
    */
-  public void shareProject(String userId, long projectId, String otherEmail, StoredData.Permission perm){
+  public long shareProject(String userId, long projectId, String otherEmail, StoredData.Permission perm){
     String otherID = storageIo.findUserByEmail(otherEmail);
     // add owner permission first
     StoredData.Permission owner = storageIo.getPermission(userId, projectId);
@@ -324,6 +324,7 @@ public abstract class CommonProjectService {
       storageIo.addPermission(userId, projectId, StoredData.Permission.OWNER);
     }
     storageIo.addPermission(otherID, projectId, perm);
+    return projectId;
   }
 
 

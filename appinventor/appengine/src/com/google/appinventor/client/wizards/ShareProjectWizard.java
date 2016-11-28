@@ -5,6 +5,7 @@ import com.google.appinventor.client.OdeAsyncCallback;
 import com.google.appinventor.client.widgets.LabeledTextBox;
 import com.google.appinventor.client.widgets.Validator;
 import com.google.appinventor.client.youngandroid.TextValidators;
+import com.google.appinventor.shared.rpc.project.UserProject;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -57,22 +58,18 @@ public class ShareProjectWizard extends Wizard{
     initFinishCommand(new Command() {
       @Override
       public void execute() {
-        String email = emailTextbox.getText();
-
-//        if(TextValidators.checkValidEmail(email)){
+        final String email = emailTextbox.getText();
+        // TODO(Xinyue Deng): add email address format checking & check if email is in the system.
         String userId = Ode.getInstance().getUser().getUserId();
         long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
-        Window.alert(projectId+"");
         Ode.getInstance().getProjectService().shareProject(userId, projectId,
-            email, 1, new OdeAsyncCallback<Void>() {
+            email, 1, new OdeAsyncCallback<Long>() {
               @Override
-              public void onSuccess(Void aVoid) {
+              public void onSuccess(Long projectId) {
+                publishShareProject(email, projectId.toString());
                 Window.alert("Success");
               }
             });
-//        }else {
-//          Window.alert("Invalid email address!");
-//        }
       }
     });
   }
@@ -95,4 +92,12 @@ public class ShareProjectWizard extends Wizard{
       }
     });
   }
+
+  public native void publishShareProject(String email, String projectId)/*-{
+    var msg = {
+      "channel": email,
+      "project": parseInt(projectId, 10)};
+    console.log(msg);
+    $wnd.socket.emit("shareProject", msg);
+  }-*/;
 }

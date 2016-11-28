@@ -21,11 +21,11 @@ Blockly.Collaboration = function(workspace, channel){
   var userLastSelection = new Map();
   var userCount = 0;
   var uuid = workspace.id;
-  var socket = io.connect("http://localhost:3000", {autoConnect: true});
+  //var socket = io.connect("http://localhost:3000", {autoConnect: true});
   console.log("new collaboration established, channel is "+channel+" user is "+uuid);
-  socket.emit("channel", channel);
+  window.parent.socket.emit("channel", channel);
 
-  socket.on(this.channel, function(msg){
+  window.parent.socket.on(this.channel, function(msg){
     var msgJSON = JSON.parse(msg);
     var userFrom = msgJSON["user"];
     console.log("User "+ uuid +" receive new events from "+userFrom);
@@ -63,12 +63,13 @@ Blockly.Collaboration = function(workspace, channel){
       return;
     }
     var msg = {
+      "channel": channel,
       "user" : uuid,
       "event" : event.toJson()
-    }
+    };
     var eventJson = JSON.stringify(msg);
     console.log(eventJson);
-    socket.emit("block", eventJson);
+    window.parent.socket.emit("block", eventJson);
   });
 }
 

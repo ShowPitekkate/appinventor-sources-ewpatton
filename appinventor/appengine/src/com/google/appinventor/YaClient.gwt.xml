@@ -91,6 +91,9 @@
   <source path="shared/rpc/user"/>
   <source path="shared/rpc/project/youngandroid"/>
 
+  <!-- javascript -->
+  <public path="public"/>
+  <script src="socket.io.js"></script>
   <!-- extra_module_contents -->
 
   <!-- ExtendedProxy -->

@@ -63,14 +63,7 @@ import com.google.appinventor.shared.rpc.admin.AdminInfoService;
 import com.google.appinventor.shared.rpc.admin.AdminInfoServiceAsync;
 import com.google.appinventor.shared.rpc.help.HelpService;
 import com.google.appinventor.shared.rpc.help.HelpServiceAsync;
-import com.google.appinventor.shared.rpc.project.FileNode;
-import com.google.appinventor.shared.rpc.project.GalleryAppListResult;
-import com.google.appinventor.shared.rpc.project.GallerySettings;
-import com.google.appinventor.shared.rpc.project.ProjectRootNode;
-import com.google.appinventor.shared.rpc.project.ProjectService;
-import com.google.appinventor.shared.rpc.project.ProjectServiceAsync;
-import com.google.appinventor.shared.rpc.project.GalleryService;
-import com.google.appinventor.shared.rpc.project.GalleryServiceAsync;
+import com.google.appinventor.shared.rpc.project.*;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 import com.google.appinventor.shared.rpc.user.Config;
 import com.google.appinventor.shared.rpc.user.SplashConfig;
@@ -118,7 +111,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.appinventor.shared.rpc.project.GalleryApp;
 
 /**
  * Main entry point for Ode. Defines the startup UI elements in
@@ -756,6 +748,11 @@ public class Ode implements EntryPoint {
           }
         });
         editorManager = new EditorManager();
+
+        // Connect to collaboration server
+        if(AppInventorFeatures.enableGroupProject()){
+          connectCollaborationServer(result.getBlocklyShareUrl(), user.getUserEmail());
+        }
 
         // Initialize UI
         initializeUi();
@@ -2214,6 +2211,17 @@ public class Ode implements EntryPoint {
       });
   }
 
+  public static void addSharedProject(String projectId){
+    final String userId = Ode.getInstance().getUser().getUserId();
+    Ode.getInstance().getProjectService().makeUserProject(userId, Long.parseLong(projectId),
+        new OdeAsyncCallback<UserProject>() {
+          @Override
+          public void onSuccess(UserProject userProject) {
+            Ode.getInstance().getProjectManager().addProject(userProject);
+          }
+        });
+  }
+
   // Native code to set the top level rendezvousServer variable
   // where blockly code can easily find it.
   private native void setRendezvousServer(String server) /*-{
@@ -2243,4 +2251,16 @@ public class Ode implements EntryPoint {
     }
   }-*/;
 
+  private native void connectCollaborationServer(String server, String userEmail) /*-{
+    $wnd.socket = $wnd.io.connect(server, {autoConnect: true});
+    $wnd.userEmail = userEmail;
+    $wnd.socket.emit("channel", userEmail);
+    $wnd.socket.on(userEmail, function(msg){
+      console.log("receive msg for sharing project");
+      var msgJSON = JSON.parse(msg);
+      console.log(msgJSON);
+      var projectId = String(msgJSON["project"]);
+      @com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;)(projectId);
+    });
+  }-*/;
 }

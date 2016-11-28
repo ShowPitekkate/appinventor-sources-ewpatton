@@ -72,6 +72,11 @@ public interface ProjectServiceAsync {
   void getProject(long projectId, AsyncCallback<ProjectRootNode> callback);
 
   /**
+   * @see ProjectService#makeUserProject(String, long)
+   */
+  void makeUserProject(String userId, long projectId, AsyncCallback<UserProject> callback);
+
+  /**
    * @see ProjectService#loadProjectSettings(long)
    */
   void loadProjectSettings(long projectId, AsyncCallback<String> callback);
@@ -174,6 +179,6 @@ public interface ProjectServiceAsync {
    * @see ProjectService#shareProject(String, long, String, int)
    */
   void shareProject(String userId, long projectId, String otherEmail,
-                    int perm, AsyncCallback<Void> callback);
+                    int perm, AsyncCallback<Long> callback);
 
 }

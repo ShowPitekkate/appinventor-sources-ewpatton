@@ -36,7 +36,6 @@ import com.google.common.collect.Maps;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.Scheduler;
 
-import com.google.gwt.dev.util.collect.HashMap;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
@@ -182,8 +181,8 @@ public class DesignToolbar extends Toolbar {
           new RemoveFormAction()));
     }
 
-    joinedUserList.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
-    rightButtons.add(joinedUserList);
+    joinedUserLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
+    rightButtons.add(joinedUserLabel);
 
     addButton(new ToolbarItem(WIDGET_NAME_SWITCH_TO_FORM_EDITOR,
         MESSAGES.switchToFormEditorButton(), new SwitchToFormEditorAction()), true);
