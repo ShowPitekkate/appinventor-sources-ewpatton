@@ -25,10 +25,10 @@ Blockly.Collaboration = function(workspace, channel){
         var msgJSON = JSON.parse(msg);
         var userFrom = msgJSON["user"];
         console.log("User"+ uuid +"receive new events from "+userFrom);
-        console.log(msgJSON["event"]);
         if(userFrom != uuid){
              var newEvent = Blockly.Events.fromJson(msgJSON["event"], workspace);
              Blockly.Events.disable();
+             console.log(msgJSON["event"]);
              newEvent.run(true);
              Blockly.Events.enable();
         }
