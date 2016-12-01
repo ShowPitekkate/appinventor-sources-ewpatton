@@ -531,14 +531,17 @@ public class DesignToolbar extends Toolbar {
     user.setStyleName("collaboration-user-box");
     user.getElement().getStyle().setBackgroundColor(color);
     user.setTitle(username);
-
-    joinedUserLabel.add(user);
-    joinedUserMap.put(username, user);
+    if (!joinedUserMap.containsKey(username)) {
+      joinedUserLabel.add(user);
+      joinedUserMap.put(username, user);
+    }
   }
 
   public static void removeJoinedUser(String username){
-    joinedUserMap.get(username).removeFromParent();
-    joinedUserMap.remove(username);
+    if (joinedUserMap.containsKey(username)) {
+      joinedUserMap.get(username).removeFromParent();
+      joinedUserMap.remove(username);
+    }
   }
 
   private static native void exportMethodToJavascript()/*-{

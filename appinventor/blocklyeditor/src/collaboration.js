@@ -16,10 +16,7 @@ Blockly.Collaboration = function(workspace, channel){
   this.workspace = workspace;
   this.channel = channel;
 
-  var colors = ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#cab2d6', '#6a3d9a'];
-  var userColorMap = new Map();
   var userLastSelection = new Map();
-  var userCount = 0;
   var uuid = workspace.id;
   //var socket = io.connect("http://localhost:3000", {autoConnect: true});
   console.log("new collaboration established, channel is "+channel+" user is "+uuid);
@@ -33,17 +30,9 @@ Blockly.Collaboration = function(workspace, channel){
     if(userFrom != uuid){
       var newEvent = Blockly.Events.fromJson(msgJSON["event"], workspace);
       Blockly.Events.disable();
-      console.log(newEvent); //blockId
       newEvent.run(true);
-      var color = '';
+      var color = window.parent.userColorMap.get(userFrom);
       var block = Blockly.mainWorkspace.getBlockById(newEvent.blockId);
-      if(userColorMap.has(userFrom)){
-        color = userColorMap.get(userFrom);
-      }else{
-        color = colors[userCount];
-        userCount += 1;
-        userColorMap.set(userFrom, color);
-      }
       if(userLastSelection.has(userFrom)){
         var prevSelected = userLastSelection.get(userFrom);
         prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
