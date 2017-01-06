@@ -395,7 +395,6 @@ Blockly.Backpack.prototype.openBackpack = function() {
     }
     this.flyout_.show(newBackpack);
   }
-  */
 };
 
 /**

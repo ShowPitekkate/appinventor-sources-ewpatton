@@ -1025,12 +1025,7 @@ Blockly.ComponentBlock.isClockMethodName =  function  (name) {
 
 Blockly.ComponentBlock.createComponentDropDown = function(block){
   var componentDropDown = new Blockly.FieldDropdown([["",""]]);
-<<<<<<< HEAD
-  componentDropDown.block = block;
-  componentDropDown.menuGenerator_ = function(){ return Blockly.Component.getComponentNamesByType(this.block.typeName);};
-=======
   componentDropDown.menuGenerator_ = function(){ return block.getTopWorkspace().getComponentDatabase().getComponentUidNameMapByType(block.typeName); };
->>>>>>> 6c3800c62fc8c22263627dc665f89479588c0a5b
   return componentDropDown;
 };
 
