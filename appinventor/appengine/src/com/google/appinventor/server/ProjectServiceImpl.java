@@ -551,7 +551,8 @@ public class ProjectServiceImpl extends OdeRemoteServiceServlet implements Proje
     // System.out.println(serializedResponse);  // COV_NF_LINE
   }
 
-  private UserProject makeUserProject(String userId, long projectId) {
+  @Override
+  public UserProject makeUserProject(String userId, long projectId) {
     return storageIo.getUserProject(userId, projectId);
   }
 
@@ -663,8 +664,8 @@ public class ProjectServiceImpl extends OdeRemoteServiceServlet implements Proje
   }
 
   @Override
-  public void shareProject(String userId, long projectId, String otherEmail, int perm) {
-    getProjectRpcImpl(userId, projectId).shareProject(userId, projectId,
+  public long shareProject(String userId, long projectId, String otherEmail, int perm) {
+    return getProjectRpcImpl(userId, projectId).shareProject(userId, projectId,
         otherEmail, StoredData.Permission.values()[perm]);
   }
 

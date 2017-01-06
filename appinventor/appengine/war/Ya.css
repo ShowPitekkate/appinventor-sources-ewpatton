@@ -2411,3 +2411,10 @@ textarea::-webkit-input-placeholder {
 .ai_type_block {
   position: absolute;
 }
+
+/** Collaboration-related elements style **/
+.collaboration-user-box{
+  width: 25px;
+  height: 25px;
+  margin-left: 4px;
+}

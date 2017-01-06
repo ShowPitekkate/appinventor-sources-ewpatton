@@ -337,6 +337,9 @@ Blockly.ai_inject = function(container, workspace) {
   workspace.injected = true;
   // Add pending resize event to fix positioning issue in Firefox.
   setTimeout(function() { Blockly.svgResize(workspace); });
+  // add collaboration code
+  console.log("Create workspace collaboration");
+  workspace.collaboration = new Blockly.Collaboration(workspace, window.location.hash);
   return workspace;
 };
 

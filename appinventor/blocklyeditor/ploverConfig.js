@@ -151,7 +151,7 @@
     "./src/replmgr.js",
 
     // Group collaboration
-    "./src/socket.io.js",
+    //"./src/socket.io.js",
     "./src/collaboration.js"
     ],
 

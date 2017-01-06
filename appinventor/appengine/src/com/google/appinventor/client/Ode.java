@@ -73,6 +73,7 @@ import com.google.appinventor.shared.rpc.project.ProjectServiceAsync;
 import com.google.appinventor.shared.rpc.project.UserProject;
 import com.google.appinventor.shared.rpc.project.GalleryService;
 import com.google.appinventor.shared.rpc.project.GalleryServiceAsync;
+import com.google.appinventor.shared.rpc.project.*;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 import com.google.appinventor.shared.rpc.user.Config;
 import com.google.appinventor.shared.rpc.user.SplashConfig;
@@ -119,7 +120,6 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.appinventor.shared.rpc.project.GalleryApp;
 
 /**
  * Main entry point for Ode. Defines the startup UI elements in
@@ -407,6 +407,7 @@ public class Ode implements EntryPoint {
           // the button). When the person switches to the projects list view again (here)
           // we re-enable it.
           projectToolbar.enableStartButton();
+          leaveProject();
         }
       };
     if (designToolbar.getCurrentView() != DesignToolbar.View.BLOCKS) {
@@ -617,6 +618,7 @@ public class Ode implements EntryPoint {
         assetManager = AssetManager.getInstance();
       }
       assetManager.loadAssets(project.getProjectId());
+      joinProject(projectIdString);
     }
     getTopToolbar().updateFileMenuButtons(1);
   }
@@ -767,6 +769,11 @@ public class Ode implements EntryPoint {
           }
         });
         editorManager = new EditorManager();
+
+        // Connect to collaboration server
+        if(AppInventorFeatures.enableGroupProject()){
+          connectCollaborationServer(result.getBlocklyShareUrl(), user.getUserEmail());
+        }
 
         // Initialize UI
         initializeUi();
@@ -2252,12 +2259,14 @@ public class Ode implements EntryPoint {
     container.add(panel);
     GalleryClient.getInstance().addListener(new GalleryRequestListener() {
       volatile int count = pending;
+
       private void hideLoadingWidget() {
         if (container.getParent() != null) {
           container.clear();
           container.removeFromParent();
         }
       }
+
       @Override
       public boolean onAppListRequestCompleted(GalleryAppListResult appsResult, int requestID, boolean refreshable) {
         if ((--count) <= 0) {
@@ -2266,6 +2275,7 @@ public class Ode implements EntryPoint {
         }
         return false;
       }
+
       @Override
       public boolean onCommentsRequestCompleted(List<GalleryComment> comments) {
         if ((--count) <= 0) {
@@ -2274,6 +2284,7 @@ public class Ode implements EntryPoint {
         }
         return false;
       }
+
       @Override
       public boolean onSourceLoadCompleted(UserProject projectInfo) {
         if ((--count) <= 0) {
@@ -2284,6 +2295,16 @@ public class Ode implements EntryPoint {
       }
     });
     return container;
+  }
+  public static void addSharedProject(String projectId){
+    final String userId = Ode.getInstance().getUser().getUserId();
+    Ode.getInstance().getProjectService().makeUserProject(userId, Long.parseLong(projectId),
+        new OdeAsyncCallback<UserProject>() {
+          @Override
+          public void onSuccess(UserProject userProject) {
+            Ode.getInstance().getProjectManager().addProject(userProject);
+          }
+        });
   }
 
   // Native code to set the top level rendezvousServer variable
@@ -2315,4 +2336,60 @@ public class Ode implements EntryPoint {
     }
   }-*/;
 
+  private native void connectCollaborationServer(String server, String userEmail) /*-{
+    $wnd.socket = $wnd.io.connect(server, {autoConnect: true});
+    $wnd.userEmail = userEmail;
+    $wnd.colors = ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c', '#cab2d6', '#6a3d9a'];
+    $wnd.userColorMap = new $wnd.Map();
+    $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
+    $wnd.socket.emit("channel", userEmail);
+    $wnd.socket.on(userEmail, function(msg){
+      var msgJSON = JSON.parse(msg);
+      var projectId = String(msgJSON["project"]);
+      @com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;)(projectId);
+    });
+  }-*/;
+
+  private native void joinProject(String projectId) /*-{
+    $wnd.socket.emit("channel", projectId);
+    $wnd.project = projectId;
+    var msg = {
+      "project": projectId,
+      "user": $wnd.userEmail
+    };
+    $wnd.socket.emit("userJoin", msg);
+    $wnd.socket.on(projectId, function(msg){
+      var msgJSON = JSON.parse(msg);
+      var c = "";
+      var user = msgJSON["user"];
+      if(user!==$wnd.userEmail){
+        switch(msgJSON["type"]){
+          case "join":
+            if(!$wnd.userColorMap.has(user)){
+              c = $wnd.colors.pop();
+              $wnd.userColorMap.set(user, c);
+            }
+            $wnd.DesignToolbar_addJoinedUser(user, $wnd.userColorMap.get(user));
+            break;
+          case "leave":
+            if($wnd.userColorMap.has(user)){
+              c = $wnd.userColorMap.get(user);
+              $wnd.colors.push(c);
+              $wnd.userColorMap.rmv(user);
+            }
+            $wnd.DesignToolbar_removeJoinedUser(user);
+            break;
+        }
+      }
+    });
+  }-*/;
+
+  private native void leaveProject()/*-{
+    var msg = {
+      "project": $wnd.project,
+      "user": $wnd.userEmail
+    };
+    $wnd.project = "";
+    $wnd.socket.emit("userLeave", msg);
+  }-*/;
 }

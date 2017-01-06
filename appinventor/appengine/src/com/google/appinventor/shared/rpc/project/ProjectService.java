@@ -108,6 +108,14 @@ public interface ProjectService extends RemoteService {
   ProjectRootNode getProject(long projectId);
 
   /**
+   * Returns the project info for the given project Id.
+   * @param userId user id
+   * @param projectId project id
+   * @return the project info
+   */
+  UserProject makeUserProject(String userId, long projectId);
+
+  /**
    * Returns a string with the project settings.
    * @param projectId  project ID
    *
@@ -332,6 +340,8 @@ public interface ProjectService extends RemoteService {
    * @param projectId the project id
    * @param otherEmail the email of other user
    * @param perm permission
+   *
+   * @return shared project id
    */
-  void shareProject(String userId, long projectId, String otherEmail, int perm);
+  long shareProject(String userId, long projectId, String otherEmail, int perm);
 }

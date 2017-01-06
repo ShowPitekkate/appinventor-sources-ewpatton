@@ -17,6 +17,7 @@
     <include path="/favicon.ico" expiration="365d" />
     <include path="/gwt.css" expiration="1d" />
     <include path="/Ya.css" expiration="1d" />
+    <include path="/socket.io.js" expiration="1d" />
     <include path="/templates/**" expiration="1d" />
     <include path="/closure-library/closure/goog/base.js" expiration="1d" />
     <include path="/closure-library/closure/goog/css/dialog.css" expiration="1d" />

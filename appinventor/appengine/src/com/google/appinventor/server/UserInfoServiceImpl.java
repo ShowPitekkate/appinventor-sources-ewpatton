@@ -21,7 +21,8 @@ import com.google.appinventor.shared.rpc.user.UserInfoService;
  * multiple servers.
  *
  */
-public class UserInfoServiceImpl extends OdeRemoteServiceServlet implements UserInfoService {
+public class
+UserInfoServiceImpl extends OdeRemoteServiceServlet implements UserInfoService {
 
   // Storage of user settings
   private final transient StorageIo storageIo = StorageIoInstanceHolder.INSTANCE;

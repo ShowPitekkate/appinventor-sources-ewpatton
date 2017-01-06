@@ -28,3 +28,10 @@
   fill: #ddd;
   fill-opacity: .8;
 }
+
+.blocklyOtherSelected>.blocklyPath {
+  stroke-width: 3px;
+}
+.blocklyOtherSelected>.blocklyPathLight {
+  display: none;
+}
