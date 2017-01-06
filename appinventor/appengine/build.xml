@@ -60,8 +60,8 @@
        ===================================================================== -->
   <import file="../build-common.xml" />
 
-  <property name="gwt.sdk" location="${lib.dir}/gwt/2.7" />
-  <property name="appengine.sdk" location="${lib.dir}/appengine/appengine-java-sdk-1.9.17" />
+  <property name="gwt.sdk" location="${lib.dir}/gwt/2.8-patched" />
+  <property name="appengine.sdk" location="${lib.dir}/appengine/appengine-java-sdk-1.9.46" />
 
   <property name="build.war.dir" location="${local.build.dir}/war" />
 
@@ -102,15 +102,7 @@
         <include name="media/*"/>
       </fileset>
     </copy>
-    <copy file="war/blocklyframe.html" toFile="${build.war.dir}/blocklyframe.html" overwrite="true">
-      <filterset>
-        <filter token="GUID" value="${guid1}"/>
-      </filterset>
-    </copy>
-    <delete>
-      <fileset dir="${build.war.dir}" includes="blockly-*.js"/>
-    </delete>
-    <copy file="${build.dir}/blocklyeditor/blockly-all.js" tofile="${build.war.dir}/blockly-${guid1}.js" />
+    <copy file="${build.dir}/blocklyeditor/blockly-all.js" tofile="${build.war.dir}/WEB-INF/classes/com/google/appinventor/client/editor/youngandroid/blockly.js" />
     <copy todir="${build.war.dir}/">
       <fileset dir="${lib.dir}">
         <include name="closure-library/**/*"/>
@@ -118,19 +110,6 @@
     </copy>
   </target>
 
-  <target name="CopyBlocklyToBuildWar"
-          description="Create blockly-all.js and add to war with unique name"
-          depends="init,GenerateGuid1,blocklyeditor_BlocklyCompile">
-    <delete>
-      <fileset dir="${build.war.dir}" includes="blockly-*.js"/>
-    </delete>
-    <copy file="${build.dir}/blocklyeditor/blockly-all.js" tofile="${build.war.dir}/blockly-${guid1}.js" />
-    <copy file="war/blocklyframe.html" toFile="${build.war.dir}/blocklyframe.html" overwrite="true">
-      <filterset>
-        <filter token="GUID" value="${guid1}"/>
-      </filterset>
-    </copy>
-  </target>
   <!-- =====================================================================
        Create the keystore that is used by AiServerLib to encrypt user and
        project IDs.
@@ -187,15 +166,15 @@
     <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gson/gson-2.1.jar" />  <!-- for keyczar -->
     <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/log4j/log4j-1.2.16.jar" />  <!-- for keyczar -->
     <!-- GCS Libs -->
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/appengine-gcs-client-0.4.3.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/appengine-gcs-client-0.6.jar" />
     <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/jackson-core-2.1.3.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-client-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-client-appengine-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-appengine-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-jackson-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-jackson2-1.18.0-rc.jar" />
-    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-services-storage-v1-rev23-1.19.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-client-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-client-appengine-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-appengine-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-jackson-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-http-client-jackson2-1.22.0.jar" />
+    <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/google-api-services-storage-v1-rev91-1.22.0.jar" />
     <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/httpclient-4.0.1.jar" />
     <copy todir="${build.war.dir}/WEB-INF/lib" file="${lib.dir}/gcs/joda-time-2.6.jar" />
     <!-- gwt libs -->
@@ -315,7 +294,7 @@
     <pathelement location="${lib.dir}/powermock/objenesis-1.2.jar" />
     <pathelement location="${lib.dir}/powermock/powermock-easymock-1.4.10-full.jar" />
     <pathelement location="${lib.dir}/responder-iq/responderiq-test.jar" />
-    <pathelement location="${lib.dir}/gcs/appengine-gcs-client-0.4.3.jar" />
+    <pathelement location="${lib.dir}/gcs/appengine-gcs-client-0.6.jar" />
     <pathelement location="${lib.dir}/protobuf/protobuf-2.6.1.jar" />
     <pathelement location="${gwt.sdk}/gwt-servlet.jar" />
     <pathelement location="${gwt.sdk}/gwt-user.jar"/>
@@ -375,7 +354,7 @@
     <pathelement location="${lib.dir}/guava/guava-18.0.jar" />
     <pathelement location="${lib.dir}/json/json.jar" />
     <pathelement location="${lib.dir}/junit/junit-4.8.2.jar" />
-    <pathelement location="${lib.dir}/gcs/appengine-gcs-client-0.4.3.jar" />
+    <pathelement location="${lib.dir}/gcs/appengine-gcs-client-0.6.jar" />
     <pathelement location="${gwt.sdk}/gwt-servlet.jar" />
   </path>
 
@@ -444,6 +423,7 @@
         <pathelement location="${lib.dir}/guava/guava-18.0.jar" />
         <pathelement location="${lib.dir}/gwt_dragdrop/gwt-dnd-3.2.3.jar" />
         <pathelement location="${lib.dir}/gwt_incubator/gwt-incubator-20101117-r1766.jar" />
+	<pathelement location="${lib.dir}/gwt_query/gwtquery-1.5-beta1.jar" />
         <!-- gwt libs -->
         <pathelement location="${gwt.sdk}/gwt-user.jar"/>
       </classpath>
@@ -494,6 +474,7 @@
         <pathelement location="${lib.dir}/guava/guava-gwt-18.0.jar" />
         <pathelement location="${lib.dir}/gwt_dragdrop/gwt-dnd-3.2.3.jar" />
         <pathelement location="${lib.dir}/gwt_incubator/gwt-incubator-20101117-r1766.jar" />
+	<pathelement location="${lib.dir}/gwt_query/gwtquery-1.5-beta1.jar" />
         <!-- gwt libs -->
         <pathelement location="${gwt.sdk}/gwt-dev.jar"/>
         <pathelement location="${gwt.sdk}/gwt-user.jar"/>
@@ -505,7 +486,7 @@
       <jvmarg line="${XstartOnFirstThread}"/>
       <arg line="-war"/>
       <arg value="${build.war.dir}"/>
-      <arg line="-logLevel INFO -style pretty"/>
+      <arg line="-logLevel INFO -style pretty -localWorkers 4"/>
       <arg value="com.google.appinventor.YaClient"/>
     </java>
   </target>

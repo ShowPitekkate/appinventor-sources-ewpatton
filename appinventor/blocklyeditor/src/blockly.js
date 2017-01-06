@@ -40,8 +40,7 @@ Blockly.hideChaff = (function(func) {
     var f = function() {
       func.apply(this, Array.prototype.slice.call(arguments));
       // [lyn, 10/06/13] for handling parameter & procedure flydowns
-      Blockly.FieldFlydown && Blockly.FieldFlydown.hide();
-      Blockly.TypeBlock && Blockly.TypeBlock.hide();
+      Blockly.getMainWorkspace().hideChaff();
     };
     f.isWrapped = true;
     return f;
@@ -63,22 +62,22 @@ Blockly.confirmDeletion = function(callback) {
 
   if (descendantCount >= DELETION_THRESHOLD) {
     if (Blockly.Util && Blockly.Util.Dialog) {
-      var msg = Blockly.Msg.WARNING_DELETE_X_BLOCKS.replace('%1', String(descendantCount))
-      var cancelButton = window.top.BlocklyPanel_getOdeMessage('cancelButton');
-      var deleteButton = window.top.BlocklyPanel_getOdeMessage('deleteButton');
+      var msg = Blockly.Msg.WARNING_DELETE_X_BLOCKS.replace('%1', String(descendantCount));
+      var cancelButton = top.BlocklyPanel_getOdeMessage('cancelButton');
+      var deleteButton = top.BlocklyPanel_getOdeMessage('deleteButton');
       var dialog = new Blockly.Util.Dialog(Blockly.Msg.CONFIRM_DELETE, msg, deleteButton, cancelButton, 0, function(button) {
-	dialog.hide();
-	if (button == deleteButton) {
-	  Blockly.mainWorkspace.playAudio('delete');
-	  callback(true);
-	} else {
-	  callback(false);
-	}
+        dialog.hide();
+        if (button == deleteButton) {
+          Blockly.mainWorkspace.playAudio('delete');
+          callback(true);
+        } else {
+          callback(false);
+        }
       });
     } else {
       var response = confirm(Blockly.Msg.WARNING_DELETE_X_BLOCKS.replace('%1', String(descendantCount)));
       if (response) {
-	Blockly.mainWorkspace.playAudio('delete');
+        Blockly.mainWorkspace.playAudio('delete');
       }
       callback(response);
     }
@@ -91,5 +90,28 @@ Blockly.confirmDeletion = function(callback) {
 
 Blockly.preinitMainWorkspace_ = function(options) {
   Blockly.mainWorkspace = new Blockly.WorkspaceSvg(options);
-}
+};
 
+Blockly.svgResize = function(workspace) {
+  var mainWorkspace = workspace;
+  while (mainWorkspace.options.parentWorkspace) {
+    mainWorkspace = mainWorkspace.options.parentWorkspace;
+  }
+  var svg = mainWorkspace.getParentSvg();
+  var div = svg.parentNode;
+  if (!div) {
+    // Workspace deleted, or something.
+    return;
+  }
+  var width = div.offsetWidth;
+  var height = div.offsetHeight;
+  if (svg.cachedWidth_ != width) {
+    svg.setAttribute('width', '100%');  // force 100% due to GWT tables
+    svg.cachedWidth_ = width;
+  }
+  if (svg.cachedHeight_ != height) {
+    svg.setAttribute('height', '100%');  // force 100% due to GWT tables
+    svg.cachedHeight_ = height;
+  }
+  mainWorkspace.resize();
+};

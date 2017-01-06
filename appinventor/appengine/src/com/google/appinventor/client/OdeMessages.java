@@ -2188,7 +2188,7 @@ public interface OdeMessages extends Messages {
 
   @DefaultMessage("User Interface")
   @Description("")
-  String UIComponentPallette();
+  String userInterfaceComponentPallette();
 
   @DefaultMessage("Layout")
   @Description("")
@@ -2200,7 +2200,7 @@ public interface OdeMessages extends Messages {
 
   @DefaultMessage("Drawing and Animation")
   @Description("")
-  String drawanimationComponentPallette();
+  String drawingAndAnimationComponentPallette();
 
   @DefaultMessage("Sensors")
   @Description("")
@@ -2214,9 +2214,13 @@ public interface OdeMessages extends Messages {
   @Description("")
   String storageComponentPallette();
 
+  @DefaultMessage("For internal use only")
+  @Description("")
+  String forInternalUseOnlyComponentPallette();
+
   @DefaultMessage("Form")
   @Description("")
-  String FormComponentPallette();
+  String formComponentPallette();
 
   @DefaultMessage("Math")
   @Description("Label on built-in-Math-blocks branch of block selector tree")
@@ -2228,7 +2232,7 @@ public interface OdeMessages extends Messages {
 
   @DefaultMessage("LEGO\u00AE MINDSTORMS\u00AE")
   @Description("")
-  String legoComponentPallette();
+  String legoMindstormsComponentPallette();
 
   @DefaultMessage("External")
   @Description("")
@@ -2290,6 +2294,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("PasswordTextBox")
   @Description("")
   String passwordTextBoxComponentPallette();
+
+  @DefaultMessage("Pedometer")
+  @Description("")
+  String pedometerComponentPallette();
 
   @DefaultMessage("Slider")
   @Description("")
@@ -2366,6 +2374,10 @@ public interface OdeMessages extends Messages {
   @Description("")
   String phoneNumberPickerComponentPallette();
 
+  @DefaultMessage("PhoneStatus")
+  @Description("")
+  String phoneStatusComponentPallette();
+
   @DefaultMessage("Sharing")
   @Description("")
   String sharingComponentPallette();
@@ -2394,6 +2406,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("LocationSensor")
   @Description("")
   String locationSensorComponentPallette();
+
+  @DefaultMessage("MediaStore")
+  @Description("")
+  String mediaStoreComponentPallette();
 
   @DefaultMessage("NearField")
   @Description("")
@@ -2523,6 +2539,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("File")
   @Description("")
   String fileComponentPallette();
+
+  @DefaultMessage("FirebaseDB")
+  @Description("")
+  String firebaseDBComponentPallette();
 
   @DefaultMessage("FusiontablesControl")
   @Description("")
@@ -3510,6 +3530,22 @@ public interface OdeMessages extends Messages {
   @Description("")
   String resultParams();
 
+  @DefaultMessage("tableId")
+  @Description("")
+  String tableIdParams();
+
+  @DefaultMessage("columns")
+  @Description("")
+  String columnsParams();
+
+  @DefaultMessage("conditions")
+  @Description("")
+  String conditionsParams();
+
+  @DefaultMessage("values")
+  @Description("")
+  String valuesParams();
+
   @DefaultMessage("other")
   @Description("")
   String otherParams();
@@ -3670,6 +3706,26 @@ public interface OdeMessages extends Messages {
   @Description("")
   String colorParams();
 
+  @DefaultMessage("year")
+  @Description("")
+  String yearParams();
+
+  @DefaultMessage("month")
+  @Description("")
+  String monthParams();
+
+  @DefaultMessage("day")
+  @Description("")
+  String dayParams();
+
+  @DefaultMessage("hour")
+  @Description("")
+  String hourParams();
+
+  @DefaultMessage("minute")
+  @Description("")
+  String minuteParams();
+
   @DefaultMessage("instant")
   @Description("")
   String instantParams();
@@ -3706,6 +3762,10 @@ public interface OdeMessages extends Messages {
   @Description("")
   String durationParams();
 
+  @DefaultMessage("pattern")
+  @Description("")
+  String patternParams();
+
   @DefaultMessage("years")
   @Description("")
   String yearsParams();
@@ -3733,6 +3793,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("message")
   @Description("")
   String messageParams();
+
+  @DefaultMessage("mediafileParams")
+  @Description("")
+  String mediafileParams();
 
   @DefaultMessage("otherScreenName")
   @Description("")
@@ -3809,6 +3873,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("provider")
   @Description("")
   String providerParams();
+
+  @DefaultMessage("phoneNumber")
+  @Description("")
+  String phoneNumberParams();
 
   @DefaultMessage("status")
   @Description("")
@@ -3962,9 +4030,17 @@ public interface OdeMessages extends Messages {
   @Description("")
   String tagParams();
 
+  @DefaultMessage("value")
+  @Description("")
+  String valueParams();
+
   @DefaultMessage("valueToStore")
   @Description("")
   String valueToStoreParams();
+
+  @DefaultMessage("valueToAdd")
+  @Description("")
+  String valueToAddParams();
 
   @DefaultMessage("tagFromWebDB")
   @Description("")
@@ -4026,6 +4102,10 @@ public interface OdeMessages extends Messages {
   @Description("")
   String encodingParams();
 
+  @DefaultMessage("xmlText")
+  @Description("")
+  String xmlTextParams();
+
   @DefaultMessage("name")
   @Description("")
   String nameParams();
@@ -4080,7 +4160,7 @@ public interface OdeMessages extends Messages {
 
   @DefaultMessage("ImagePath")
   @Description("")
-  String ImagePathParams();
+  String imagePathParams();
 
   @DefaultMessage("ms")
   @Description("")
@@ -5290,7 +5370,7 @@ public interface OdeMessages extends Messages {
 
   @DefaultMessage("XmlTextDecode")
   @Description("")
-  String XmlTextDecodeMethods();
+  String xmlTextDecodeMethods();
 
   @DefaultMessage("PostFile")
   @Description("")
@@ -5732,6 +5812,10 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Non-visible component providing location information, including longitude, latitude, altitude (if supported by the device), speed (if supported by the device), and address.  This can also perform \"geocoding\", converting a given address (not necessarily the current one) to a latitude (with the <code>LatitudeFromAddress</code> method) and a longitude (with the <code>LongitudeFromAddress</code> method).</p>\n <p>In order to function, the component must have its <code>Enabled</code> property set to True, and the device must have location sensing enabled through wireless networks or GPS satellites (if outdoors).</p>\nLocation information might not be immediately available when an app starts.  You''ll have to wait a short time for a location provider to be found and used, or wait for the OnLocationChanged event")
   @Description("")
   String LocationSensorHelpStringComponentPallette();
+
+  @DefaultMessage("<p>The MediaStore component communicates with a web service to store media objects. This component has a single method that stores a media object in the services blob store, and returns a pointer to the object via a url.</p>")
+  @Description("")
+  String MediaStoreHelpStringComponentPallette();
 
   @DefaultMessage("<p>Non-visible component to provide NFC capabilities.  For now this component supports the reading and writing of text tags only (if supported by the device)</p><p>In order to read and write text tags, the component must have its <code>ReadMode</code> property set to True or False respectively.</p><p><strong>Note:</strong> This component will only work on Screen1 of any App Inventor app.</p>")
   @Description("")

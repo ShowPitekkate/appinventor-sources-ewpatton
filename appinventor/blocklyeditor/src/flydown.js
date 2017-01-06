@@ -97,7 +97,12 @@ Blockly.Flydown.prototype.position = function() {
  * @param {!num} y y-position of upper-left corner of flydown
  */
 Blockly.Flydown.prototype.showAt = function(xmlList,x,y) {
-  this.show(xmlList); // invoke flyout method, which adds blocks to flydown and calculates width and height.
+  Blockly.Events.disable();
+  try {
+    this.show(xmlList); // invoke flyout method, which adds blocks to flydown and calculates width and height.
+  } finally {
+    Blockly.Events.enable();
+  }
   // this.svgGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
   // Calculate path around flydown blocks. Based on code in flyout position_ method.
 
