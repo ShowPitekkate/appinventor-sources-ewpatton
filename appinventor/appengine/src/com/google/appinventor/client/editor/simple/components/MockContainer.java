@@ -6,8 +6,10 @@
 
 package com.google.appinventor.client.editor.simple.components;
 
+import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.palette.SimplePaletteItem;
+import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.widgets.dnd.DragSource;
 import com.google.appinventor.client.widgets.dnd.DropTarget;
 import com.google.common.base.Preconditions;
@@ -173,8 +175,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       rootPanel.add(component);
       refreshForm();
     }
-
     getForm().fireComponentAdded(component);
+    Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
   }
 
   /**
@@ -298,6 +300,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       throw new IllegalArgumentException();
     }
 
+    OdeLog.log("Layout on drop");
     if (layout.onDrop(sourceComponent, x, y, offsetX, offsetY)) {
       sourceComponent.select();
     }

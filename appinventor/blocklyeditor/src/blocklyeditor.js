@@ -339,7 +339,7 @@ Blockly.ai_inject = function(container, workspace) {
   setTimeout(function() { Blockly.svgResize(workspace); });
   // add collaboration code
   console.log("Create workspace collaboration");
-  workspace.collaboration = new Blockly.Collaboration(workspace, window.location.hash);
+  workspace.collaboration = new Blockly.Collaboration(workspace);
   return workspace;
 };
 

@@ -11,17 +11,17 @@ goog.provide("AI2.Blockly.Collaboration");
 
 goog.require("Blockly.Workspace");
 
-Blockly.Collaboration = function(workspace, channel){
+Blockly.Collaboration = function(workspace){
   this.workspace = workspace;
-  this.channel = channel;
+  var channel = window.parent.Ode_getCurrentChannel();
 
   var userLastSelection = new Map();
   var uuid = workspace.id;
   //var socket = io.connect("http://localhost:3000", {autoConnect: true});
   console.log("new collaboration established, channel is "+channel+" user is "+uuid);
-  window.parent.socket.emit("channel", channel);
+  window.parent.socket.emit("screenChannel", channel);
 
-  window.parent.socket.on(this.channel, function(msg){
+  window.parent.socket.on(channel, function(msg){
     var msgJSON = JSON.parse(msg);
     var userFrom = msgJSON["user"];
     console.log("User "+ uuid +" receive new events from "+userFrom);

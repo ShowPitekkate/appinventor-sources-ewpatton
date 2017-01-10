@@ -164,7 +164,9 @@ public class YoungAndroidPalettePanel extends Composite implements SimplePalette
     removePaletteItem(simplePaletteItems.get(componentTypeName), category);
   }
 
-
+  public SimplePaletteItem getPaletteItemByType(String componentTypeName){
+    return simplePaletteItems.get(componentTypeName);
+  }
 
   /*
    * Adds a component entry to the palette.

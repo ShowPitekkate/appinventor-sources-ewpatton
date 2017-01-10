@@ -8,11 +8,15 @@ package com.google.appinventor.client;
 
 import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.ProjectEditor;
+import com.google.appinventor.client.editor.simple.components.MockComponent;
+import com.google.appinventor.client.editor.simple.components.MockFormLayout;
+import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
 import com.google.appinventor.client.editor.youngandroid.BlocklyPanel;
 import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
 import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 
+import com.google.appinventor.client.editor.youngandroid.palette.YoungAndroidPalettePanel;
 import com.google.appinventor.client.explorer.commands.AddFormCommand;
 import com.google.appinventor.client.explorer.commands.ChainableCommand;
 import com.google.appinventor.client.explorer.commands.DeleteFileCommand;
@@ -82,11 +86,13 @@ public class DesignToolbar extends Toolbar {
    */
   public static class DesignProject {
     public final String name;
+    public final long projectId;
     public final Map<String, Screen> screens; // screen name -> Screen
     public String currentScreen; // name of currently displayed screen
 
     public DesignProject(String name, long projectId) {
       this.name = name;
+      this.projectId = projectId;
       screens = Maps.newHashMap();
       // Screen1 is initial screen by default
       currentScreen = YoungAndroidSourceNode.SCREEN1_FORM_NAME;
@@ -188,12 +194,24 @@ public class DesignToolbar extends Toolbar {
         MESSAGES.switchToFormEditorButton(), new SwitchToFormEditorAction()), true);
     addButton(new ToolbarItem(WIDGET_NAME_SWITCH_TO_BLOCKS_EDITOR,
         MESSAGES.switchToBlocksEditorButton(), new SwitchToBlocksEditorAction()), true);
-
+    addButton(new ToolbarItem("Test", "Test", new AddComponentAction()), true);
     // Gray out the Designer button and enable the blocks button
     toggleEditor(false);
     Ode.getInstance().getTopToolbar().updateFileMenuButtons(0);
   }
 
+  private class AddComponentAction implements Command {
+
+    @Override
+    public void execute() {
+      YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(getCurrentProject().projectId);
+      YaFormEditor formEditor = projectEditor.getFormFileEditor(getCurrentProject().currentScreen);
+      MockComponent component = SimpleComponentDescriptor.createMockComponent("Button", formEditor);
+      MockFormLayout formLayout = (MockFormLayout) formEditor.getForm().getLayout();
+      formLayout.setDividerPos(0);
+      formEditor.getForm().onDrop(component, -1, -1, -1, -1);
+    }
+  }
   private class AddFormAction implements Command {
     @Override
     public void execute() {
@@ -287,6 +305,7 @@ public class DesignToolbar extends Toolbar {
   }
 
   private void doSwitchScreen1(long projectId, String screenName, View view) {
+    OdeLog.log("do switch screen 1");
     if (!projectMap.containsKey(projectId)) {
       OdeLog.wlog("DesignToolbar: no project with id " + projectId
           + ". Ignoring SwitchScreenAction.execute().");
@@ -331,6 +350,7 @@ public class DesignToolbar extends Toolbar {
     }
     // Inform the Blockly Panel which project/screen (aka form) we are working on
     BlocklyPanel.setCurrentForm(projectId + "_" + newScreenName);
+    Ode.getInstance().componentSocketEvent(Ode.getInstance().getCurrentChannel());
   }
 
   private class SwitchToBlocksEditorAction implements Command {
@@ -524,6 +544,7 @@ public class DesignToolbar extends Toolbar {
   public View getCurrentView() {
     return currentView;
   }
+
 
   // TODO(dxy): Change to session id to allow different sessions from the same user.
   public static void addJoinedUser(String username, String color){

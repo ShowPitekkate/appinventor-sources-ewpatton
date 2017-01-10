@@ -27,7 +27,7 @@ import com.google.gwt.user.client.Element;
  * @author lizlooney@google.com (Liz Looney)
  * @author hal@mit.edu (Hal Abelson)
  */
-abstract class MockHVLayoutBase extends MockLayout {
+public abstract class MockHVLayoutBase extends MockLayout {
 
   // Gap between adjacent components to allow for the insertion divider
   private static final int COMPONENT_SPACING = 5;
@@ -654,7 +654,7 @@ abstract class MockHVLayoutBase extends MockLayout {
   }
 
   @Override
-  boolean onDrop(MockComponent source, int x, int y, int offsetX, int offsetY) {
+  public boolean onDrop(MockComponent source, int x, int y, int offsetX, int offsetY) {
     if (dividerPos != -1) {
       int dstPos = dividerPos;
 
@@ -692,6 +692,9 @@ abstract class MockHVLayoutBase extends MockLayout {
     }
   }
 
+  public void setDividerPos(int pos) {
+    this.dividerPos = pos;
+  }
   /**
    * Set the layout flags centerH and centerV that govern whether the layout performs
    * horizontal or vertical centering.   Called by the arrangement that uses this layout

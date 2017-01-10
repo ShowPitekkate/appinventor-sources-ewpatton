@@ -132,6 +132,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
 
   private static final int OLD_PROJECT_YAV = 150; // Projects older then this have no authURL
 
+  private final Map<String, MockComponent> componentMap = new HashMap<String, MockComponent>();
   /**
    * Creates a new YaFormEditor.
    *
@@ -328,6 +329,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     if (loadComplete) {
       if (permanentlyDeleted) {
         onFormStructureChange();
+        componentMap.remove(component.getUuid());
       }
     } else {
       OdeLog.elog("onComponentRemoved called when loadComplete is false");
@@ -338,6 +340,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   public void onComponentAdded(MockComponent component) {
     if (loadComplete) {
       onFormStructureChange();
+      componentMap.put(component.getUuid(), component);
     } else {
       OdeLog.elog("onComponentAdded called when loadComplete is false");
     }
@@ -495,7 +498,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     JSONObject propertiesObject = YoungAndroidSourceAnalyzer.parseSourceFile(
         content, JSON_PARSER);
     form = createMockForm(propertiesObject.getProperties().get("Properties").asObject());
-
+    componentMap.put(form.getUuid(), form);
     // Initialize the nonVisibleComponentsPanel and visibleComponentsPanel.
     nonVisibleComponentsPanel.setForm(form);
     visibleComponentsPanel.setForm(form);
@@ -849,5 +852,9 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   @Override
   public void setProperty(String uuid, String property, String value) {
     // TODO(ewpatton): Implementation
+  }
+
+  public MockComponent getComponent(String uuid) {
+    return componentMap.get(uuid);
   }
 }

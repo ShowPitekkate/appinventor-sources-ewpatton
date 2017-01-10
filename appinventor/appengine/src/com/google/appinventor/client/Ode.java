@@ -28,6 +28,12 @@ import com.google.appinventor.client.boxes.SourceStructureBox;
 import com.google.appinventor.client.boxes.ViewerBox;
 import com.google.appinventor.client.editor.EditorManager;
 import com.google.appinventor.client.editor.FileEditor;
+import com.google.appinventor.client.editor.simple.components.MockComponent;
+import com.google.appinventor.client.editor.simple.components.MockContainer;
+import com.google.appinventor.client.editor.simple.components.MockFormLayout;
+import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
+import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
+import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 import com.google.appinventor.client.explorer.commands.ChainableCommand;
 import com.google.appinventor.client.explorer.commands.CommandRegistry;
 import com.google.appinventor.client.explorer.commands.SaveAllEditorsCommand;
@@ -645,6 +651,7 @@ public class Ode implements EntryPoint {
    */
   @Override
   public void onModuleLoad() {
+    exportMethodToJavascript();
     Tracking.trackPageview();
 
     // Handler for any otherwise unhandled exceptions
@@ -2307,6 +2314,37 @@ public class Ode implements EntryPoint {
         });
   }
 
+  public static String getCurrentChannel() {
+    return Ode.getInstance().getDesignToolbar().getCurrentProject().projectId + "_" + Ode.getInstance().getDesignToolbar().getCurrentProject().currentScreen;
+  }
+
+  // TODO(Xinyue): Move this to event class
+  public static void runCreateComponent(String parentUUID, String componentType, Integer beforeIndex, String selfUUID) {
+    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
+    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
+    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
+    MockComponent component = SimpleComponentDescriptor.createMockComponent(componentType, formEditor);
+    component.onCreateFromPalette();
+    component.changeProperty(MockComponent.PROPERTY_NAME_UUID, selfUUID);
+    if (component.isVisible()) {
+      MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
+      container.addVisibleComponent(component, beforeIndex);
+    } else {
+      formEditor.getForm().addComponent(component);
+      formEditor.getNonVisibleComponentsPanel().addComponent(component);
+      component.select();
+    }
+  }
+
+  public static native void exportMethodToJavascript()/*-{
+    $wnd.Ode_addSharedProject =
+      $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
+    $wnd.Ode_getCurrentChannel =
+      $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
+    $wnd.Ode_runCreateComponent =
+      $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;));
+  }-*/;
+
   // Native code to set the top level rendezvousServer variable
   // where blockly code can easily find it.
   private native void setRendezvousServer(String server) /*-{
@@ -2346,7 +2384,7 @@ public class Ode implements EntryPoint {
     $wnd.socket.on(userEmail, function(msg){
       var msgJSON = JSON.parse(msg);
       var projectId = String(msgJSON["project"]);
-      @com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;)(projectId);
+      $wnd.Ode_addSharedProject(projectId);
     });
   }-*/;
 
@@ -2391,5 +2429,46 @@ public class Ode implements EntryPoint {
     };
     $wnd.project = "";
     $wnd.socket.emit("userLeave", msg);
+  }-*/;
+
+
+  // TODO(Xinyue): Modify this with event system
+  public native void createComponent(String parentUUID, String componentType, int beforeIndex, String uuid)/*-{
+    var channel = $wnd.Ode_getCurrentChannel();
+    var msg = {
+      "channel": channel,
+      "user": $wnd.userEmail,
+      "type": "ADD",
+      "parent": parentUUID,
+      "componentType": componentType,
+      "beforeIndex": beforeIndex,
+      "uuid": uuid
+    };
+    $wnd.socket.emit("component", msg);
+
+  }-*/;
+
+  public native void componentSocketEvent(String channel)/*-{
+    console.log("subscribe to channel "+channel);
+    $wnd.socket.on(channel, function(msg){
+      var msgJSON = JSON.parse(msg);
+      if($wnd.userEmail != msgJSON["user"]){
+        switch(msgJSON["type"]){
+          case "ADD":
+            console.log("receive add component event");
+            console.log(msgJSON);
+            $wnd.Ode_runCreateComponent(msgJSON["parent"], msgJSON["componentType"], msgJSON["beforeIndex"], msgJSON["uuid"]);
+            break;
+          case "RENAME":
+            break;
+          case "REMOVE":
+            break;
+          case "CHANGE":
+            break;
+          case "MOVE":
+            break;
+        }
+      }
+    });
   }-*/;
 }
