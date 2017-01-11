@@ -2326,11 +2326,14 @@ public class Ode implements EntryPoint {
     MockComponent component = SimpleComponentDescriptor.createMockComponent(componentType, formEditor);
     component.onCreateFromPalette();
     component.changeProperty(MockComponent.PROPERTY_NAME_UUID, selfUUID);
-    if (component.isVisible()) {
+    OdeLog.log(("run create component "+componentType+" at index "+beforeIndex.intValue()));
+    if (component.isVisibleComponent()) {
+      OdeLog.log("component is visible");
       MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-      container.addVisibleComponent(component, beforeIndex);
+      container.broadCastAddComponent(component, beforeIndex.intValue(), false);
     } else {
-      formEditor.getForm().addComponent(component);
+      OdeLog.log("component is non-visible");
+      formEditor.getForm().broadCastAddComponent(component, -1, false);
       formEditor.getNonVisibleComponentsPanel().addComponent(component);
       component.select();
     }
@@ -2449,7 +2452,8 @@ public class Ode implements EntryPoint {
   }-*/;
 
   public native void componentSocketEvent(String channel)/*-{
-    console.log("subscribe to channel "+channel);
+    console.log("component socket event "+channel);
+    $wnd.socket.emit("screenChannel", channel);
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
       if($wnd.userEmail != msgJSON["user"]){

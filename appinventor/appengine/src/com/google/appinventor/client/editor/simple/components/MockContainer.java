@@ -111,6 +111,13 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     }
   }
 
+  public void broadCastAddComponent(MockComponent component, int beforeIndex, boolean broadCast){
+    addComponent(component, beforeIndex);
+    if (broadCast) {
+      Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
+    }
+  }
+
   
   /**
    * Adds a new component to the end of this container.
@@ -118,7 +125,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
    * @param component  component to be added
    */
   public final void addComponent(MockComponent component) {
-    addComponent(component, -1);
+    //addComponent(component, -1);
+    broadCastAddComponent(component, -1, true);
   }
 
   /**
@@ -145,7 +153,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       beforeActualIndex = getChildren().indexOf(visibleChildren.get(beforeVisibleIndex));
     }
 
-    addComponent(component, beforeActualIndex);
+    //addComponent(component, beforeActualIndex);
+    broadCastAddComponent(component, beforeActualIndex, true);
   }
 
   /**
@@ -158,7 +167,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
   private void addComponent(MockComponent component, int beforeIndex) {
     // Set the container to be the parent of the component
     component.setContainer(this);
-
+    OdeLog.log("Add component "+component.getType()+"at "+beforeIndex);
     // Add the component as a child component of the container
     if (beforeIndex == -1) {
       children.add(component);
@@ -176,7 +185,6 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       refreshForm();
     }
     getForm().fireComponentAdded(component);
-    Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
   }
 
   /**
