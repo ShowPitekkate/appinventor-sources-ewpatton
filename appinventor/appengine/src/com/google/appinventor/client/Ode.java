@@ -2319,18 +2319,18 @@ public class Ode implements EntryPoint {
   }
 
   // TODO(Xinyue): Move this to event class
-  public static void runCreateComponent(String parentUUID, String componentType, Integer beforeIndex, String selfUUID) {
+  public static void runCreateComponent(String parentUUID, String componentType, String beforeIndex, String selfUUID) {
     DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
     YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
     YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
     MockComponent component = SimpleComponentDescriptor.createMockComponent(componentType, formEditor);
     component.onCreateFromPalette();
     component.changeProperty(MockComponent.PROPERTY_NAME_UUID, selfUUID);
-    OdeLog.log(("run create component "+componentType+" at index "+beforeIndex.intValue()));
+    OdeLog.log(("run create component "+componentType+" at index "+beforeIndex));
     if (component.isVisibleComponent()) {
       OdeLog.log("component is visible");
       MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-      container.broadCastAddComponent(component, beforeIndex.intValue(), false);
+      container.broadCastAddComponent(component, Integer.parseInt(beforeIndex), false);
     } else {
       OdeLog.log("component is non-visible");
       formEditor.getForm().broadCastAddComponent(component, -1, false);
@@ -2345,7 +2345,7 @@ public class Ode implements EntryPoint {
     $wnd.Ode_getCurrentChannel =
       $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
     $wnd.Ode_runCreateComponent =
-      $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Integer;Ljava/lang/String;));
+      $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 
   // Native code to set the top level rendezvousServer variable
@@ -2444,7 +2444,7 @@ public class Ode implements EntryPoint {
       "type": "ADD",
       "parent": parentUUID,
       "componentType": componentType,
-      "beforeIndex": beforeIndex,
+      "beforeIndex": beforeIndex.toString(),
       "uuid": uuid
     };
     $wnd.socket.emit("component", msg);
