@@ -30,7 +30,6 @@ import com.google.appinventor.client.editor.EditorManager;
 import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.editor.simple.components.MockContainer;
-import com.google.appinventor.client.editor.simple.components.MockFormLayout;
 import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
 import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
@@ -2330,13 +2329,23 @@ public class Ode implements EntryPoint {
     if (component.isVisibleComponent()) {
       OdeLog.log("component is visible");
       MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-      container.broadCastAddComponent(component, Integer.parseInt(beforeIndex), false);
+      container.broadcastAddComponent(component, Integer.parseInt(beforeIndex), false);
     } else {
       OdeLog.log("component is non-visible");
-      formEditor.getForm().broadCastAddComponent(component, -1, false);
+      formEditor.getForm().broadcastAddComponent(component, -1, false);
       formEditor.getNonVisibleComponentsPanel().addComponent(component);
       component.select();
     }
+  }
+
+  // TODO(Xinyue): BUG: move component to a new container, the name is wrong.
+  public static void runRemoveComponent(String parentUUID, String selfUUID) {
+    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
+    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
+    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
+    MockComponent component = formEditor.getComponent(selfUUID);
+    MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
+    container.broadcastRemoveComponent(component, true, false);
   }
 
   public static native void exportMethodToJavascript()/*-{
@@ -2346,6 +2355,8 @@ public class Ode implements EntryPoint {
       $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
     $wnd.Ode_runCreateComponent =
       $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+    $wnd.Ode_runRemoveComponent =
+      $entry(@com.google.appinventor.client.Ode::runRemoveComponent(Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 
   // Native code to set the top level rendezvousServer variable
@@ -2451,6 +2462,17 @@ public class Ode implements EntryPoint {
 
   }-*/;
 
+  public native void removeComponent(String parentUuid, String uuid)/*-{
+    var msg = {
+      "channel": $wnd.Ode_getCurrentChannel(),
+      "user": $wnd.userEmail,
+      "type": "REMOVE",
+      "parent": parentUuid,
+      "uuid": uuid
+    };
+    $wnd.socket.emit("component", msg);
+  }-*/;
+
   public native void componentSocketEvent(String channel)/*-{
     console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
@@ -2466,6 +2488,9 @@ public class Ode implements EntryPoint {
           case "RENAME":
             break;
           case "REMOVE":
+            console.log("receive remove component event");
+            console.log(msgJSON);
+            $wnd.Ode_runRemoveComponent(msgJSON["parent"], msgJSON["uuid"]);
             break;
           case "CHANGE":
             break;

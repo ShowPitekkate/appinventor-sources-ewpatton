@@ -111,10 +111,17 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     }
   }
 
-  public void broadCastAddComponent(MockComponent component, int beforeIndex, boolean broadCast){
+  public void broadcastAddComponent(MockComponent component, int beforeIndex, boolean broadcast){
     addComponent(component, beforeIndex);
-    if (broadCast) {
+    if (broadcast) {
       Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
+    }
+  }
+
+  public void broadcastRemoveComponent(MockComponent component, boolean permanentlyDeleted, boolean broadcast) {
+    removeComponent(component, permanentlyDeleted);
+    if (broadcast) {
+      Ode.getInstance().removeComponent(this.getUuid(), component.getUuid());
     }
   }
 
@@ -126,7 +133,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
    */
   public final void addComponent(MockComponent component) {
     //addComponent(component, -1);
-    broadCastAddComponent(component, -1, true);
+    broadcastAddComponent(component, -1, true);
   }
 
   /**
@@ -154,7 +161,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     }
 
     //addComponent(component, beforeActualIndex);
-    broadCastAddComponent(component, beforeActualIndex, true);
+    broadcastAddComponent(component, beforeActualIndex, true);
   }
 
   /**

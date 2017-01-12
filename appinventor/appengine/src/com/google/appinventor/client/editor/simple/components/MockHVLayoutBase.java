@@ -677,7 +677,7 @@ public abstract class MockHVLayoutBase extends MockLayout {
       if (srcContainer != null) {
         // Pass false to indicate that the component isn't being permanently deleted.
         // It's just being moved from one container to another.
-        srcContainer.removeComponent(source, false);
+        srcContainer.broadcastRemoveComponent(source, false, true);
       }
       dstContainer.addVisibleComponent(source, dstPos);
       return true;

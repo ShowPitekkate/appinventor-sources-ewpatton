@@ -420,7 +420,7 @@ final class MockTableLayout extends MockLayout {
       if (srcContainer != null) {
         // Pass false to indicate that the component isn't being permanently deleted.
         // It's just being moved from one container to another.
-        srcContainer.removeComponent(source, false);
+        srcContainer.broadcastRemoveComponent(source, false, true);
       }
       source.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN, "" + destCell.col);
       source.changeProperty(MockVisibleComponent.PROPERTY_NAME_ROW, "" + destCell.row);

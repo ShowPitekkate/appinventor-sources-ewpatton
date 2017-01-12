@@ -51,7 +51,7 @@ public final class MockTableArrangement extends MockContainer {
         "" + ComponentConstants.DEFAULT_ROW_COLUMN);
     component.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN,
         "" + ComponentConstants.DEFAULT_ROW_COLUMN);
-    super.removeComponent(component, permanentlyDeleted);
+    super.broadcastRemoveComponent(component, permanentlyDeleted, true);
   }
 
   private void setColumnsProperty(String value) {
