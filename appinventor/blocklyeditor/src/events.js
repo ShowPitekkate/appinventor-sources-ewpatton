@@ -321,7 +321,7 @@ AI.Events.ComponentProperty = function(projectId, component) {
 };
 goog.inherits(AI.Events.ComponentProperty, AI.Events.ComponentEvent);
 
-AI.Events.ComponentProperty.property.type = AI.Events.COMPONENT_PROPERTY;
+AI.Events.ComponentProperty.prototype.type = AI.Events.COMPONENT_PROPERTY;
 
 AI.Events.ComponentProperty.prototype.fromJson = function(json) {
    AI.Events.ComponentProperty.superClass_.fromJson.call(this, json);
