@@ -48,9 +48,9 @@ public class DeleteBlock extends JavaScriptObject implements BlocklyEvent {
   }-*/;
 
   @Override
-  public long getProjectId() {
+  public String getProjectId() {
     // TODO Auto-generated method stub
-    return 0;
+    return "";
   }
 
   @Override
@@ -64,11 +64,4 @@ public class DeleteBlock extends JavaScriptObject implements BlocklyEvent {
     // TODO Auto-generated method stub
     
   }
-
-  @Override
-  public long getUserId() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
 }

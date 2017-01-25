@@ -38,6 +38,7 @@ import com.google.appinventor.client.widgets.dnd.DropTarget;
 import com.google.appinventor.client.widgets.properties.EditableProperties;
 import com.google.appinventor.client.widgets.properties.PropertiesPanel;
 import com.google.appinventor.client.youngandroid.YoungAndroidFormUpgrader;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.shared.properties.json.JSONArray;
 import com.google.appinventor.shared.properties.json.JSONObject;
@@ -623,6 +624,11 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     OdeLog.log("Adding blocks editor as a listener for " + form.getName());
     form.addFormChangeListener(((YaProjectEditor) projectEditor)
         .getBlocksFileEditor(form.getName()));
+
+    // If collaboration feature is enabled, register collaboration manager.
+    if (AppInventorFeatures.enableGroupProject()) {
+      form.addFormChangeListener(Ode.getInstance().getCollaborationManager());
+    }
   }
 
   /*

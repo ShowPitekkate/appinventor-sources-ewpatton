@@ -23,9 +23,9 @@ public class ChangeProperty extends JavaScriptObject implements DesignerEvent {
   }
 
   @Override
-  public long getProjectId() {
+  public String getProjectId() {
     // TODO Auto-generated method stub
-    return 0;
+    return "";
   }
 
   @Override
@@ -40,10 +40,7 @@ public class ChangeProperty extends JavaScriptObject implements DesignerEvent {
 
   }
 
-  @Override
-  public long getUserId() {
-    // TODO Auto-generated method stub
-    return 0;
+  public JavaScriptObject toJson() {
+    return null;
   }
-
 }

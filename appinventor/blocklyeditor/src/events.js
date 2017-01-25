@@ -38,13 +38,13 @@ AI.Events.SCREEN_POP = 'screen.pop';
  * Type identifier used for serializing ComponentAdd events.
  * @const {string}
  */
-AI.Events.COMPONENT_ADD = 'component.add';
+AI.Events.COMPONENT_CREATE = 'component.create';
 
 /**
  * Type identifier used for serializing ComponentRemove events.
  * @const {string}
  */
-AI.Events.COMPONENT_REMOVE = 'component.remove';
+AI.Events.COMPONENT_DELETE = 'component.delete';
 
 /**
  * Type identifier used for serializing ComponentMove events.
@@ -56,7 +56,7 @@ AI.Events.COMPONENT_MOVE = 'component.move';
  * Type identifier used for serializing PropertyChange events.
  * @const {string}
  */
-AI.Events.COMPONENT_PROPERTY_CHANGE = 'property.change';
+AI.Events.COMPONENT_PROPERTY = 'component.property';
 
 /**
  * Abstract class for all App Inventor events.
@@ -189,20 +189,36 @@ AI.Events.ScreenPop.prototype.type = AI.Events.SCREEN_POP;
  * Base class for component-related events.
  *
  * @param {number} projectId Project ID of the project the designer editor is editing.
- * @param {{}} component The newly created Component object.
+ * @param {{}} component id of the The newly created Component object.
  * @extends {AI.Events.Abstract}
  * @constructor
  */
 AI.Events.ComponentEvent = function(projectId, component) {
   AI.Events.ComponentEvent.superClass_.constructor.call(this);
   this.projectId = projectId;
-  this.component = component;
+  this.componentId = component.id;
 };
 goog.inherits(AI.Events.ComponentEvent, AI.Events.Abstract);
 
 // Component events need to be sent while collaborating in real time.
-AI.Events.ComponentEvent.prototype.realtime = true;
+//AI.Events.ComponentEvent.prototype.realtime = true;
+AI.Events.ComponentEvent.prototype.fromJson = function(json) {
+  this.projectId = json["projectId"];
+  this.componentId = json["componentId"];
+};
 
+AI.Events.ComponentEvent.prototype.toJson = function() {
+  var json = {
+    "type": this.type
+  };
+  if(this.projectId){
+    json["projectId"] = this.projectId;
+  }
+  if(this.componentId){
+    json["componentId"] = this.componentId;
+  }
+  return json;
+};
 /**
  * Event raised when a new Component has been dragged from the palette and dropped in the
  * Designer view.
@@ -212,16 +228,33 @@ AI.Events.ComponentEvent.prototype.realtime = true;
  * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
-AI.Events.ComponentAdd = function(projectId, component) {
+AI.Events.CreateComponent = function(projectId, component) {
   if (!component) {
     return;  // Blank event to be populated by fromJson.
   }
-  AI.Events.ComponentAdd.superClass_.constructor.call(this, projectId, component);
+  AI.Events.CreateComponent.superClass_.constructor.call(this, projectId, component);
+  this.componentType = component.type;
+  this.parentId = component.parent;
+  this.beforeIndex = component.beforeIndex;
 };
-goog.inherits(AI.Events.ComponentAdd, AI.Events.ComponentEvent);
+goog.inherits(AI.Events.CreateComponent, AI.Events.ComponentEvent);
 
-AI.Events.ComponentAdd.prototype.type = AI.Events.COMPONENT_ADD;
+AI.Events.CreateComponent.prototype.type = AI.Events.COMPONENT_CREATE;
 
+AI.Events.CreateComponent.prototype.fromJson = function(json) {
+   AI.Events.ComponentAdd.superClass_.fromJson.call(this, json);
+   this.componentType = json["componentType"];
+   this.parentId = json["parentId"];
+   this.beforeIndex = json["beforeIndex"];
+};
+
+AI.Events.CreateComponent.prototype.toJson = function() {
+   var json = AI.Events.ComponentAdd.superClass_.fromJson.call(this);
+   json["componentType"] = this.componentType;
+   json["parentId"] = this.parentId;
+   json["beforeIndex"] = this.beforeIndex;
+   return json;
+};
 /**
  * Event raised when a Component has been removed from the screen.
  *
@@ -230,16 +263,27 @@ AI.Events.ComponentAdd.prototype.type = AI.Events.COMPONENT_ADD;
  * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
-AI.Events.ComponentRemove = function(projectId, component) {
+AI.Events.DeleteComponent = function(projectId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
-  AI.Events.ComponentRemove.superClass_.constructor.call(this, projectId, component);
+  AI.Events.DeleteComponent.superClass_.constructor.call(this, projectId, component);
+  this.parentId = component.parent;
 };
-goog.inherits(AI.Events.ComponentRemove, AI.Events.ComponentEvent);
+goog.inherits(AI.Events.DeleteComponent, AI.Events.ComponentEvent);
 
-AI.Events.ComponentRemove.prototype.type = AI.Events.COMPONENT_REMOVE;
+AI.Events.DeleteComponent.prototype.type = AI.Events.COMPONENT_DELETE;
 
+AI.Events.DeleteComponent.prototype.fromJson = function(json) {
+   AI.Events.ComponentRemove.superClass_.fromJson.call(this, json);
+   this.parentId = json["parentId"];
+};
+
+AI.Events.DeleteComponent.prototype.toJson = function() {
+   var json = AI.Events.ComponentRemove.superClass_.fromJson.call(this);
+   json["parentId"] = this.parentId;
+   return json;
+};
 /**
  * Event raised when a Component has been moved in the component hierarchy.
  *
@@ -265,16 +309,31 @@ AI.Events.ComponentMove.prototype.type = AI.Events.COMPONENT_MOVE;
  *
  * @param projectId
  * @param component
- * @param property
- * @param oldValue
- * @param newValue
  * @constructor
  */
-AI.Events.PropertyChange = function(projectId, component, property, oldValue, newValue) {
+AI.Events.ComponentProperty = function(projectId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
-  this.property = property;
-  this.oldValue = oldValue;
-  this.newValue = newValue;
+  this.property = component.property;
+  this.oldValue = component.oldValue;
+  this.newValue = componnet.newValue;
+};
+goog.inherits(AI.Events.ComponentProperty, AI.Events.ComponentEvent);
+
+AI.Events.ComponentProperty.property.type = AI.Events.COMPONENT_PROPERTY;
+
+AI.Events.ComponentProperty.prototype.fromJson = function(json) {
+   AI.Events.ComponentProperty.superClass_.fromJson.call(this, json);
+   this.property = json["property"];
+   this.oldValue = json["oldValue"];
+   this.newValue = json["newValue"];
+};
+
+AI.Events.ComponentProperty.prototype.toJson = function() {
+   var json = AI.Events.ComponentProperty.superClass_.fromJson.call(this);
+   json["property"] = this.property;
+   json["oldValue"] = this.oldValue;
+   json["newValue"] = this.newValue;
+   return json;
 };

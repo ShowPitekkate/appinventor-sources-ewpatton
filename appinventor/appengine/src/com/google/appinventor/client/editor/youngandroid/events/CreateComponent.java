@@ -12,49 +12,51 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
   protected CreateComponent() {}
 
   private static native String init(Class<CreateComponent> clazz)/*-{
-    clazz.jsType = AppInventor.Events.CreateComponent;
+    clazz.jsType = AI.Events.CreateComponent;
     return clazz.jsType.prototype.type;
   }-*/;
 
-  static native CreateComponent create(long projectId, String uuid, String componentType)/*-{
-    return new AppInventor.Events.CreateComponent(
+  public static native CreateComponent create(String projectId, String uuid, String componentType, String parentId, int beforeIndex)/*-{
+    var component = {
+      id: uuid,
+      type: componentType,
+      parent: parentId,
+      beforeIndex: beforeIndex};
+    return new AI.Events.CreateComponent(projectId, component);
   }-*/;
 
   @Override
-  public native boolean recordUndo()/*-{
+  public final native boolean recordUndo()/*-{
     return this.recordUndo;
   }-*/;
 
   @Override
-  public native String getType()/*-{
+  public final native String getType()/*-{
     return this.type;
   }-*/;
 
   @Override
-  public native <T> T as(Class<T> eventType)/*-{
+  public final native <T> T as(Class<T> eventType)/*-{
     return eventType && eventType.jsType && eventType.jsType.prototype.type == this.type ?
       this : null;
   }-*/;
 
   @Override
-  public native long getProjectId()/*-{
+  public final native String getProjectId()/*-{
     return this.projectId;
   }-*/;
 
   @Override
-  public native boolean isRealtime()/*-{
+  public final native boolean isRealtime()/*-{
     return this.realtime;
   }-*/;
 
   @Override
-  public native void setRealtime(boolean realtime)/*-{
+  public final native void setRealtime(boolean realtime)/*-{
     this.realtime = realtime;
   }-*/;
 
-  @Override
-  public long getUserId() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
+  public final native JavaScriptObject toJson() /*-{
+    return this.toJson();
+  }-*/;
 }

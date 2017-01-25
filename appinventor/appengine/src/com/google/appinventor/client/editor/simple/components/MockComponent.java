@@ -248,6 +248,8 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
 
   private MouseListenerCollection mouseListeners = new MouseListenerCollection();
 
+  private int index;
+
   /**
    * Creates a new instance of the component.
    *
@@ -670,7 +672,7 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
    *
    * @return  owning component container for this component
    */
-  protected final MockContainer getContainer() {
+  public final MockContainer getContainer() {
     return container;
   }
 
@@ -1065,6 +1067,16 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     this.componentDefinition = COMPONENT_DATABASE.getComponentDefinition(this.type); //Update ComponentDefinition
   }
 
+  /**
+   * Set the index of the component in its parent container, used in collaboration. -1 means the last child.
+   * @param index index of the component
+   */
+  public void setIndex(int index) {
+    this.index = index;
+  }
 
+  public int getIndex() {
+    return this.index;
+  }
 
 }

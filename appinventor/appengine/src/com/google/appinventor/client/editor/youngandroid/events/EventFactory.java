@@ -30,4 +30,8 @@ public class EventFactory {
     $wnd.EventFactory.constructors[type] = constructor;
     $wnd.EventFactory.fromJson[type] = fromJson;
   }-*/;
+
+  public static void run(JavaScriptObject json) {
+
+  }
 }

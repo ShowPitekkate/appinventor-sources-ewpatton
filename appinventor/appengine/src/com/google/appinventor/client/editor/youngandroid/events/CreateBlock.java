@@ -50,9 +50,9 @@ public class CreateBlock extends JavaScriptObject implements BlocklyEvent {
   }-*/;
 
   @Override
-  public long getProjectId() {
+  public String getProjectId() {
     // TODO Auto-generated method stub
-    return 0;
+    return "";
   }
 
   @Override
@@ -64,11 +64,5 @@ public class CreateBlock extends JavaScriptObject implements BlocklyEvent {
   public native void setRealtime(boolean realtime)/*-{
     this.realtime = realtime;
   }-*/;
-
-  @Override
-  public long getUserId() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
 
 }

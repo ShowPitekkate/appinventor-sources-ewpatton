@@ -350,7 +350,7 @@ public class DesignToolbar extends Toolbar {
     }
     // Inform the Blockly Panel which project/screen (aka form) we are working on
     BlocklyPanel.setCurrentForm(projectId + "_" + newScreenName);
-    Ode.getInstance().componentSocketEvent(Ode.getInstance().getCurrentChannel());
+    Ode.getInstance().getCollaborationManager().componentSocketEvent(Ode.getInstance().getCurrentChannel());
   }
 
   private class SwitchToBlocksEditorAction implements Command {

@@ -111,12 +111,12 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     }
   }
 
-  public void broadcastAddComponent(MockComponent component, int beforeIndex, boolean broadcast){
-    addComponent(component, beforeIndex);
-    if (broadcast) {
-      Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
-    }
-  }
+//  public void broadcastAddComponent(MockComponent component, int beforeIndex, boolean broadcast){
+//    addComponent(component, beforeIndex);
+//    if (broadcast) {
+//      Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
+//    }
+//  }
 
   public void broadcastRemoveComponent(MockComponent component, boolean permanentlyDeleted, boolean broadcast) {
     removeComponent(component, permanentlyDeleted);
@@ -132,8 +132,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
    * @param component  component to be added
    */
   public final void addComponent(MockComponent component) {
-    //addComponent(component, -1);
-    broadcastAddComponent(component, -1, true);
+    addComponent(component, -1);
+    //broadcastAddComponent(component, -1, true);
   }
 
   /**
@@ -160,8 +160,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       beforeActualIndex = getChildren().indexOf(visibleChildren.get(beforeVisibleIndex));
     }
 
-    //addComponent(component, beforeActualIndex);
-    broadcastAddComponent(component, beforeActualIndex, true);
+    addComponent(component, beforeActualIndex);
+    //broadcastAddComponent(component, beforeActualIndex, true);
   }
 
   /**
@@ -191,6 +191,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       rootPanel.add(component);
       refreshForm();
     }
+    component.setIndex(beforeIndex);
     getForm().fireComponentAdded(component);
   }
 

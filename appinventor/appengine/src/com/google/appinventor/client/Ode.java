@@ -271,6 +271,7 @@ public class Ode implements EntryPoint {
 
   private SplashConfig splashConfig; // Splash Screen Configuration
 
+  private CollaborationManager collaborationManager; // Collaboration Server Manager
   /**
    * Returns global instance of Ode.
    *
@@ -778,6 +779,7 @@ public class Ode implements EntryPoint {
 
         // Connect to collaboration server
         if(AppInventorFeatures.enableGroupProject()){
+          collaborationManager = new CollaborationManager();
           connectCollaborationServer(result.getBlocklyShareUrl(), user.getUserEmail());
         }
 
@@ -1366,6 +1368,14 @@ public class Ode implements EntryPoint {
     return user;
   }
 
+  /**
+   * Returns collaboration manager.
+   *
+   * @return collaboration manager.
+   */
+  public CollaborationManager getCollaborationManager() {
+    return collaborationManager;
+  }
   /**
    * Helper method to create push buttons.
    *
@@ -2329,10 +2339,10 @@ public class Ode implements EntryPoint {
     if (component.isVisibleComponent()) {
       OdeLog.log("component is visible");
       MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-      container.broadcastAddComponent(component, Integer.parseInt(beforeIndex), false);
+      container.addVisibleComponent(component, Integer.parseInt(beforeIndex));
     } else {
       OdeLog.log("component is non-visible");
-      formEditor.getForm().broadcastAddComponent(component, -1, false);
+      formEditor.getForm().addComponent(component);
       formEditor.getNonVisibleComponentsPanel().addComponent(component);
       component.select();
     }
@@ -2348,6 +2358,14 @@ public class Ode implements EntryPoint {
     container.broadcastRemoveComponent(component, true, false);
   }
 
+  public static void enableBroadcast() {
+    Ode.getInstance().getCollaborationManager().enableBroadcast();
+  }
+
+  public static void disableBroadcast() {
+    Ode.getInstance().getCollaborationManager().disableBroadcast();
+  }
+
   public static native void exportMethodToJavascript()/*-{
     $wnd.Ode_addSharedProject =
       $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
@@ -2357,6 +2375,10 @@ public class Ode implements EntryPoint {
       $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     $wnd.Ode_runRemoveComponent =
       $entry(@com.google.appinventor.client.Ode::runRemoveComponent(Ljava/lang/String;Ljava/lang/String;));
+    $wnd.Ode_enableBroadcast =
+      $entry(@com.google.appinventor.client.Ode::enableBroadcast());
+    $wnd.Ode_disableBroadcast =
+      $entry(@com.google.appinventor.client.Ode::disableBroadcast());
   }-*/;
 
   // Native code to set the top level rendezvousServer variable
@@ -2471,33 +2493,5 @@ public class Ode implements EntryPoint {
       "uuid": uuid
     };
     $wnd.socket.emit("component", msg);
-  }-*/;
-
-  public native void componentSocketEvent(String channel)/*-{
-    console.log("component socket event "+channel);
-    $wnd.socket.emit("screenChannel", channel);
-    $wnd.socket.on(channel, function(msg){
-      var msgJSON = JSON.parse(msg);
-      if($wnd.userEmail != msgJSON["user"]){
-        switch(msgJSON["type"]){
-          case "ADD":
-            console.log("receive add component event");
-            console.log(msgJSON);
-            $wnd.Ode_runCreateComponent(msgJSON["parent"], msgJSON["componentType"], msgJSON["beforeIndex"], msgJSON["uuid"]);
-            break;
-          case "RENAME":
-            break;
-          case "REMOVE":
-            console.log("receive remove component event");
-            console.log(msgJSON);
-            $wnd.Ode_runRemoveComponent(msgJSON["parent"], msgJSON["uuid"]);
-            break;
-          case "CHANGE":
-            break;
-          case "MOVE":
-            break;
-        }
-      }
-    });
   }-*/;
 }
