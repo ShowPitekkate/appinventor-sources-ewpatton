@@ -111,20 +111,6 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     }
   }
 
-//  public void broadcastAddComponent(MockComponent component, int beforeIndex, boolean broadcast){
-//    addComponent(component, beforeIndex);
-//    if (broadcast) {
-//      Ode.getInstance().createComponent(this.getUuid(), component.getType(), beforeIndex, component.getUuid());
-//    }
-//  }
-
-  public void broadcastRemoveComponent(MockComponent component, boolean permanentlyDeleted, boolean broadcast) {
-    removeComponent(component, permanentlyDeleted);
-    if (broadcast) {
-      Ode.getInstance().removeComponent(this.getUuid(), component.getUuid());
-    }
-  }
-
   
   /**
    * Adds a new component to the end of this container.

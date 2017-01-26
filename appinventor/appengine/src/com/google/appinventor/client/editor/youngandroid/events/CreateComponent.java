@@ -56,7 +56,31 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     this.realtime = realtime;
   }-*/;
 
+  public final native String getComponentId() /*-{
+    return this.componentId;
+  }-*/;
+
+  public final native String getComponentType()/*-{
+    return this.componentType;
+  }-*/;
+
+  public final native String getParentId()/*-{
+    return this.parentId;
+  }-*/;
+
+  public final native int getBeforeIndex()/*-{
+    return this.beforeIndex;
+  }-*/;
+
   public final native JavaScriptObject toJson() /*-{
     return this.toJson();
   }-*/;
+
+  public static final native CreateComponent fromJson(JavaScriptObject json)/*-{
+    var event = new AI.Events.CreateComponent(null, null);
+    event.fromJson(json);
+    return event;
+  }-*/;
+
+
 }

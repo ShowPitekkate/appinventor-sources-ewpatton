@@ -2,45 +2,72 @@ package com.google.appinventor.client.editor.youngandroid.events;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class DeleteComponent extends JavaScriptObject implements DesignerEvent {
-
-  @Override
-  public boolean recordUndo() {
-    // TODO Auto-generated method stub
-    return false;
+public class DeleteComponent extends JavaScriptObject {
+  public static final String TYPE;
+  static {
+    TYPE = init(DeleteComponent.class);
   }
 
-  @Override
-  public String getType() {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  protected DeleteComponent() {}
 
-  @Override
-  public <T> T as(Class<T> eventType) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  private static native String init(Class<DeleteComponent> clazz)/*-{
+    clazz.jsType = AI.Events.DeleteComponent;
+    return clazz.jsType.prototype.type;
+  }-*/;
 
-  @Override
-  public String getProjectId() {
-    // TODO Auto-generated method stub
-    return "";
-  }
+  public static native DeleteComponent create(String projectId, String uuid, String parentId, boolean permanentlyDeleted)/*-{
+    var component = {
+      id: uuid,
+      parent: parentId,
+      deleted: permanentlyDeleted};
+    return new AI.Events.DeleteComponent(projectId, component);
+  }-*/;
 
-  @Override
-  public boolean isRealtime() {
-    // TODO Auto-generated method stub
-    return false;
-  }
+  public final native boolean recordUndo()/*-{
+    return this.recordUndo;
+  }-*/;
 
-  @Override
-  public void setRealtime(boolean realtime) {
-    // TODO Auto-generated method stub
+  public final native String getType()/*-{
+    return this.type;
+  }-*/;
 
-  }
+  public final native <T> T as(Class<T> eventType)/*-{
+    return eventType && eventType.jsType && eventType.jsType.prototype.type == this.type ?
+      this : null;
+  }-*/;
 
-  public JavaScriptObject toJson() {
-    return null;
-  }
+  public final native String getProjectId()/*-{
+    return this.projectId;
+  }-*/;
+
+  public final native boolean isRealtime()/*-{
+    return this.realtime;
+  }-*/;
+
+  public final native void setRealtime(boolean realtime)/*-{
+    this.realtime = realtime;
+  }-*/;
+
+  public final native String getComponentId() /*-{
+    return this.componentId;
+  }-*/;
+
+  public final native String getParentId() /*-{
+    return this.parentId;
+  }-*/;
+
+  public final native boolean getDeleted() /*-{
+    return this.deleted;
+  }-*/;
+
+  public final native JavaScriptObject toJson() /*-{
+    return this.toJson();
+  }-*/;
+
+  public final native static DeleteComponent fromJson(JavaScriptObject json) /*-{
+    var event = new AI.Events.DeleteComponent(null, null);
+    event.fromJson(json);
+    return event;
+  }-*/;
+
 }

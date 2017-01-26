@@ -3,7 +3,10 @@ package com.google.appinventor.client;
 import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.editor.simple.components.FormChangeListener;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
+import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
 import com.google.appinventor.client.editor.youngandroid.events.CreateComponent;
+import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
+import com.google.appinventor.client.editor.youngandroid.events.EventFactory;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.gwt.core.client.JavaScriptObject;
 
@@ -13,10 +16,10 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class CollaborationManager implements FormChangeListener {
 
   private boolean broadcast;
-  private String screenChannel;
 
   public CollaborationManager() {
     broadcast = true;
+    EventFactory.exportMethodToJavascript();
   }
 
   public void enableBroadcast() {
@@ -29,19 +32,23 @@ public class CollaborationManager implements FormChangeListener {
 
   @Override
   public void onComponentPropertyChanged(MockComponent component, String propertyName, String propertyValue) {
-
+    if(broadcast){
+      ChangeProperty event = ChangeProperty.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), propertyName, propertyValue);
+      broadcastComponentEvent(event.toJson());
+    }
   }
 
   @Override
   public void onComponentRemoved(MockComponent component, boolean permanentlyDeleted) {
-
+    if (broadcast) {
+      DeleteComponent event = DeleteComponent.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), component.getContainer().getUuid(), permanentlyDeleted);
+      broadcastComponentEvent(event.toJson());
+    }
   }
 
   @Override
   public void onComponentAdded(MockComponent component) {
-    OdeLog.log("Collaboration Manager onComponentAdded Called");
     if (broadcast) {
-      OdeLog.log("Raise Create Component Event");
       CreateComponent event = CreateComponent.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), component.getType(), component.getContainer().getUuid(), component.getIndex());
       broadcastComponentEvent(event.toJson());
     }
@@ -49,7 +56,10 @@ public class CollaborationManager implements FormChangeListener {
 
   @Override
   public void onComponentRenamed(MockComponent component, String oldName) {
-
+    if(broadcast){
+      ChangeProperty event = ChangeProperty.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), MockComponent.PROPERTY_NAME_NAME, component.getName());
+      broadcastComponentEvent(event.toJson());
+    }
   }
 
   @Override
@@ -76,23 +86,7 @@ public class CollaborationManager implements FormChangeListener {
       if($wnd.userEmail != msgJSON["user"]){
         console.log(event);
         $wnd.Ode_disableBroadcast();
-        switch(event["type"]){
-          case AI.Events.COMPONENT_CREATE:
-            console.log("receive add component event");
-            $wnd.Ode_runCreateComponent(event["parentId"], event["componentType"], event["beforeIndex"], event["componentId"]);
-            break;
-          case "RENAME":
-            break;
-          case AI.Events.COMPONENT_DELETE:
-            console.log("receive remove component event");
-            console.log(msgJSON);
-            $wnd.Ode_runRemoveComponent(event["parentId"], event["componentId"]);
-            break;
-          case AI.Events.COMPONENT_PROPERTY:
-            break;
-          case "MOVE":
-            break;
-        }
+        $wnd.EventFactory_run(event["type"], event);
         $wnd.Ode_enableBroadcast();
       }
     });

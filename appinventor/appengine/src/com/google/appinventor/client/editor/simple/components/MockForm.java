@@ -617,7 +617,7 @@ public final class MockForm extends MockContainer {
   /**
    * Triggers a component property change event to be sent to the listener on the listener list.
    */
-  protected void fireComponentPropertyChanged(MockComponent component,
+  public void fireComponentPropertyChanged(MockComponent component,
       String propertyName, String propertyValue) {
     for (FormChangeListener listener : formChangeListeners) {
       listener.onComponentPropertyChanged(component, propertyName, propertyValue);
@@ -645,7 +645,7 @@ public final class MockForm extends MockContainer {
   /**
    * Triggers a component renamed event to be sent to the listener on the listener list.
    */
-  protected void fireComponentRenamed(MockComponent component, String oldName) {
+  public void fireComponentRenamed(MockComponent component, String oldName) {
     for (FormChangeListener listener : formChangeListeners) {
       listener.onComponentRenamed(component, oldName);
     }

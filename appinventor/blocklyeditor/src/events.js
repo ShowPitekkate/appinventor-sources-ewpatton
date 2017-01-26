@@ -201,7 +201,7 @@ AI.Events.ComponentEvent = function(projectId, component) {
 goog.inherits(AI.Events.ComponentEvent, AI.Events.Abstract);
 
 // Component events need to be sent while collaborating in real time.
-//AI.Events.ComponentEvent.prototype.realtime = true;
+AI.Events.ComponentEvent.prototype.realtime = true;
 AI.Events.ComponentEvent.prototype.fromJson = function(json) {
   this.projectId = json["projectId"];
   this.componentId = json["componentId"];
@@ -271,6 +271,7 @@ AI.Events.DeleteComponent = function(projectId, component) {
   }
   AI.Events.DeleteComponent.superClass_.constructor.call(this, projectId, component);
   this.parentId = component.parent;
+  this.deleted = component.deleted;
 };
 goog.inherits(AI.Events.DeleteComponent, AI.Events.ComponentEvent);
 
@@ -279,11 +280,13 @@ AI.Events.DeleteComponent.prototype.type = AI.Events.COMPONENT_DELETE;
 AI.Events.DeleteComponent.prototype.fromJson = function(json) {
    AI.Events.DeleteComponent.superClass_.fromJson.call(this, json);
    this.parentId = json["parentId"];
+   this.deleted = json["deleted"];
 };
 
 AI.Events.DeleteComponent.prototype.toJson = function() {
    var json = AI.Events.DeleteComponent.superClass_.toJson.call(this);
    json["parentId"] = this.parentId;
+   json["deleted"] = this.deleted;
    return json;
 };
 /**
@@ -317,9 +320,9 @@ AI.Events.ComponentProperty = function(projectId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
+  AI.Events.ComponentProperty.superClass_.constructor.call(this, projectId, component);
   this.property = component.property;
-  this.oldValue = component.oldValue;
-  this.newValue = componnet.newValue;
+  this.value = component.value;
 };
 goog.inherits(AI.Events.ComponentProperty, AI.Events.ComponentEvent);
 
@@ -328,14 +331,12 @@ AI.Events.ComponentProperty.prototype.type = AI.Events.COMPONENT_PROPERTY;
 AI.Events.ComponentProperty.prototype.fromJson = function(json) {
    AI.Events.ComponentProperty.superClass_.fromJson.call(this, json);
    this.property = json["property"];
-   this.oldValue = json["oldValue"];
-   this.newValue = json["newValue"];
+   this.value = json["value"];
 };
 
 AI.Events.ComponentProperty.prototype.toJson = function() {
    var json = AI.Events.ComponentProperty.superClass_.toJson.call(this);
    json["property"] = this.property;
-   json["oldValue"] = this.oldValue;
-   json["newValue"] = this.newValue;
+   json["value"] = this.value;
    return json;
 };

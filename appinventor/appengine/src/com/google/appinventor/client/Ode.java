@@ -2327,37 +2327,6 @@ public class Ode implements EntryPoint {
     return Ode.getInstance().getDesignToolbar().getCurrentProject().projectId + "_" + Ode.getInstance().getDesignToolbar().getCurrentProject().currentScreen;
   }
 
-  // TODO(Xinyue): Move this to event class
-  public static void runCreateComponent(String parentUUID, String componentType, String beforeIndex, String selfUUID) {
-    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
-    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
-    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
-    MockComponent component = SimpleComponentDescriptor.createMockComponent(componentType, formEditor);
-    component.onCreateFromPalette();
-    component.changeProperty(MockComponent.PROPERTY_NAME_UUID, selfUUID);
-    OdeLog.log(("run create component "+componentType+" at index "+beforeIndex));
-    if (component.isVisibleComponent()) {
-      OdeLog.log("component is visible");
-      MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-      container.addVisibleComponent(component, Integer.parseInt(beforeIndex));
-    } else {
-      OdeLog.log("component is non-visible");
-      formEditor.getForm().addComponent(component);
-      formEditor.getNonVisibleComponentsPanel().addComponent(component);
-      component.select();
-    }
-  }
-
-  // TODO(Xinyue): BUG: move component to a new container, the name is wrong.
-  public static void runRemoveComponent(String parentUUID, String selfUUID) {
-    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
-    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
-    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
-    MockComponent component = formEditor.getComponent(selfUUID);
-    MockContainer container = (MockContainer) formEditor.getComponent(parentUUID);
-    container.broadcastRemoveComponent(component, true, false);
-  }
-
   public static void enableBroadcast() {
     Ode.getInstance().getCollaborationManager().enableBroadcast();
   }
@@ -2371,10 +2340,6 @@ public class Ode implements EntryPoint {
       $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
     $wnd.Ode_getCurrentChannel =
       $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
-    $wnd.Ode_runCreateComponent =
-      $entry(@com.google.appinventor.client.Ode::runCreateComponent(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
-    $wnd.Ode_runRemoveComponent =
-      $entry(@com.google.appinventor.client.Ode::runRemoveComponent(Ljava/lang/String;Ljava/lang/String;));
     $wnd.Ode_enableBroadcast =
       $entry(@com.google.appinventor.client.Ode::enableBroadcast());
     $wnd.Ode_disableBroadcast =
@@ -2467,31 +2432,4 @@ public class Ode implements EntryPoint {
     $wnd.socket.emit("userLeave", msg);
   }-*/;
 
-
-  // TODO(Xinyue): Modify this with event system
-  public native void createComponent(String parentUUID, String componentType, int beforeIndex, String uuid)/*-{
-    var channel = $wnd.Ode_getCurrentChannel();
-    var msg = {
-      "channel": channel,
-      "user": $wnd.userEmail,
-      "type": "ADD",
-      "parent": parentUUID,
-      "componentType": componentType,
-      "beforeIndex": beforeIndex.toString(),
-      "uuid": uuid
-    };
-    $wnd.socket.emit("component", msg);
-
-  }-*/;
-
-  public native void removeComponent(String parentUuid, String uuid)/*-{
-    var msg = {
-      "channel": $wnd.Ode_getCurrentChannel(),
-      "user": $wnd.userEmail,
-      "type": "REMOVE",
-      "parent": parentUuid,
-      "uuid": uuid
-    };
-    $wnd.socket.emit("component", msg);
-  }-*/;
 }

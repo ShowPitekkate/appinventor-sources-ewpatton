@@ -965,7 +965,7 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     this.editor.getProjectEditor().clearLocation(getName());
     getForm().select();
     // Pass true to indicate that the component is being permanently deleted.
-    getContainer().broadcastRemoveComponent(this, true, true);
+    getContainer().removeComponent(this, true);
     // tell the component its been removed, so it can remove children's blocks
     onRemoved();
     properties.removePropertyChangeListener(this);
