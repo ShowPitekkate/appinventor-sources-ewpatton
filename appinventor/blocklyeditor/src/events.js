@@ -242,17 +242,19 @@ goog.inherits(AI.Events.CreateComponent, AI.Events.ComponentEvent);
 AI.Events.CreateComponent.prototype.type = AI.Events.COMPONENT_CREATE;
 
 AI.Events.CreateComponent.prototype.fromJson = function(json) {
-   AI.Events.ComponentAdd.superClass_.fromJson.call(this, json);
+   console.log(json);
+   AI.Events.CreateComponent.superClass_.fromJson.call(this, json);
    this.componentType = json["componentType"];
    this.parentId = json["parentId"];
    this.beforeIndex = json["beforeIndex"];
 };
 
 AI.Events.CreateComponent.prototype.toJson = function() {
-   var json = AI.Events.ComponentAdd.superClass_.fromJson.call(this);
+   var json = AI.Events.CreateComponent.superClass_.toJson.call(this);
    json["componentType"] = this.componentType;
    json["parentId"] = this.parentId;
    json["beforeIndex"] = this.beforeIndex;
+   console.log(json);
    return json;
 };
 /**
@@ -275,12 +277,12 @@ goog.inherits(AI.Events.DeleteComponent, AI.Events.ComponentEvent);
 AI.Events.DeleteComponent.prototype.type = AI.Events.COMPONENT_DELETE;
 
 AI.Events.DeleteComponent.prototype.fromJson = function(json) {
-   AI.Events.ComponentRemove.superClass_.fromJson.call(this, json);
+   AI.Events.DeleteComponent.superClass_.fromJson.call(this, json);
    this.parentId = json["parentId"];
 };
 
 AI.Events.DeleteComponent.prototype.toJson = function() {
-   var json = AI.Events.ComponentRemove.superClass_.fromJson.call(this);
+   var json = AI.Events.DeleteComponent.superClass_.toJson.call(this);
    json["parentId"] = this.parentId;
    return json;
 };
@@ -331,7 +333,7 @@ AI.Events.ComponentProperty.prototype.fromJson = function(json) {
 };
 
 AI.Events.ComponentProperty.prototype.toJson = function() {
-   var json = AI.Events.ComponentProperty.superClass_.fromJson.call(this);
+   var json = AI.Events.ComponentProperty.superClass_.toJson.call(this);
    json["property"] = this.property;
    json["oldValue"] = this.oldValue;
    json["newValue"] = this.newValue;

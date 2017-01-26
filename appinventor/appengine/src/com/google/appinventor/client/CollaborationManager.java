@@ -61,7 +61,7 @@ public class CollaborationManager implements FormChangeListener {
     var msg = {
       "channel": $wnd.Ode_getCurrentChannel(),
       "user": $wnd.userEmail,
-      "event": eventJSON
+      "event": eventJson
     };
     console.log(msg);
     $wnd.socket.emit("component", msg);
