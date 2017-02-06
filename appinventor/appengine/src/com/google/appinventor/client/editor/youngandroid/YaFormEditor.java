@@ -863,4 +863,9 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   public MockComponent getComponent(String uuid) {
     return componentMap.get(uuid);
   }
+
+  @Override
+  public void moveComponent(String uuid, String parentUuid, int index) {
+    // TODO(ewpatton): Implementation
+  }
 }
