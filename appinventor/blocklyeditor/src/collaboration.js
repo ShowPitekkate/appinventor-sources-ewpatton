@@ -24,14 +24,26 @@ Blockly.Collaboration = function(workspace){
   window.parent.socket.on(channel, function(msg){
     var msgJSON = JSON.parse(msg);
     var userFrom = msgJSON["user"];
+    var eventJson = msgJSON["event"];
     console.log("User "+ uuid +" receive new events from "+userFrom);
     console.log(msgJSON);
     if(userFrom != uuid){
-      var newEvent = Blockly.Events.fromJson(msgJSON["event"], workspace);
+      var newEvent = Blockly.Events.fromJson(eventJson, workspace);
       Blockly.Events.disable();
       newEvent.run(true);
+      if(eventJson["type"]==="delete"){
+        Blockly.Events.enable();
+        return;
+      }
       var color = window.parent.userColorMap.get(msgJSON["email"]);
       var block = Blockly.mainWorkspace.getBlockById(newEvent.blockId);
+      if(eventJson["type"]==="create"){
+        if(!Blockly.mainWorkspace.rendered){
+                Blockly.mainWorkspace.rendered = true;
+              }
+              block.initSvg();
+              block.rendered = true;
+      }
       if(userLastSelection.has(userFrom)){
         var prevSelected = userLastSelection.get(userFrom);
         prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
@@ -56,8 +68,8 @@ Blockly.Collaboration = function(workspace){
       "email": window.parent.userEmail,
       "event" : event.toJson()
     };
-//    var eventJson = JSON.stringify(msg);
-//    console.log(eventJson);
+    var eventJson = JSON.stringify(msg);
+    console.log(eventJson);
     window.parent.socket.emit("block", msg);
   });
 }

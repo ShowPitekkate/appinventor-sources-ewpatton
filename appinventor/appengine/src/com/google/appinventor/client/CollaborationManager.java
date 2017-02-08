@@ -78,7 +78,11 @@ public class CollaborationManager implements FormChangeListener {
   }-*/;
 
   public native void componentSocketEvent(String channel)/*-{
-    console.log("component socket event "+channel);
+
+  }-*/;
+
+  /*
+  console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
@@ -90,7 +94,6 @@ public class CollaborationManager implements FormChangeListener {
         $wnd.Ode_enableBroadcast();
       }
     });
-  }-*/;
-
+   */
 
 }
