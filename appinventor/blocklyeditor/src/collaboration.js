@@ -13,7 +13,7 @@ goog.require("Blockly.Workspace");
 
 Blockly.Collaboration = function(workspace){
   this.workspace = workspace;
-  var channel = window.parent.Ode_getCurrentChannel();
+  var channel = window.parent.Ode_getCurrentChannel()+"_block";
 
   var userLastSelection = new Map();
   var uuid = workspace.id;
@@ -42,7 +42,7 @@ Blockly.Collaboration = function(workspace){
                 Blockly.mainWorkspace.rendered = true;
               }
               block.initSvg();
-              block.rendered = true;
+              block.render();
       }
       if(userLastSelection.has(userFrom)){
         var prevSelected = userLastSelection.get(userFrom);
