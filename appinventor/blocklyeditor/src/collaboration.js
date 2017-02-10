@@ -38,11 +38,8 @@ Blockly.Collaboration = function(workspace){
       var color = window.parent.userColorMap.get(msgJSON["email"]);
       var block = Blockly.mainWorkspace.getBlockById(newEvent.blockId);
       if(eventJson["type"]==="create"){
-        if(!Blockly.mainWorkspace.rendered){
-                Blockly.mainWorkspace.rendered = true;
-              }
-              block.initSvg();
-              block.render();
+        block.initSvg();
+        block.render();
       }
       if(userLastSelection.has(userFrom)){
         var prevSelected = userLastSelection.get(userFrom);

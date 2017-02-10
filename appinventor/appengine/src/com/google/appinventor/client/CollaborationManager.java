@@ -92,4 +92,61 @@ public class CollaborationManager implements FormChangeListener {
     });
   }-*/;
 
+  public native void connectCollaborationServer(String server, String userEmail) /*-{
+    $wnd.socket = $wnd.io.connect(server, {autoConnect: true});
+    $wnd.userEmail = userEmail;
+    $wnd.colors = ['#999999','#f781bf','#a65628','#ffff33','#ff7f00','#984ea3','#4daf4a','#377eb8','#e41a1c'];
+    $wnd.userColorMap = new $wnd.Map();
+    $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
+    $wnd.socket.emit("userChannel", userEmail);
+    $wnd.socket.on(userEmail, function(msg){
+      var msgJSON = JSON.parse(msg);
+      var projectId = String(msgJSON["project"]);
+      $wnd.Ode_addSharedProject(projectId);
+    });
+  }-*/;
+
+  public native void joinProject(String projectId) /*-{
+    $wnd.socket.emit("projectChannel", projectId);
+    $wnd.project = projectId;
+    var msg = {
+      "project": projectId,
+      "user": $wnd.userEmail
+    };
+    $wnd.socket.emit("userJoin", msg);
+    $wnd.socket.on(projectId, function(msg){
+      var msgJSON = JSON.parse(msg);
+      var c = "";
+      var user = msgJSON["user"];
+      if(user!==$wnd.userEmail){
+        switch(msgJSON["type"]){
+          case "join":
+            if(!$wnd.userColorMap.has(user)){
+              c = $wnd.colors.pop();
+              $wnd.userColorMap.set(user, c);
+            }
+            $wnd.DesignToolbar_addJoinedUser(user, $wnd.userColorMap.get(user));
+            break;
+          case "leave":
+            if($wnd.userColorMap.has(user)){
+              c = $wnd.userColorMap.get(user);
+              $wnd.colors.push(c);
+              $wnd.userColorMap.rmv(user);
+            }
+            $wnd.DesignToolbar_removeJoinedUser(user);
+            break;
+        }
+      }
+    });
+  }-*/;
+
+  public native void leaveProject()/*-{
+    var msg = {
+      "project": $wnd.project,
+      "user": $wnd.userEmail
+    };
+    $wnd.project = "";
+    $wnd.socket.emit("userLeave", msg);
+  }-*/;
+
 }

@@ -305,7 +305,6 @@ public class DesignToolbar extends Toolbar {
   }
 
   private void doSwitchScreen1(long projectId, String screenName, View view) {
-    OdeLog.log("do switch screen 1");
     if (!projectMap.containsKey(projectId)) {
       OdeLog.wlog("DesignToolbar: no project with id " + projectId
           + ". Ignoring SwitchScreenAction.execute().");
@@ -552,6 +551,7 @@ public class DesignToolbar extends Toolbar {
     user.setStyleName("collaboration-user-box");
     user.getElement().getStyle().setBackgroundColor(color);
     user.setTitle(username);
+    user.getElement().setInnerHTML(Character.toString(Character.toUpperCase(username.charAt(0))));
     if (!joinedUserMap.containsKey(username)) {
       joinedUserLabel.add(user);
       joinedUserMap.put(username, user);
@@ -560,7 +560,7 @@ public class DesignToolbar extends Toolbar {
 
   public static void removeJoinedUser(String username){
     if (joinedUserMap.containsKey(username)) {
-      joinedUserMap.get(username).removeFromParent();
+      joinedUserLabel.remove(joinedUserMap.get(username));
       joinedUserMap.remove(username);
     }
   }
