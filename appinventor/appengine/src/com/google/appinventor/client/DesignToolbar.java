@@ -194,24 +194,11 @@ public class DesignToolbar extends Toolbar {
         MESSAGES.switchToFormEditorButton(), new SwitchToFormEditorAction()), true);
     addButton(new ToolbarItem(WIDGET_NAME_SWITCH_TO_BLOCKS_EDITOR,
         MESSAGES.switchToBlocksEditorButton(), new SwitchToBlocksEditorAction()), true);
-    addButton(new ToolbarItem("Test", "Test", new AddComponentAction()), true);
     // Gray out the Designer button and enable the blocks button
     toggleEditor(false);
     Ode.getInstance().getTopToolbar().updateFileMenuButtons(0);
   }
 
-  private class AddComponentAction implements Command {
-
-    @Override
-    public void execute() {
-      YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(getCurrentProject().projectId);
-      YaFormEditor formEditor = projectEditor.getFormFileEditor(getCurrentProject().currentScreen);
-      MockComponent component = SimpleComponentDescriptor.createMockComponent("Button", formEditor);
-      MockFormLayout formLayout = (MockFormLayout) formEditor.getForm().getLayout();
-      formLayout.setDividerPos(0);
-      formEditor.getForm().onDrop(component, -1, -1, -1, -1);
-    }
-  }
   private class AddFormAction implements Command {
     @Override
     public void execute() {
