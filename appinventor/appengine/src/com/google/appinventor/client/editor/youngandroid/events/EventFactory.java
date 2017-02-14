@@ -8,10 +8,7 @@ import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescri
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
 import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 import com.google.appinventor.client.output.OdeLog;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptObject;
-import com.google.gwt.query.client.builders.JsniBundle;
-import com.google.gwt.query.client.builders.JsniBundle.LibrarySource;
 
 public class EventFactory {
 
@@ -27,18 +24,7 @@ public class EventFactory {
   static {
     ((EventFactorySources) GWT.create(EventFactorySources.class)).load();
   }*/
-  
-//  public static native AppInventorEvent create(String type, Object... args)/*-{
-//  }-*/;
-//
-//  public static native CreateComponent create(long projectId, String uuid, String componentType)/*-{
-//    $wnd.EventFactory.constructors[@com.google.appinventor.client.editor.youngandroid.events.CreateComponent::TYPE
-//  }-*/;
-//
-//  static native void registerEventType(String type, JavaScriptObject constructor, JavaScriptObject fromJson)/*-{
-//    $wnd.EventFactory.constructors[type] = constructor;
-//    $wnd.EventFactory.fromJson[type] = fromJson;
-//  }-*/;
+
 
   private static void runCreateComponent(CreateComponent event) {
     long projectId = Long.parseLong(event.getProjectId());
@@ -48,9 +34,14 @@ public class EventFactory {
     }
     YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
     YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
-    MockComponent component = SimpleComponentDescriptor.createMockComponent(event.getComponentType(), formEditor);
-    component.onCreateFromPalette();
-    component.changeProperty(MockComponent.PROPERTY_NAME_UUID, event.getComponentId());
+    MockComponent component = null;
+    if(formEditor.hasComponent(event.getComponentId())){
+      component = formEditor.getComponent(event.getComponentId());
+    }else {
+      component = SimpleComponentDescriptor.createMockComponent(event.getComponentType(), formEditor);
+      component.onCreateFromPalette();
+      component.changeProperty(MockComponent.PROPERTY_NAME_UUID, event.getComponentId());
+    }
     OdeLog.log(("run create component " + event.getComponentType() + " at index " + event.getBeforeIndex()));
     if (component.isVisibleComponent()) {
       OdeLog.log("component is visible");
