@@ -17,7 +17,6 @@ Blockly.Collaboration = function(workspace){
 
   var userLastSelection = new Map();
   var uuid = workspace.id;
-  //var socket = io.connect("http://localhost:3000", {autoConnect: true});
   console.log("new collaboration established, channel is "+channel+" user is "+uuid);
   window.parent.socket.emit("screenChannel", channel);
 
@@ -65,8 +64,7 @@ Blockly.Collaboration = function(workspace){
       "email": window.parent.userEmail,
       "event" : event.toJson()
     };
-    var eventJson = JSON.stringify(msg);
-    console.log(eventJson);
+    console.log(msg);
     window.parent.socket.emit("block", msg);
   });
 }

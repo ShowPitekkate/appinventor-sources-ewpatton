@@ -1,17 +1,15 @@
 package com.google.appinventor.client;
 
-import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.editor.simple.components.FormChangeListener;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
 import com.google.appinventor.client.editor.youngandroid.events.CreateComponent;
 import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
 import com.google.appinventor.client.editor.youngandroid.events.EventFactory;
-import com.google.appinventor.client.output.OdeLog;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
- * Created by xinyue on 1/19/17.
+ * This class manages group collaboration.
  */
 public class CollaborationManager implements FormChangeListener {
 

@@ -59,6 +59,12 @@ AI.Events.COMPONENT_MOVE = 'component.move';
 AI.Events.COMPONENT_PROPERTY = 'component.property';
 
 /**
+ * Type identifier used for serializing ComponentSelect events.
+ * @const {string}
+ */
+AI.Events.COMPONENT_SELECT = 'component.select';
+
+/**
  * Abstract class for all App Inventor events.
  * @constructor
  */
