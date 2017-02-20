@@ -336,6 +336,7 @@ public class DesignToolbar extends Toolbar {
     }
     // Inform the Blockly Panel which project/screen (aka form) we are working on
     BlocklyPanel.setCurrentForm(projectId + "_" + newScreenName);
+    // Setup collaboration channel
     Ode.getInstance().getCollaborationManager().componentSocketEvent(Ode.getInstance().getCurrentChannel());
   }
 

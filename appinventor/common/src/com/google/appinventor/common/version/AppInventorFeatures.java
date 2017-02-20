@@ -123,4 +123,22 @@ public final class AppInventorFeatures {
   public static boolean enableGroupProject(){
     return true;
   }
+
+  /**
+   * If set to true, is in project-level collaboration mode. It can only be true when
+   * group collaboration is enabled.
+   * @return true to enable project-level locking
+   */
+  public static boolean enableProjectLocking(){
+    return enableGroupProject() & true;
+  }
+
+  /**
+   * If set to true, is in component-level collaboration mode. It can only be true when
+   * group collaboration is enabled.
+   * @return true to enable component-level locking
+   */
+  public static boolean enableComponentLocking(){
+    return enableGroupProject() & false;
+  }
 }

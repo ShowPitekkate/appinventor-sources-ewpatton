@@ -69,6 +69,7 @@ public class CollaborationManager implements FormChangeListener {
     var msg = {
       "channel": $wnd.Ode_getCurrentChannel(),
       "user": $wnd.userEmail,
+      "source": "Designer",
       "event": eventJson
     };
     console.log(msg);
@@ -76,16 +77,54 @@ public class CollaborationManager implements FormChangeListener {
   }-*/;
 
   public native void componentSocketEvent(String channel)/*-{
+    if($wnd.subscribedChannel.has(channel)){
+      return;
+    }
     console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
+    $wnd.subscribedChannel.add(channel);
+    var userLastSelection = new Map();
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
       var event = msgJSON["event"];
-      if($wnd.userEmail != msgJSON["user"]){
-        console.log(event);
-        $wnd.Ode_disableBroadcast();
-        $wnd.EventFactory_run(event["type"], event);
-        $wnd.Ode_enableBroadcast();
+      var userFrom = msgJSON["user"];
+      if($wnd.userEmail != userFrom){
+        console.log(msgJSON);
+        switch(msgJSON["source"]) {
+          case "Designer":
+            $wnd.Ode_disableBroadcast();
+            $wnd.EventFactory_run(event["type"], event);
+            $wnd.Ode_enableBroadcast();
+            break;
+          case "Block":
+            // TODO(xinyue): assign it to the correct workspace
+            var workspace = Blockly.mainWorkspace;
+            var newEvent = Blockly.Events.fromJson(event, workspace);
+            Blockly.Events.disable();
+            newEvent.run(true);
+            if(event["type"]==="delete"){
+              Blockly.Events.enable();
+              return;
+            }
+            var color = $wnd.userColorMap.get(userFrom);
+            var block = workspace.getBlockById(newEvent.blockId);
+            if(event["type"]==="create"){
+              block.initSvg();
+              block.render();
+            }
+            if(userLastSelection.has(userFrom)){
+              var prevSelected = userLastSelection.get(userFrom);
+              prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
+              prevSelected.svgGroup_.className.animVal = 'blockDraggable';
+              prevSelected.svgPath_.removeAttribute('stroke');
+            }
+            block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
+            block.svgGroup_.className.animVal += ' blocklyOtherSelected';
+            block.svgPath_.setAttribute('stroke', color);
+            userLastSelection.set(userFrom, block);
+            Blockly.Events.enable();
+            break;
+        }
       }
     });
   }-*/;
@@ -96,6 +135,7 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.colors = ['#999999','#f781bf','#a65628','#ffff33','#ff7f00','#984ea3','#4daf4a','#377eb8','#e41a1c'];
     $wnd.userColorMap = new $wnd.Map();
     $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
+    $wnd.subscribedChannel = new $wnd.Set();
     $wnd.socket.emit("userChannel", userEmail);
     $wnd.socket.on(userEmail, function(msg){
       var msgJSON = JSON.parse(msg);
