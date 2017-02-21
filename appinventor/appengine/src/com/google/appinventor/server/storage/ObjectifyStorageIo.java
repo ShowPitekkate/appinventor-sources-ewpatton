@@ -639,6 +639,8 @@ public class ObjectifyStorageIo implements  StorageIo {
           long date = System.currentTimeMillis();
           ProjectData pd = new ProjectData();
           pd.id = null;  // let Objectify auto-generate the project id
+          pd.owner = userId;
+          pd.leader = userId; // When project is created, owner is the leader.
           pd.dateCreated = date;
           pd.dateModified = date;
           pd.history = project.getProjectHistory();
@@ -944,7 +946,7 @@ public class ObjectifyStorageIo implements  StorageIo {
       return new UserProject(projectId, projectData.t.name,
           projectData.t.type, projectData.t.dateCreated,
           projectData.t.dateModified, projectData.t.galleryId,
-          projectData.t.attributionId);
+          projectData.t.attributionId, projectData.t.shared);
     }
   }
 
@@ -977,7 +979,7 @@ public class ObjectifyStorageIo implements  StorageIo {
         uProjects.add(new UserProject(projectData.id, projectData.name,
             projectData.type, projectData.dateCreated,
             projectData.dateModified, projectData.galleryId,
-            projectData.attributionId));
+            projectData.attributionId, projectData.shared));
       }
       return uProjects;
     }
@@ -2900,10 +2902,61 @@ public class ObjectifyStorageIo implements  StorageIo {
         public void run(Objectify datastore) throws ObjectifyException, IOException {
           ProjectData pd = datastore.find(projectKey(projectId));
           pd.userPermission.put(userId, perm);
+          pd.shared = true;
           datastore.put(pd);
         }
       }, true);
     }catch (ObjectifyException e){
+      throw CrashReport.createAndLogError(LOG, null, null, e);
+    }
+  }
+
+  @Override
+  public String getProjectOwner(final long projectId) {
+    final Result<String> result = new Result<>();
+    try{
+      runJobWithRetries(new JobRetryHelper() {
+        @Override
+        public void run(Objectify datastore) throws ObjectifyException, IOException {
+          ProjectData pd = datastore.find(projectKey(projectId));
+          result.t = pd.owner;
+        }
+      }, false);
+    } catch (ObjectifyException e){
+      throw CrashReport.createAndLogError(LOG, null, null, e);
+    }
+    return result.t;
+  }
+
+  @Override
+  public String getProjectLeader(final long projectId) {
+    final Result<String> result = new Result<>();
+    try{
+      runJobWithRetries(new JobRetryHelper() {
+        @Override
+        public void run(Objectify datastore) throws ObjectifyException, IOException {
+          ProjectData pd = datastore.find(projectKey(projectId));
+          result.t = pd.leader;
+        }
+      }, false);
+    } catch (ObjectifyException e){
+      throw CrashReport.createAndLogError(LOG, null, null, e);
+    }
+    return result.t;
+  }
+
+  @Override
+  public void setProjectLeader(final long projectId, final String userId) {
+    try{
+      runJobWithRetries(new JobRetryHelper() {
+        @Override
+        public void run(Objectify datastore) throws ObjectifyException, IOException {
+          ProjectData pd = datastore.find(projectKey(projectId));
+          pd.leader = userId;
+          datastore.put(pd);
+        }
+      }, true);
+    } catch (ObjectifyException e){
       throw CrashReport.createAndLogError(LOG, null, null, e);
     }
   }

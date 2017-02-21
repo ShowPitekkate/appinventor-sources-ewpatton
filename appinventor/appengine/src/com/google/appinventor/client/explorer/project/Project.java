@@ -9,6 +9,7 @@ package com.google.appinventor.client.explorer.project;
 import com.google.appinventor.client.Ode;
 import static com.google.appinventor.client.Ode.MESSAGES;
 import com.google.appinventor.client.OdeAsyncCallback;
+import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.settings.project.ProjectSettings;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
@@ -51,7 +52,8 @@ public final class Project {
    * Loads the project's nodes from the backend.
    */
   public void loadProjectNodes() {
-    if (projectRoot == null && !loadingInProgress) {
+    if (!loadingInProgress) {
+      OdeLog.log("Project: in loading");
       loadingInProgress = true;
 
       if (settings == null) {
@@ -178,6 +180,24 @@ public final class Project {
    */
   public ProjectRootNode getRootNode() {
     return projectRoot;
+  }
+
+  /**
+   * Returns if the project is shared with others
+   *
+   * @return shared
+   */
+  public boolean isShared() {
+    return projectInfo.isShared();
+  }
+
+  /**
+   * Set if the project is shared.
+   *
+   * @param shared
+   */
+  public void setShared(boolean shared) {
+    projectInfo.setShared(shared);
   }
 
   /**

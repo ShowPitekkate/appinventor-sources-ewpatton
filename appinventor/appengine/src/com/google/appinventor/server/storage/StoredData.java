@@ -78,6 +78,12 @@ public class StoredData {
     // Auto-generated unique project id
     @Id Long id;
 
+    // User ID of the project creator
+    String owner;
+
+    // User ID of the project leader(current project editor in Project-level collaboration mode)
+    String leader;
+
     // Verbose project name
     String name;
 
@@ -107,6 +113,7 @@ public class StoredData {
     // the id of the gallery app that was copied for remix
     @Serialized
     Map<String, Permission> userPermission = new HashMap<>(); // This stores the permission information, user id to perm
+    boolean shared;
   }
 
   // Project properties specific to the user

@@ -594,39 +594,39 @@ public class Ode implements EntryPoint {
   }
 
   public void openYoungAndroidProjectInDesigner(final Project project) {
-    ProjectRootNode projectRootNode = project.getRootNode();
-    if (projectRootNode == null) {
+    final ProjectRootNode projectRootNode = project.getRootNode();
+    if (projectRootNode == null || project.isShared()) {
       // The project nodes haven't been loaded yet.
       // Add a ProjectChangeListener so we'll be notified when they have been loaded.
       project.addProjectChangeListener(new ProjectChangeAdapter() {
         @Override
         public void onProjectLoaded(Project projectLoaded) {
-          project.removeProjectChangeListener(this);
-          openYoungAndroidProjectInDesigner(project);
+          projectLoaded.removeProjectChangeListener(this);
+          OdeLog.log("ODE: project "+projectLoaded.getProjectId()+" finish loading");
+
+          // The project nodes have been loaded. Tell the viewer to open
+          // the project. This will cause the projects source files to be fetched
+          // asynchronously, and loaded into file editors.
+          ViewerBox.getViewerBox().show(projectLoaded.getRootNode());
+          // Note: we can't call switchToDesignView until the Screen1 file editor
+          // finishes loading. We leave that to setCurrentFileEditor(), which
+          // will get called at the appropriate time.
+          String projectIdString = Long.toString(projectLoaded.getProjectId());
+          if (!History.getToken().equals(projectIdString)) {
+            // insert token into history but do not trigger listener event
+            History.newItem(projectIdString, false);
+          }
+          if (assetManager == null) {
+            assetManager = AssetManager.getInstance();
+          }
+          assetManager.loadAssets(projectLoaded.getProjectId());
+          Ode.getInstance().getCollaborationManager().joinProject(projectIdString);
+          getTopToolbar().updateFileMenuButtons(1);
         }
       });
+      OdeLog.log("ODE: load project "+project.getProjectId());
       project.loadProjectNodes();
-
-    } else {
-      // The project nodes have been loaded. Tell the viewer to open
-      // the project. This will cause the projects source files to be fetched
-      // asynchronously, and loaded into file editors.
-      ViewerBox.getViewerBox().show(projectRootNode);
-      // Note: we can't call switchToDesignView until the Screen1 file editor
-      // finishes loading. We leave that to setCurrentFileEditor(), which
-      // will get called at the appropriate time.
-      String projectIdString = Long.toString(project.getProjectId());
-      if (!History.getToken().equals(projectIdString)) {
-        // insert token into history but do not trigger listener event
-        History.newItem(projectIdString, false);
-      }
-      if (assetManager == null) {
-        assetManager = AssetManager.getInstance();
-      }
-      assetManager.loadAssets(project.getProjectId());
-      Ode.getInstance().getCollaborationManager().joinProject(projectIdString);
     }
-    getTopToolbar().updateFileMenuButtons(1);
   }
 
   /**

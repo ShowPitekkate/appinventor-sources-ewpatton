@@ -659,4 +659,10 @@ public interface StorageIo {
   // project user permission
   StoredData.Permission getPermission(String userId, long projectId);
   void addPermission(String userId, long projectId, StoredData.Permission perm);
+
+  String getProjectOwner(long projectId);
+
+  String getProjectLeader(long projectId);
+
+  void setProjectLeader(long projectId, String userId);
 }

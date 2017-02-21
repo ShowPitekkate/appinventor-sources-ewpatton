@@ -337,7 +337,11 @@ public class DesignToolbar extends Toolbar {
     // Inform the Blockly Panel which project/screen (aka form) we are working on
     BlocklyPanel.setCurrentForm(projectId + "_" + newScreenName);
     // Setup collaboration channel
-    Ode.getInstance().getCollaborationManager().componentSocketEvent(Ode.getInstance().getCurrentChannel());
+    String currentChannel = Ode.getInstance().getCurrentChannel();
+    if(!currentChannel.equals(Ode.getInstance().getCollaborationManager().getScreenChannel())){
+      Ode.getInstance().getCollaborationManager().setScreenChannel(currentChannel);
+      Ode.getInstance().getCollaborationManager().componentSocketEvent(currentChannel);
+    }
   }
 
   private class SwitchToBlocksEditorAction implements Command {
@@ -553,10 +557,18 @@ public class DesignToolbar extends Toolbar {
     }
   }
 
+  public static void removeAllJoinedUser() {
+    for (String username : joinedUserMap.keySet()) {
+      joinedUserLabel.remove(joinedUserMap.get(username));
+    }
+    joinedUserMap.clear();
+  }
   private static native void exportMethodToJavascript()/*-{
     $wnd.DesignToolbar_addJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::addJoinedUser(Ljava/lang/String;Ljava/lang/String;));
     $wnd.DesignToolbar_removeJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::removeJoinedUser(Ljava/lang/String;));
+    $wnd.DesignToolbar_removeAllJoinedUser =
+      $entry(@com.google.appinventor.client.DesignToolbar::removeAllJoinedUser());
   }-*/;
 }

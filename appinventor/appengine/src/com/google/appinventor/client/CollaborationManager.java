@@ -14,9 +14,12 @@ import com.google.gwt.core.client.JavaScriptObject;
 public class CollaborationManager implements FormChangeListener {
 
   private boolean broadcast;
+  // TODO(xinyue): Modify this to support multi screen
+  public String screenChannel;
 
   public CollaborationManager() {
     broadcast = true;
+    this.screenChannel = "";
     EventFactory.exportMethodToJavascript();
   }
 
@@ -26,6 +29,14 @@ public class CollaborationManager implements FormChangeListener {
 
   public void disableBroadcast() {
     broadcast = false;
+  }
+
+  public void setScreenChannel(String screenChannel) {
+    this.screenChannel = screenChannel;
+  }
+
+  public String getScreenChannel() {
+    return this.screenChannel;
   }
 
   @Override
@@ -77,9 +88,6 @@ public class CollaborationManager implements FormChangeListener {
   }-*/;
 
   public native void componentSocketEvent(String channel)/*-{
-    if($wnd.subscribedChannel.has(channel)){
-      return;
-    }
     console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
     $wnd.subscribedChannel.add(channel);
@@ -147,6 +155,7 @@ public class CollaborationManager implements FormChangeListener {
   public native void joinProject(String projectId) /*-{
     $wnd.socket.emit("projectChannel", projectId);
     $wnd.project = projectId;
+    $wnd.DesignToolbar_removeAllJoinedUser();
     var msg = {
       "project": projectId,
       "user": $wnd.userEmail
@@ -154,6 +163,9 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.socket.emit("userJoin", msg);
     $wnd.socket.on(projectId, function(msg){
       var msgJSON = JSON.parse(msg);
+      if(msgJSON["project"]!=$wnd.project){
+        return;
+      }
       var c = "";
       var user = msgJSON["user"];
       if(user!==$wnd.userEmail){

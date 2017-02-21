@@ -319,9 +319,12 @@ public abstract class CommonProjectService {
   public long shareProject(String userId, long projectId, String otherEmail, StoredData.Permission perm){
     String otherID = storageIo.findUserByEmail(otherEmail);
     // add owner permission first
-    StoredData.Permission owner = storageIo.getPermission(userId, projectId);
-    if(owner!= StoredData.Permission.OWNER){
-      storageIo.addPermission(userId, projectId, StoredData.Permission.OWNER);
+    // TODO(xinyue): Only owner can share project
+    if (userId.equals(storageIo.getProjectOwner(projectId))) {
+      StoredData.Permission owner = storageIo.getPermission(userId, projectId);
+      if(owner!= StoredData.Permission.OWNER){
+        storageIo.addPermission(userId, projectId, StoredData.Permission.OWNER);
+      }
     }
     storageIo.addPermission(otherID, projectId, perm);
     return projectId;

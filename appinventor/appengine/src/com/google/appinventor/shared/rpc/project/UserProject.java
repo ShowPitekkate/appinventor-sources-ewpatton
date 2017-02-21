@@ -53,6 +53,8 @@ public class UserProject implements IsSerializable {
   public static final long NOTPUBLISHED = 0;
   public static final long FROMSCRATCH = 0;
 
+  private boolean shared;
+
   /**
    * Default constructor. This constructor is required by GWT.
    */
@@ -77,6 +79,7 @@ public class UserProject implements IsSerializable {
     this.modificationDate = creationDate;
     this.galleryId = galleryId;
     this.attributionId = attributionId;
+    shared = false;
   }
 
   /**
@@ -91,7 +94,7 @@ public class UserProject implements IsSerializable {
    * @param attributionId attribution id
    */
   public UserProject(long projectId, String projectName, String projectType, long creationDate,
-      long modificationDate, long galleryId, long attributionId) {
+      long modificationDate, long galleryId, long attributionId, boolean shared) {
     this.projectId = projectId;
     this.projectName = projectName;
     this.projectType = projectType;
@@ -99,6 +102,7 @@ public class UserProject implements IsSerializable {
     this.modificationDate = modificationDate;
     this.galleryId = galleryId;
     this.attributionId = attributionId;
+    this.shared = shared;
   }
 
   /**
@@ -200,5 +204,13 @@ public class UserProject implements IsSerializable {
     userProject.modificationDate = Long.parseLong(parts[4]);
     userProject.galleryId= UserProject.NOTPUBLISHED;
     return userProject;
+  }
+
+  public void setShared(boolean shared) {
+    this.shared = shared;
+  }
+
+  public boolean isShared() {
+    return shared;
   }
 }
