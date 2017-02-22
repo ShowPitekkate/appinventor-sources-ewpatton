@@ -6346,7 +6346,7 @@ public interface OdeMessages extends Messages {
   String reloadWindow();
 
   @DefaultMessage("Share Project")
-  @Description("")
+  @Description("Menu Item in projects menu to share project with others")
   String shareProjectMenuItem();
 
   @DefaultMessage("Share project with...")
@@ -6357,5 +6357,9 @@ public interface OdeMessages extends Messages {
   @Description("Label for a text box that allows user to enter the email address of the user "+
       "whom they want to share project with.")
   String shareProjectEmailLabel();
+
+  @DefaultMessage("Switch Leader")
+  @Description("Button for switch editor of project in project-level collaborative mode")
+  String switchLeaderButton();
 
 }

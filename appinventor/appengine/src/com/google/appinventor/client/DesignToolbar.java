@@ -124,6 +124,7 @@ public class DesignToolbar extends Toolbar {
   private static final String WIDGET_NAME_SCREENS_DROPDOWN = "ScreensDropdown";
   private static final String WIDGET_NAME_SWITCH_TO_BLOCKS_EDITOR = "SwitchToBlocksEditor";
   private static final String WIDGET_NAME_SWITCH_TO_FORM_EDITOR = "SwitchToFormEditor";
+  private static final String WIDGET_NAME_SWITCH_LEADER = "SwitchLeader";
 
   // Switch language
   private static final String WIDGET_NAME_SWITCH_LANGUAGE = "Language";
@@ -194,6 +195,11 @@ public class DesignToolbar extends Toolbar {
         MESSAGES.switchToFormEditorButton(), new SwitchToFormEditorAction()), true);
     addButton(new ToolbarItem(WIDGET_NAME_SWITCH_TO_BLOCKS_EDITOR,
         MESSAGES.switchToBlocksEditorButton(), new SwitchToBlocksEditorAction()), true);
+    // Switch leader button when project-level collaborative mode activated
+    if(AppInventorFeatures.enableProjectLocking()){
+      addButton(new ToolbarItem(WIDGET_NAME_SWITCH_LEADER,
+          MESSAGES.switchLeaderButton(), new SwitchLeaderAction()), true);
+    }
     // Gray out the Designer button and enable the blocks button
     toggleEditor(false);
     Ode.getInstance().getTopToolbar().updateFileMenuButtons(0);
@@ -383,6 +389,14 @@ public class DesignToolbar extends Toolbar {
       }
     }
   }
+
+  private class SwitchLeaderAction implements Command {
+    @Override
+    public void execute() {
+
+    }
+  }
+
 
   public void addProject(long projectId, String projectName) {
     if (!projectMap.containsKey(projectId)) {
