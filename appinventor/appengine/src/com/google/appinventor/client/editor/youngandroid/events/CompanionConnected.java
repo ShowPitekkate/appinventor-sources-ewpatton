@@ -33,12 +33,11 @@ public class CompanionConnected extends JavaScriptObject implements CompanionEve
   }-*/;
 
   @Override
-  public native long getProjectId()/*-{
+  public native String getProjectId()/*-{
     return this.projectId;
   }-*/;
 
-  @Override
-  public native long getUserId()/*-{
+  public native String getUserId()/*-{
     return this.userId;
   }-*/;
 
@@ -56,4 +55,5 @@ public class CompanionConnected extends JavaScriptObject implements CompanionEve
   public native boolean isTransient()/*-{
     return !this.persist;
   }-*/;
+
 }

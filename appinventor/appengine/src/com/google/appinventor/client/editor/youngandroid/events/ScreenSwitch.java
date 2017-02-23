@@ -16,43 +16,35 @@ public final class ScreenSwitch extends JavaScriptObject implements ScreenEvent 
     return clazz.jsType.prototype.type;
   }-*/;
 
-  @Override
   public native boolean recordUndo()/*-{
     return false;
   }-*/;
 
-  @Override
   public native String getType()/*-{
     return this.type;
   }-*/;
 
-  @Override
   public native <T> T as(Class<T> eventType)/*-{
     return eventType && eventType.jsType && eventType.jsType.prototype.type == this.type ?
       this : null;
   }-*/;
 
-  @Override
-  public native long getProjectId()/*-{
+  public native String getProjectId()/*-{
     return this.projectId;
   }-*/;
 
-  @Override
-  public native long getUserId()/*-{
+  public native String getUserId()/*-{
     return this.userId;
   }-*/;
 
-  @Override
   public native boolean isRealtime()/*-{
     return this.realtime;
   }-*/;
 
-  @Override
   public native void setRealtime(boolean realtime)/*-{
     this.realtime = realtime;
   }-*/;
 
-  @Override
   public native boolean isTransient()/*-{
     return !this.persist;
   }-*/;

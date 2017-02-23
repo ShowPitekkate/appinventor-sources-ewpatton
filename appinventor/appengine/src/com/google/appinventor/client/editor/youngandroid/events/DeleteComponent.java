@@ -70,8 +70,7 @@ public class DeleteComponent extends JavaScriptObject {
     return event;
   }-*/;
 
-  @Override
-  public boolean isTransient() {
+  public final boolean isTransient() {
     // TODO Auto-generated method stub
     return false;
   }

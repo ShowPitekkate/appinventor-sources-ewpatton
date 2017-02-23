@@ -65,8 +65,7 @@ public class CreateBlock extends JavaScriptObject implements BlocklyEvent {
     this.realtime = realtime;
   }-*/;
 
-  @Override
-  public native long getUserId()/*-{
+  public native String getUserId()/*-{
     return this.userId;
   }-*/;
 

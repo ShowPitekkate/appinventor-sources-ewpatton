@@ -25,33 +25,27 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return new AI.Events.CreateComponent(projectId, component);
   }-*/;
 
-  @Override
   public final native boolean recordUndo()/*-{
     return this.recordUndo;
   }-*/;
 
-  @Override
   public final native String getType()/*-{
     return this.type;
   }-*/;
 
-  @Override
   public final native <T> T as(Class<T> eventType)/*-{
     return eventType && eventType.jsType && eventType.jsType.prototype.type == this.type ?
       this : null;
   }-*/;
 
-  @Override
   public final native String getProjectId()/*-{
     return this.projectId;
   }-*/;
 
-  @Override
   public final native boolean isRealtime()/*-{
     return this.realtime;
   }-*/;
 
-  @Override
   public final native void setRealtime(boolean realtime)/*-{
     this.realtime = realtime;
   }-*/;
@@ -82,14 +76,12 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return event;
   }-*/;
 
-  @Override
-  public native long getUserId()/*-{
+  public final native String getUserId()/*-{
     // TODO Auto-generated method stub
     return 0;
   }-*/;
 
-  @Override
-  public native boolean isTransient()/*-{
+  public final native boolean isTransient()/*-{
     return !this.persist;
   }-*/;
 
