@@ -185,11 +185,13 @@ public class CollaborationManager implements FormChangeListener {
             }
             $wnd.DesignToolbar_removeJoinedUser(user);
             break;
+          case "leader":
+            $wnd.DesignToolbar_switchLeader(msgJSON["leader"]);
+            break;
         }
       }
     });
   }-*/;
-
   public native void leaveProject()/*-{
     var msg = {
       "project": $wnd.project,
@@ -199,4 +201,12 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.socket.emit("userLeave", msg);
   }-*/;
 
+  public native void switchLeader(String leaderId)/*-{
+    var msg = {
+      "project": $wnd.project,
+      "user": $wnd.userEmail,
+      "leader": leaderId
+    }
+    $wnd.socket.emit("leader", msg);
+  }-*/;
 }

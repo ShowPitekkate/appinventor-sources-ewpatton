@@ -34,6 +34,7 @@ import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 
+import com.google.appinventor.shared.rpc.user.User;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -413,6 +414,8 @@ public class DesignToolbar extends Toolbar {
           @Override
           public void onSuccess(Void aVoid) {
             //TODO(xinyue): publish to others and modify UI
+            switchLeader(userId);
+            Ode.getInstance().getCollaborationManager().switchLeader(userId);
           }
         });
       }
@@ -572,6 +575,9 @@ public class DesignToolbar extends Toolbar {
     return currentView;
   }
 
+  public static void setLeaderInfo(String userEmail) {
+    leaderInfo.setText(MESSAGES.leaderInfoLabel()+userEmail);
+  }
 
   // TODO(dxy): Change to session id to allow different sessions from the same user.
   public static void addJoinedUser(String username, String color){
@@ -600,8 +606,19 @@ public class DesignToolbar extends Toolbar {
     joinedUserMap.clear();
   }
 
-  public static void setLeaderInfo(String userEmail) {
-    leaderInfo.setText(MESSAGES.leaderInfoLabel()+userEmail);
+  public static void switchLeader(String leaderId){
+    User self = Ode.getInstance().getUser();
+    // if user self is the leader
+    if (leaderId.equals(self.getUserId())) {
+      Ode.getInstance().getTopPanel().setReadOnlyMode(false);
+      Ode.getInstance().getDesignToolbar().setButtonEnabled(WIDGET_NAME_SWITCH_LEADER, false);
+    }else{
+      Ode.getInstance().getTopPanel().setReadOnlyMode(true);
+      Ode.getInstance().getDesignToolbar().setButtonEnabled(WIDGET_NAME_SWITCH_LEADER, true);
+    }
+    setLeaderInfo(self.getUserEmail());
+    Ode.getInstance().getProjectManager()
+        .getProject(Ode.getInstance().getCurrentYoungAndroidProjectId()).setLeader(leaderId);
   }
 
   private static native void exportMethodToJavascript()/*-{
@@ -611,6 +628,8 @@ public class DesignToolbar extends Toolbar {
       $entry(@com.google.appinventor.client.DesignToolbar::removeJoinedUser(Ljava/lang/String;));
     $wnd.DesignToolbar_removeAllJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::removeAllJoinedUser());
+    $wnd.DesignToolbar_switchLeader =
+        $entry(@com.google.appinventor.client.DesignToolbar::switchLeader(Ljava/lang/String;));
   }-*/;
 
 }

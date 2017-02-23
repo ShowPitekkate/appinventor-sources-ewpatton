@@ -69,6 +69,8 @@ public class TopPanel extends Composite {
 
   private final VerticalPanel rightPanel;  // remember this so we can add MOTD later if needed
 
+  private Label readOnly;
+
   final Ode ode = Ode.getInstance();
 
   /**
@@ -96,10 +98,13 @@ public class TopPanel extends Composite {
     links.setStyleName("ode-TopPanelLinks");
     links.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
 
+    readOnly = new Label(MESSAGES.readOnlyMode());
+    readOnly.setStyleName("ode-TopPanelWarningLabel");
+    readOnly.setVisible(false);
+    links.add(readOnly);
+
     if (Ode.getInstance().isReadOnly()) {
-      Label readOnly = new Label(MESSAGES.readOnlyMode());
-      readOnly.setStyleName("ode-TopPanelWarningLabel");
-      links.add(readOnly);
+      setReadOnlyMode(true);
     }
 
     // My Projects Link
@@ -331,6 +336,10 @@ public class TopPanel extends Composite {
    */
   public void showMotd() {
     addMotd(rightPanel);
+  }
+
+  public void setReadOnlyMode(boolean isReadOnly) {
+    readOnly.setVisible(isReadOnly);
   }
 
   private static class WindowOpenClickHandler implements ClickHandler {

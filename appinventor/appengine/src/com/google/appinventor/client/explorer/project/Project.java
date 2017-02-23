@@ -201,6 +201,21 @@ public final class Project {
   }
 
   /**
+   * Get the user id of project leader
+   * @return user id of the leader
+   */
+  public String getLeader() {
+    return projectInfo.getLeaderId();
+  }
+
+  /**
+   * Set the leader of the project
+   * @param leaderId user id of the leader
+   */
+  public void setLeader(String leaderId) {
+    projectInfo.setLeaderId(leaderId);
+  }
+  /**
    * Adds the given node to the project.
    *
    * <p/>If a node with the same file id already exists, the node is not added

@@ -6,6 +6,7 @@
 
 package com.google.appinventor.client;
 
+import java.util.Date;
 import java.util.Random;
 
 import java.util.List;
@@ -622,6 +623,26 @@ public class Ode implements EntryPoint {
           assetManager.loadAssets(projectLoaded.getProjectId());
           Ode.getInstance().getCollaborationManager().joinProject(projectIdString);
           getTopToolbar().updateFileMenuButtons(1);
+          if (AppInventorFeatures.enableProjectLocking()) {
+            if (project.getLeader() != null && project.isShared()) {
+              // TODO(xinyue): if user isn't the leader, cannot edit the project.
+              if (!project.getLeader().equals(Ode.getInstance().user.getUserId())) {
+                topPanel.setReadOnlyMode(true);
+              }
+              Ode.getInstance().userInfoService.getUserInformationByUserId(project.getLeader(), new AsyncCallback<User>() {
+                @Override
+                public void onFailure(Throwable throwable) {
+
+                }
+
+                @Override
+                public void onSuccess(User user) {
+                  designToolbar.setLeaderInfo(user.getUserEmail());
+                }
+              });
+            }
+          }
+
         }
       });
       OdeLog.log("ODE: load project "+project.getProjectId());
@@ -1320,6 +1341,13 @@ public class Ode implements EntryPoint {
     return null;
   }
 
+  /**
+   * Returns the top panel of the instance.
+   * @return top panel
+   */
+  public TopPanel getTopPanel() {
+    return topPanel;
+  }
   /**
    * Updates the modification date for the requested projected in the local
    * cached data structure based on the date received from the server.

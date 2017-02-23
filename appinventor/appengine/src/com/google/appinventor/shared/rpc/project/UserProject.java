@@ -221,6 +221,6 @@ public class UserProject implements IsSerializable {
   }
 
   public void setLeaderId(String leaderId) {
-    this.leaderId = leaderEmail;
+    this.leaderId = leaderId;
   }
 }
