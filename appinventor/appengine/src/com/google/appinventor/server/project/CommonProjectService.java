@@ -330,7 +330,23 @@ public abstract class CommonProjectService {
     return projectId;
   }
 
+  /**
+   * Set the leader of the given project as the given user id.
+   * @param projectId project id
+   * @param userId user id
+   */
+  public void setProjectLeader(long projectId, String userId){
+    storageIo.setProjectLeader(projectId, userId);
+  }
 
+  /**
+   * Get the leader of the given project
+   * @param projectId project id
+   * @return user id of the leader
+   */
+  public String getProjectLeader(long projectId){
+    return storageIo.getProjectLeader(projectId);
+  }
   /**
    * Invokes a build command for the project.
    *

@@ -21,6 +21,7 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.apphosting.api.ApiProxy;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.server.CrashReport;
 import com.google.appinventor.server.FileExporter;
 import com.google.appinventor.server.flags.Flag;
@@ -943,10 +944,14 @@ public class ObjectifyStorageIo implements  StorageIo {
     if (projectData.t == null) {
       return null;
     } else {
-      return new UserProject(projectId, projectData.t.name,
+      UserProject result = new UserProject(projectId, projectData.t.name,
           projectData.t.type, projectData.t.dateCreated,
           projectData.t.dateModified, projectData.t.galleryId,
           projectData.t.attributionId, projectData.t.shared);
+      if (AppInventorFeatures.enableProjectLocking()) {
+        result.setLeaderId(projectData.t.leader);
+      }
+      return result;
     }
   }
 
@@ -976,10 +981,14 @@ public class ObjectifyStorageIo implements  StorageIo {
     } else {
       List<UserProject> uProjects = Lists.newArrayListWithExpectedSize(projectDatas.t.size());
       for (ProjectData projectData : projectDatas.t.values()) {
-        uProjects.add(new UserProject(projectData.id, projectData.name,
+        UserProject res = new UserProject(projectData.id, projectData.name,
             projectData.type, projectData.dateCreated,
             projectData.dateModified, projectData.galleryId,
-            projectData.attributionId, projectData.shared));
+            projectData.attributionId, projectData.shared);
+        if (AppInventorFeatures.enableProjectLocking()) {
+          res.setLeaderId(projectData.leader);
+        }
+        uProjects.add(res);
       }
       return uProjects;
     }
@@ -2960,7 +2969,6 @@ public class ObjectifyStorageIo implements  StorageIo {
       throw CrashReport.createAndLogError(LOG, null, null, e);
     }
   }
-
 }
 
 

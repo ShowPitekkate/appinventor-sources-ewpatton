@@ -669,6 +669,17 @@ public class ProjectServiceImpl extends OdeRemoteServiceServlet implements Proje
         otherEmail, StoredData.Permission.values()[perm]);
   }
 
+  @Override
+  public void setProjectLeader(long projectId, String userId) {
+    getProjectRpcImpl(userId, projectId).setProjectLeader(projectId, userId);
+  }
+
+  @Override
+  public String getProjectLeader(long projectId) {
+    return getProjectRpcImpl(userInfoProvider.getUserId(), projectId).getProjectLeader(projectId);
+  }
+
+
   private void validateSessionId(String sessionId) throws InvalidSessionException {
     String storedSessionId = userInfoProvider.getSessionId();
     if (DEBUG) {

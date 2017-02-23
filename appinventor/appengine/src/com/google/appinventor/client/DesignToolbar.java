@@ -42,6 +42,7 @@ import com.google.gwt.core.client.Scheduler;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -161,6 +162,8 @@ public class DesignToolbar extends Toolbar {
 
   private static HorizontalPanel joinedUserLabel = new HorizontalPanel();
   private static Map<String, Label> joinedUserMap = Maps.newHashMap();
+
+  private static Label leaderInfo;
   /**
    * Initializes and assembles all commands into buttons in the toolbar.
    */
@@ -186,6 +189,11 @@ public class DesignToolbar extends Toolbar {
           new AddFormAction()));
       addButton(new ToolbarItem(WIDGET_NAME_REMOVEFORM, MESSAGES.removeFormButton(),
           new RemoveFormAction()));
+    }
+
+    if (AppInventorFeatures.enableProjectLocking()) {
+      leaderInfo = new Label();
+      rightButtons.add(leaderInfo);
     }
 
     joinedUserLabel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_RIGHT);
@@ -393,7 +401,21 @@ public class DesignToolbar extends Toolbar {
   private class SwitchLeaderAction implements Command {
     @Override
     public void execute() {
+      if (Window.confirm(MESSAGES.reallySwitchLeader())) {
+        final long projectId = Ode.getInstance().getCurrentYoungAndroidProjectRootNode().getProjectId();
+        final String userId = Ode.getInstance().getUser().getUserId();
+        Ode.getInstance().getProjectService().setProjectLeader(projectId, userId, new AsyncCallback<Void>() {
+          @Override
+          public void onFailure(Throwable throwable) {
+            Window.alert("Unable to switch leader");
+          }
 
+          @Override
+          public void onSuccess(Void aVoid) {
+            //TODO(xinyue): publish to others and modify UI
+          }
+        });
+      }
     }
   }
 
@@ -577,6 +599,11 @@ public class DesignToolbar extends Toolbar {
     }
     joinedUserMap.clear();
   }
+
+  public static void setLeaderInfo(String userEmail) {
+    leaderInfo.setText(MESSAGES.leaderInfoLabel()+userEmail);
+  }
+
   private static native void exportMethodToJavascript()/*-{
     $wnd.DesignToolbar_addJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::addJoinedUser(Ljava/lang/String;Ljava/lang/String;));
@@ -585,4 +612,5 @@ public class DesignToolbar extends Toolbar {
     $wnd.DesignToolbar_removeAllJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::removeAllJoinedUser());
   }-*/;
+
 }

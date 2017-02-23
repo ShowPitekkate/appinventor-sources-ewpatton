@@ -6362,4 +6362,11 @@ public interface OdeMessages extends Messages {
   @Description("Button for switch editor of project in project-level collaborative mode")
   String switchLeaderButton();
 
+  @DefaultMessage("Switching leader allows only you can modify this project. Are you sure you want to switch leader?")
+  @Description("Confirmation message for switch the leader of a project")
+  String reallySwitchLeader();
+
+  @DefaultMessage("Leader: ")
+  @Description("Leader info on toolbar")
+  String leaderInfoLabel();
 }

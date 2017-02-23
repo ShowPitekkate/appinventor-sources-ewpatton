@@ -344,4 +344,19 @@ public interface ProjectService extends RemoteService {
    * @return shared project id
    */
   long shareProject(String userId, long projectId, String otherEmail, int perm);
+
+  /**
+   * Switch the leader of a project as the user id passed in.
+   * @param projectId the project id
+   * @param userId the leader user id
+   */
+  void setProjectLeader(long projectId, String userId);
+
+  /**
+   * Get the leader of the given project.
+   *
+   * @param projectId project id
+   * @return user id of the leader
+   */
+  String getProjectLeader(long projectId);
 }

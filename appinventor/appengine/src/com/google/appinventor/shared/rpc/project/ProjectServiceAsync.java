@@ -181,4 +181,14 @@ public interface ProjectServiceAsync {
   void shareProject(String userId, long projectId, String otherEmail,
                     int perm, AsyncCallback<Long> callback);
 
+  /**
+   * @see ProjectService#setProjectLeader(long, String)
+   */
+  void setProjectLeader(long projectId, String userId, AsyncCallback<Void> callback);
+
+  /**
+   * @see ProjectService#getProjectLeader(long)
+   */
+  void getProjectLeader(long projectId, AsyncCallback<String> callback);
+
 }

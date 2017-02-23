@@ -55,6 +55,8 @@ public class UserProject implements IsSerializable {
 
   private boolean shared;
 
+  private String leaderId;
+
   /**
    * Default constructor. This constructor is required by GWT.
    */
@@ -212,5 +214,13 @@ public class UserProject implements IsSerializable {
 
   public boolean isShared() {
     return shared;
+  }
+
+  public String getLeaderId() {
+    return leaderId;
+  }
+
+  public void setLeaderId(String leaderId) {
+    this.leaderId = leaderEmail;
   }
 }
