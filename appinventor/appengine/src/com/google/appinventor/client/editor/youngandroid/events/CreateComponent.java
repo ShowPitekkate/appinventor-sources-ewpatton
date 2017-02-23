@@ -82,5 +82,15 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return event;
   }-*/;
 
+  @Override
+  public native long getUserId()/*-{
+    // TODO Auto-generated method stub
+    return 0;
+  }-*/;
+
+  @Override
+  public native boolean isTransient()/*-{
+    return !this.persist;
+  }-*/;
 
 }

@@ -11,12 +11,10 @@ import com.google.appinventor.client.DesignToolbar;
 import com.google.appinventor.client.ErrorReporter;
 import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.TopToolbar;
-import com.google.appinventor.client.editor.youngandroid.events.BlocklyEvent;
+import com.google.appinventor.client.editor.youngandroid.events.AppInventorEvent;
+import com.google.appinventor.client.editor.youngandroid.events.NativeEventHelper;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.settings.user.BlocksSettings;
-import com.google.appinventor.client.settings.user.UserSettings;
-import com.google.appinventor.client.widgets.properties.EditableProperty;
-import com.google.appinventor.client.widgets.properties.TextPropertyEditor;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.common.collect.Sets;
@@ -82,7 +80,7 @@ public class BlocklyPanel extends HTMLPanel {
   }
 
   public interface BlocklyWorkspaceChangeListener {
-    public void onWorkspaceChange(BlocklyPanel panel, BlocklyEvent event);
+    public void onWorkspaceChange(BlocklyPanel panel, AppInventorEvent event);
   }
 
   // The currently displayed form (project/screen)
@@ -94,10 +92,25 @@ public class BlocklyPanel extends HTMLPanel {
   // My form name
   private final String formName;
 
+  /**
+   * Objects registered to listen for workspace changes.
+   */
   private final Set<BlocklyWorkspaceChangeListener> listeners = Sets.newHashSet();
 
-  // My workspace
+  /**
+   * Reference to the native Blockly.WorkspaceSvg.
+   */
   private JavaScriptObject workspace;
+
+  /**
+   * If true, the loading of the blocks editor has not completed.
+   */
+  private boolean loadComplete = false;
+
+  /**
+   * If true, the loading of the blocks editor resulted in an error.
+   */
+  private boolean loadError = false;
 
   public BlocklyPanel(YaBlocksEditor blocksEditor, String formName) {
     this(blocksEditor, formName, false);
@@ -108,7 +121,7 @@ public class BlocklyPanel extends HTMLPanel {
     getElement().addClassName("svg");
     getElement().setId(formName);
     this.formName = formName;
-    initWorkspace(readOnly, LocaleInfo.getCurrentLocale().isRTL());
+    initWorkspace(Long.toString(blocksEditor.getProjectId()), readOnly, LocaleInfo.getCurrentLocale().isRTL());
     OdeLog.log("Created BlocklyPanel for " + formName);
   }
 
@@ -120,9 +133,18 @@ public class BlocklyPanel extends HTMLPanel {
     listeners.remove(listener);
   }
 
-  private void workspaceChanged(BlocklyEvent event) {
-    for (BlocklyWorkspaceChangeListener listener : listeners) {
-      listener.onWorkspaceChange(this, event);
+  private void workspaceChanged(JavaScriptObject event) {
+    // ignore workspaceChanged events until after the load finishes
+    if (!loadComplete) {
+      return;
+    }
+    if (loadError) {
+      YaBlocksEditor.setBlocksDamaged(formName);
+      ErrorReporter.reportError(MESSAGES.blocksNotSaved(formName));
+    } else {
+      for (BlocklyWorkspaceChangeListener listener : listeners) {
+        listener.onWorkspaceChange(this, NativeEventHelper.asEvent(event));
+      }
     }
   }
 
@@ -167,10 +189,13 @@ public class BlocklyPanel extends HTMLPanel {
     try {
       doLoadBlocksContent(formJson, blocksContent);
     } catch (JavaScriptException e) {
+      loadError = true;
       ErrorReporter.reportError(MESSAGES.blocksLoadFailure(formName));
       OdeLog.elog("Error loading blocks for screen " + formName + ": "
           + e.getDescription());
       throw new LoadBlocksException(e, formName);
+    } finally {
+      loadComplete = true;
     }
   }
 
@@ -207,6 +232,7 @@ public class BlocklyPanel extends HTMLPanel {
   }
 
   public void startRepl(boolean alreadyRunning, boolean forEmulator, boolean forUsb) { // Start the Repl
+    makeActive();
     doStartRepl(alreadyRunning, forEmulator, forUsb);
   }
 
@@ -455,19 +481,26 @@ public class BlocklyPanel extends HTMLPanel {
       $entry(@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::saveUserSettings());
   }-*/;
 
-  private native void initWorkspace(boolean readOnly, boolean rtl)/*-{
+  private native void initWorkspace(String projectId, boolean readOnly, boolean rtl)/*-{
     var el = this.@com.google.gwt.user.client.ui.UIObject::getElement()();
-    var workspace = Blockly.BlocklyEditor.create(el, readOnly, rtl);
-    var BlocklyPanel$this = this;
+    var workspace = Blockly.BlocklyEditor.create(el,
+      this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::formName,
+      readOnly, rtl);
+    workspace.projectId = projectId;
+    var cb = $entry(this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspaceChanged(Lcom/google/gwt/core/client/JavaScriptObject;));
+    cb = cb.bind(this);
     workspace.addChangeListener(function(e) {
       var block = this.getBlockById(e.blockId);
       if ( block && e.name == Blockly.ComponentBlock.COMPONENT_SELECTOR ) {
         block.rename(e.oldValue, e.newValue);
       }
-      BlocklyPanel$this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspaceChanged(Lcom/google/appinventor/client/editor/youngandroid/events/BlocklyEvent;)(e);
+      cb(e);
       // [lyn 12/31/2013] Check for duplicate component event handlers before
       // running any error handlers to avoid quadratic time behavior.
-      this.getWarningHandler().determineDuplicateComponentEventHandlers();
+      var handler = this.getWarningHandler();
+      if (handler) {
+        handler.determineDuplicateComponentEventHandlers();
+      }
     }.bind(workspace));
     this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace = workspace;
   }-*/;
@@ -478,6 +511,13 @@ public class BlocklyPanel extends HTMLPanel {
   native void injectWorkspace()/*-{
     var el = this.@com.google.gwt.user.client.ui.UIObject::getElement()();
     Blockly.ai_inject(el, this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace);
+  }-*/;
+
+  /**
+   * Make the workspace associated with the BlocklyPanel the main workspace.
+   */
+  native void makeActive()/*-{
+    Blockly.mainWorkspace = this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace;
   }-*/;
 
   // [lyn, 2014/10/27] added formJson for upgrading
@@ -593,13 +633,12 @@ public class BlocklyPanel extends HTMLPanel {
   }-*/;
 
   public native void toggleWarning()/*-{
-    this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace
-      .getWarningHandler().toggleWarning();
-  }-*/;
-
-  public native String doGetYailRepl(String formJson, String packageName) /*-{
-    return this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace
-      .getFormYail(formJson, packageName, true);
+    var handler =
+      this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace
+        .getWarningHandler();
+    if (handler) {  // handler won't exist if the workspace hasn't rendered yet.
+      handler.toggleWarning();
+    }
   }-*/;
 
   public native String doGetYail(String formJson, String packageName) /*-{
@@ -608,7 +647,8 @@ public class BlocklyPanel extends HTMLPanel {
   }-*/;
 
   public native void doSendJson(String formJson, String packageName) /*-{
-    Blockly.ReplMgr.sendFormData(formJson, packageName);
+    Blockly.ReplMgr.sendFormData(formJson, packageName,
+      this.@com.google.appinventor.client.editor.youngandroid.BlocklyPanel::workspace);
   }-*/;
 
   public native void doResetYail() /*-{

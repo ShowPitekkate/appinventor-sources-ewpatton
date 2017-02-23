@@ -7,4 +7,5 @@ public interface AppInventorEvent {
   public String getProjectId();
   public boolean isRealtime();
   public void setRealtime(boolean realtime);
+  public boolean isTransient();
 }

@@ -71,4 +71,11 @@ public class ChangeProperty extends JavaScriptObject {
     event.fromJson(json);
     return event;
   }-*/;
+
+  @Override
+  public boolean isTransient() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
 }
