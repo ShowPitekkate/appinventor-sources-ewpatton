@@ -516,6 +516,11 @@ public final class YaBlocksEditor extends FileEditor
     }
   }
 
+  @Override
+  public void onComponentMoved(MockComponent component, String newParentId, int index) {
+    // nothing changed in block editor
+  }
+
   private void updateSourceStructureExplorer() {
     MockForm form = getForm();
     if (form != null) {

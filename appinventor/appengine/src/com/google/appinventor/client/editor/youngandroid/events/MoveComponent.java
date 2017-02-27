@@ -2,23 +2,30 @@ package com.google.appinventor.client.editor.youngandroid.events;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class DeleteComponent extends JavaScriptObject {
+/**
+ * Move Component Event
+ */
+public class MoveComponent extends JavaScriptObject {
+
   public static final String TYPE;
+
   static {
-    TYPE = init(DeleteComponent.class);
+    TYPE = init(MoveComponent.class);
   }
 
-  protected DeleteComponent() {}
+  protected MoveComponent() {}
 
-  private static native String init(Class<DeleteComponent> clazz)/*-{
-    clazz.jsType = AI.Events.DeleteComponent;
+  private static native String init(Class<MoveComponent> clazz)/*-{
+    clazz.jsType = AI.Events.MoveComponent;
     return clazz.jsType.prototype.type;
   }-*/;
 
-  public static native DeleteComponent create(String editorId, String uuid)/*-{
+  public static native MoveComponent create(String editorId, String uuid, String parentId, int index)/*-{
     var component = {
-      id: uuid};
-    return new AI.Events.DeleteComponent(editorId, component);
+      id: uuid,
+      parentId: parentId,
+      index: index};
+    return new AI.Events.MoveComponent(editorId, component);
   }-*/;
 
   public final native boolean recordUndo()/*-{
@@ -54,12 +61,20 @@ public class DeleteComponent extends JavaScriptObject {
     return this.componentId;
   }-*/;
 
+  public final native String getParentId()/*-{
+    return this.parentId;
+  }-*/;
+
+  public final native int getIndex()/*-{
+    return this.index;
+  }-*/;
+
   public final native JavaScriptObject toJson() /*-{
     return this.toJson();
   }-*/;
 
-  public final native static DeleteComponent fromJson(JavaScriptObject json) /*-{
-    var event = new AI.Events.DeleteComponent(null, null);
+  public static final native MoveComponent fromJson(JavaScriptObject json)/*-{
+    var event = new AI.Events.MoveComponent(null, null);
     event.fromJson(json);
     return event;
   }-*/;
@@ -71,4 +86,5 @@ public class DeleteComponent extends JavaScriptObject {
   public final native void run()/*-{
     return this.run();
   }-*/;
+
 }

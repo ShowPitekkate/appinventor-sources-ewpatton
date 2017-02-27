@@ -652,6 +652,14 @@ public final class MockForm extends MockContainer {
   }
 
   /**
+   * Triggers a component moved event to be sent to the listener on the listener list.
+   */
+  public void fireComponentMoved(MockComponent component, String newParentId, int index) {
+    for (FormChangeListener listener : formChangeListeners) {
+      listener.onComponentMoved(component, newParentId, index);
+    }
+  }
+  /**
    * Triggers a component selection change event to be sent to the listener on the listener list.
    */
   protected void fireComponentSelectionChange(MockComponent component, boolean selected) {

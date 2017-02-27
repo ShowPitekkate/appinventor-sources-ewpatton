@@ -47,7 +47,7 @@ AI.Events.COMPONENT_CREATE = 'component.create';
 AI.Events.COMPONENT_DELETE = 'component.delete';
 
 /**
- * Type identifier used for serializing ComponentMove events.
+ * Type identifier used for serializing MoveComponent events.
  * @const {string}
  */
 AI.Events.COMPONENT_MOVE = 'component.move';
@@ -163,6 +163,18 @@ goog.inherits(AI.Events.ScreenEvent, AI.Events.Abstract);
 // Changing screens is transient behavior.
 AI.Events.ScreenEvent.prototype.isTransient = true;
 
+AI.Events.ScreenEvent.prototype.toJSON = function() {
+  var json = {
+    "type" : this.type
+  };
+  if(this.projectId){
+    json["projectId"] = this.projectId;
+  }
+  if(this.componentId){
+    json["screenName"] = this.screenName;
+  }
+  return json;
+};
 /**
  * Event raised when a screen switch occurs in a project editor.
  *
@@ -177,6 +189,9 @@ goog.inherits(AI.Events.ScreenSwitch, AI.Events.ScreenEvent);
 
 AI.Events.ScreenSwitch.prototype.type = AI.Events.SCREEN_SWITCH;
 
+AI.Events.ScreenSwitch.prototype.toJSON = function() {
+  return AI.Events.ScreenSwitch.superClass_.toJSON.call(this);
+};
 /**
  * Event raised when a screen is pushed on the view stack in the Companion.
  *
@@ -207,21 +222,25 @@ AI.Events.ScreenPop.prototype.type = AI.Events.SCREEN_POP;
 /**
  * Base class for component-related events.
  *
- * @param {number} projectId Project ID of the project the designer editor is editing.
+ * @param {String} projectId_screenName which is the id of the designer editor is editing.
  * @param {{}} component id of the The newly created Component object.
  * @extends {AI.Events.Abstract}
  * @constructor
  */
-AI.Events.ComponentEvent = function(projectId, component) {
+AI.Events.ComponentEvent = function(editorId, component) {
   AI.Events.ComponentEvent.superClass_.constructor.call(this);
-  this.projectId = projectId;
+  this.editorId = editorId;
+  this.projectId = editorId.split("_")[0];
   this.componentId = component.id;
 };
 goog.inherits(AI.Events.ComponentEvent, AI.Events.Abstract);
 
 // Component events need to be sent while collaborating in real time.
 AI.Events.ComponentEvent.prototype.realtime = true;
+AI.Events.ComponentEvent.prototype.isTransient = true;
+
 AI.Events.ComponentEvent.prototype.fromJson = function(json) {
+  this.editorId = json["editorId"];
   this.projectId = json["projectId"];
   this.componentId = json["componentId"];
 };
@@ -230,6 +249,9 @@ AI.Events.ComponentEvent.prototype.toJson = function() {
   var json = {
     "type": this.type
   };
+  if(this.editorId) {
+    json["editorId"] = this.editorId;
+  }
   if(this.projectId){
     json["projectId"] = this.projectId;
   }
@@ -238,108 +260,146 @@ AI.Events.ComponentEvent.prototype.toJson = function() {
   }
   return json;
 };
+
+AI.Events.ComponentEvent.fromJson = function(json) {
+  var event;
+  switch(json["type"]){
+    case AI.Events.COMPONENT_CREATE:
+      event = new AI.Events.CreateComponent(null, null);
+      break;
+    case AI.Events.COMPONENT_DELETE:
+      event = new AI.Events.DeleteComponent(null, null);
+      break;
+    case AI.Events.COMPONENT_MOVE:
+      event = new AI.Events.MoveComponent(null, null);
+      break;
+    case AI.Events.COMPONENT_PROPERTY:
+      event = new AI.Events.ComponentProperty(null, null);
+      break;
+    case AI.Events.COMPONENT_SELECT:
+      break;
+    default:
+      throw "Unknown component type: "+json["type"];
+  }
+  event.fromJson(json);
+  return event;
+};
 /**
  * Event raised when a new Component has been dragged from the palette and dropped in the
  * Designer view.
  *
- * @param {number} projectId Project ID of the project the designer editor is editing.
+ * @param {String} editorId Editor ID of the project the designer editor is editing.
  * @param {{}} component The newly created Component object.
  * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
-AI.Events.CreateComponent = function(projectId, component) {
+AI.Events.CreateComponent = function(editorId, component) {
   if (!component) {
     return;  // Blank event to be populated by fromJson.
   }
-  AI.Events.CreateComponent.superClass_.constructor.call(this, projectId, component);
+  AI.Events.CreateComponent.superClass_.constructor.call(this, editorId, component);
   this.componentType = component.type;
-  this.parentId = component.parent;
-  this.beforeIndex = component.beforeIndex;
 };
 goog.inherits(AI.Events.CreateComponent, AI.Events.ComponentEvent);
 
 AI.Events.CreateComponent.prototype.type = AI.Events.COMPONENT_CREATE;
 
 AI.Events.CreateComponent.prototype.fromJson = function(json) {
-   console.log(json);
-   AI.Events.CreateComponent.superClass_.fromJson.call(this, json);
-   this.componentType = json["componentType"];
-   this.parentId = json["parentId"];
-   this.beforeIndex = json["beforeIndex"];
+  console.log(json);
+  AI.Events.CreateComponent.superClass_.fromJson.call(this, json);
+  this.componentType = json["componentType"];
 };
 
 AI.Events.CreateComponent.prototype.toJson = function() {
-   var json = AI.Events.CreateComponent.superClass_.toJson.call(this);
-   json["componentType"] = this.componentType;
-   json["parentId"] = this.parentId;
-   json["beforeIndex"] = this.beforeIndex;
-   console.log(json);
-   return json;
+  var json = AI.Events.CreateComponent.superClass_.toJson.call(this);
+  json["componentType"] = this.componentType;
+  console.log(json);
+  return json;
+};
+
+AI.Events.CreateComponent.prototype.run = function() {
+  var editor = top.getDesignerForForm(this.editorId);
+  editor.addComponent(this.componentId, this.componentType);
 };
 /**
  * Event raised when a Component has been removed from the screen.
  *
- * @param {number} projectId Project ID of the project the designer editor is editing.
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
  * @param {{}} component The deleted Component object.
  * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
-AI.Events.DeleteComponent = function(projectId, component) {
+AI.Events.DeleteComponent = function(editorId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
-  AI.Events.DeleteComponent.superClass_.constructor.call(this, projectId, component);
-  this.parentId = component.parent;
-  this.deleted = component.deleted;
+  AI.Events.DeleteComponent.superClass_.constructor.call(this, editorId, component);
 };
 goog.inherits(AI.Events.DeleteComponent, AI.Events.ComponentEvent);
 
 AI.Events.DeleteComponent.prototype.type = AI.Events.COMPONENT_DELETE;
 
 AI.Events.DeleteComponent.prototype.fromJson = function(json) {
-   AI.Events.DeleteComponent.superClass_.fromJson.call(this, json);
-   this.parentId = json["parentId"];
-   this.deleted = json["deleted"];
+  AI.Events.DeleteComponent.superClass_.fromJson.call(this, json);
 };
 
 AI.Events.DeleteComponent.prototype.toJson = function() {
-   var json = AI.Events.DeleteComponent.superClass_.toJson.call(this);
-   json["parentId"] = this.parentId;
-   json["deleted"] = this.deleted;
-   return json;
+  var json = AI.Events.DeleteComponent.superClass_.toJson.call(this);
+  return json;
+};
+
+AI.Events.DeleteComponent.prototype.run = function() {
+  var editor = top.getDesignerForForm(this.editorId);
+  editor.removeComponent(this.componentId);
 };
 /**
  * Event raised when a Component has been moved in the component hierarchy.
  *
- * @param {number} projectId Project ID of the project the designer editor is editing.
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
  * @param {{}} component The moved Component
  * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
-AI.Events.ComponentMove = function(projectId, component) {
+AI.Events.MoveComponent = function(editorId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
-  AI.Events.ComponentMove.superClass_.constructor.call(this, projectId, component);
-  var location = this.currentLocation_();
-  this.oldParentUuid = location.parentUuid;
-  this.oldIndex = location.index;
+  AI.Events.MoveComponent.superClass_.constructor.call(this, editorId, component);
+  this.parentId = component.parentId;
+  this.index = component.index;
 };
-goog.inherits(AI.Events.ComponentMove, AI.Events.ComponentEvent);
+goog.inherits(AI.Events.MoveComponent, AI.Events.ComponentEvent);
 
-AI.Events.ComponentMove.prototype.type = AI.Events.COMPONENT_MOVE;
+AI.Events.MoveComponent.prototype.type = AI.Events.COMPONENT_MOVE;
 
+AI.Events.MoveComponent.prototype.fromJson = function(json) {
+  AI.Events.MoveComponent.superClass_.fromJson.call(this, json);
+  this.parentId = json["parentId"];
+  this.index = json["index"];
+};
+
+AI.Events.MoveComponent.prototype.toJson = function() {
+  var json = AI.Events.MoveComponent.superClass_.toJson.call(this);
+  json["parentId"] = this.parentId;
+  json["index"] = this.index;
+  return json;
+};
+
+AI.Events.MoveComponent.prototype.run = function() {
+  var editor = top.getDesignerForForm(this.editorId);
+  editor.moveComponent(this.componentId, this.parentId, this.index);
+};
 /**
  *
- * @param projectId
+ * @param editorId
  * @param component
  * @constructor
  */
-AI.Events.ComponentProperty = function(projectId, component) {
+AI.Events.ComponentProperty = function(editorId, component) {
   if (!component) {
     return;  // Blank event for deserialization.
   }
-  AI.Events.ComponentProperty.superClass_.constructor.call(this, projectId, component);
+  AI.Events.ComponentProperty.superClass_.constructor.call(this, editorId, component);
   this.property = component.property;
   this.value = component.value;
 };
@@ -348,14 +408,23 @@ goog.inherits(AI.Events.ComponentProperty, AI.Events.ComponentEvent);
 AI.Events.ComponentProperty.prototype.type = AI.Events.COMPONENT_PROPERTY;
 
 AI.Events.ComponentProperty.prototype.fromJson = function(json) {
-   AI.Events.ComponentProperty.superClass_.fromJson.call(this, json);
-   this.property = json["property"];
-   this.value = json["value"];
+  AI.Events.ComponentProperty.superClass_.fromJson.call(this, json);
+  this.property = json["property"];
+  this.value = json["value"];
 };
 
 AI.Events.ComponentProperty.prototype.toJson = function() {
-   var json = AI.Events.ComponentProperty.superClass_.toJson.call(this);
-   json["property"] = this.property;
-   json["value"] = this.value;
-   return json;
+  var json = AI.Events.ComponentProperty.superClass_.toJson.call(this);
+  json["property"] = this.property;
+  json["value"] = this.value;
+  return json;
+};
+
+AI.Events.ComponentProperty.prototype.run = function() {
+  var editor = top.getDesignerForForm(this.editorId);
+  if(this.property=="Name"){
+    editor.renameComponent(this.componentId, this.value);
+  } else {
+    editor.setProperty(this.componentId, this.property, this.value);
+  }
 };

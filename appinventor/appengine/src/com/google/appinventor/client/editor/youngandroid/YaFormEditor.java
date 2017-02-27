@@ -367,6 +367,15 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   }
 
   @Override
+  public void onComponentMoved(MockComponent component, String newParentId, int index) {
+    if (loadComplete) {
+      onFormStructureChange();
+    } else {
+      OdeLog.elog("onComponentAdded called when loadComplete is false");
+    }
+  }
+
+  @Override
   public void onComponentSelectionChange(MockComponent component, boolean selected) {
     if (loadComplete) {
       if (selected) {
@@ -833,11 +842,18 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
       throw new IllegalStateException("Component with UUID \"" + uuid + "\" already exists.");
     }
     MockComponent component = SimpleComponentDescriptor.createMockComponent(type, this);
+    component.onCreateFromPalette();
     component.changeProperty(MockComponent.PROPERTY_NAME_UUID, uuid);
     componentsDb.put(uuid, component);
-    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
-    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
-    blockEditor.addComponent(component.getType(), component.getName(), component.getUuid());
+    // if component is non-visible, add to non-visible panel directly.
+    if(!component.isVisibleComponent()){
+      this.getForm().addComponent(component);
+      this.getNonVisibleComponentsPanel().addComponent(component);
+      component.select();
+    }
+//    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//    blockEditor.addComponent(component.getType(), component.getName(), component.getUuid());
   }
 
   @Override
@@ -848,9 +864,9 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     MockComponent component = componentsDb.get(uuid);
     componentsDb.remove(uuid);
     component.getContainer().removeComponent(component, true);
-    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
-    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
-    blockEditor.removeComponent(component.getType(), component.getName(), uuid);
+//    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//    blockEditor.removeComponent(component.getType(), component.getName(), uuid);
   }
 
   @Override
@@ -861,11 +877,12 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     } else {
       String oldName = component.getPropertyValue(MockComponent.PROPERTY_NAME_NAME);
       component.changeProperty(MockComponent.PROPERTY_NAME_NAME, name);
-      YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
-      YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
-      blockEditor.renameComponent(oldName, name, uuid);
-      onFormStructureChange();
-      updatePropertiesPanel(component);
+      this.getForm().fireComponentRenamed(component, oldName);
+//      YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//      YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//      blockEditor.renameComponent(oldName, name, uuid);
+//      onFormStructureChange();
+//      updatePropertiesPanel(component);
     }
   }
 
@@ -886,6 +903,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     }
     MockComponent component = componentsDb.get(uuid);
     component.changeProperty(property, value);
+    this.getForm().fireComponentPropertyChanged(component, property, value);
   }
 
 

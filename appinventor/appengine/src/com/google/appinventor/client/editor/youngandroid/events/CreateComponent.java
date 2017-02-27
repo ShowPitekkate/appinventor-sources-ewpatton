@@ -2,7 +2,7 @@ package com.google.appinventor.client.editor.youngandroid.events;
 
 import com.google.gwt.core.client.JavaScriptObject;
 
-public class CreateComponent extends JavaScriptObject implements DesignerEvent {
+public class CreateComponent extends JavaScriptObject {
   public static final String TYPE;
   
   static {
@@ -16,13 +16,11 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return clazz.jsType.prototype.type;
   }-*/;
 
-  public static native CreateComponent create(String projectId, String uuid, String componentType, String parentId, int beforeIndex)/*-{
+  public static native CreateComponent create(String editorId, String uuid, String componentType)/*-{
     var component = {
       id: uuid,
-      type: componentType,
-      parent: parentId,
-      beforeIndex: beforeIndex};
-    return new AI.Events.CreateComponent(projectId, component);
+      type: componentType};
+    return new AI.Events.CreateComponent(editorId, component);
   }-*/;
 
   public final native boolean recordUndo()/*-{
@@ -36,6 +34,10 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
   public final native <T> T as(Class<T> eventType)/*-{
     return eventType && eventType.jsType && eventType.jsType.prototype.type == this.type ?
       this : null;
+  }-*/;
+
+  public final native String getEditorId()/*-{
+    return this.editorId;
   }-*/;
 
   public final native String getProjectId()/*-{
@@ -58,14 +60,6 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return this.componentType;
   }-*/;
 
-  public final native String getParentId()/*-{
-    return this.parentId;
-  }-*/;
-
-  public final native int getBeforeIndex()/*-{
-    return this.beforeIndex;
-  }-*/;
-
   public final native JavaScriptObject toJson() /*-{
     return this.toJson();
   }-*/;
@@ -76,13 +70,11 @@ public class CreateComponent extends JavaScriptObject implements DesignerEvent {
     return event;
   }-*/;
 
-  public final native String getUserId()/*-{
-    // TODO Auto-generated method stub
-    return 0;
-  }-*/;
-
   public final native boolean isTransient()/*-{
     return !this.persist;
   }-*/;
 
+  public final native void run()/*-{
+    return this.run();
+  }-*/;
 }

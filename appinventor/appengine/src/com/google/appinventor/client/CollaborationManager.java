@@ -2,10 +2,7 @@ package com.google.appinventor.client;
 
 import com.google.appinventor.client.editor.simple.components.FormChangeListener;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
-import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
-import com.google.appinventor.client.editor.youngandroid.events.CreateComponent;
-import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
-import com.google.appinventor.client.editor.youngandroid.events.EventFactory;
+import com.google.appinventor.client.editor.youngandroid.events.*;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
@@ -18,7 +15,7 @@ public class CollaborationManager implements FormChangeListener {
   public String screenChannel;
 
   public CollaborationManager() {
-    broadcast = true;
+    broadcast = false;
     this.screenChannel = "";
     EventFactory.exportMethodToJavascript();
   }
@@ -42,7 +39,7 @@ public class CollaborationManager implements FormChangeListener {
   @Override
   public void onComponentPropertyChanged(MockComponent component, String propertyName, String propertyValue) {
     if(broadcast){
-      ChangeProperty event = ChangeProperty.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), propertyName, propertyValue);
+      ChangeProperty event = ChangeProperty.create(Ode.getCurrentChannel(), component.getUuid(), propertyName, propertyValue);
       broadcastComponentEvent(event.toJson());
     }
   }
@@ -50,7 +47,7 @@ public class CollaborationManager implements FormChangeListener {
   @Override
   public void onComponentRemoved(MockComponent component, boolean permanentlyDeleted) {
     if (broadcast) {
-      DeleteComponent event = DeleteComponent.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), component.getContainer().getUuid(), permanentlyDeleted);
+      DeleteComponent event = DeleteComponent.create(Ode.getCurrentChannel(), component.getUuid());
       broadcastComponentEvent(event.toJson());
     }
   }
@@ -58,7 +55,7 @@ public class CollaborationManager implements FormChangeListener {
   @Override
   public void onComponentAdded(MockComponent component) {
     if (broadcast) {
-      CreateComponent event = CreateComponent.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), component.getType(), component.getContainer().getUuid(), component.getIndex());
+      CreateComponent event = CreateComponent.create(Ode.getCurrentChannel(), component.getUuid(), component.getType());
       broadcastComponentEvent(event.toJson());
     }
   }
@@ -66,7 +63,15 @@ public class CollaborationManager implements FormChangeListener {
   @Override
   public void onComponentRenamed(MockComponent component, String oldName) {
     if(broadcast){
-      ChangeProperty event = ChangeProperty.create(Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()), component.getUuid(), MockComponent.PROPERTY_NAME_NAME, component.getName());
+      ChangeProperty event = ChangeProperty.create(Ode.getCurrentChannel(), component.getUuid(), MockComponent.PROPERTY_NAME_NAME, component.getName());
+      broadcastComponentEvent(event.toJson());
+    }
+  }
+
+  @Override
+  public void onComponentMoved(MockComponent component, String newParentId, int index) {
+    if(broadcast){
+      MoveComponent event = MoveComponent.create(Ode.getCurrentChannel(), component.getUuid(), newParentId, index);
       broadcastComponentEvent(event.toJson());
     }
   }

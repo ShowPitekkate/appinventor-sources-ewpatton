@@ -207,6 +207,11 @@ public final class YoungAndroidComponentSelectorPropertyEditor
     }
   }
 
+  @Override
+  public void onComponentMoved(MockComponent component, String newParentId, int index) {
+
+  }
+
   public void onComponentSelectionChange(MockComponent component, boolean selected) {
   }
 }
