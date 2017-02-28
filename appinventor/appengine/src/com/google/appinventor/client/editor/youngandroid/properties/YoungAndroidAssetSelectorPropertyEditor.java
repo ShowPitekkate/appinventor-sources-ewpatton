@@ -165,7 +165,7 @@ public final class YoungAndroidAssetSelectorPropertyEditor extends AdditionalCho
       Window.alert(MESSAGES.noAssetSelected());
       return false;
     }
-    property.setValue(choices.getValueAtIndex(selected));
+    property.raisePropertyChangeEvent(choices.getValueAtIndex(selected));
     return true;
   }
 

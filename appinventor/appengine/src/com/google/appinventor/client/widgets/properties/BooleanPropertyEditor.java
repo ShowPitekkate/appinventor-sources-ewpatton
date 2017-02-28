@@ -50,6 +50,6 @@ public class BooleanPropertyEditor extends PropertyEditor implements ValueChange
 
   @Override
   public void onValueChange(ValueChangeEvent<Boolean> event) {
-    property.setValue(checkbox.getValue() ? trueValue : falseValue);
+    property.raisePropertyChangeEvent(checkbox.getValue() ? trueValue : falseValue);
   }
 }
