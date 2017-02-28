@@ -88,7 +88,7 @@ public class ChoicePropertyEditor extends PropertyEditor {
       items.add(new DropDownItem("Choice Property Editor", choice.caption, new Command() {
         @Override
         public void execute() {
-          property.setValue(choice.value);
+          property.raisePropertyChangeEvent(choice.value);
         }
       }));
     }

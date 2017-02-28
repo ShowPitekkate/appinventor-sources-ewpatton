@@ -77,7 +77,7 @@ public class YoungAndroidDefaultURLPropertyEditor extends PropertyEditor {
     urlField.addValueChangeHandler(new ValueChangeHandler() {
         @Override
         public void onValueChange(ValueChangeEvent event) {
-          property.setValue(urlField.getText());
+          property.raisePropertyChangeEvent(urlField.getText());
         }
       });
 
@@ -96,7 +96,7 @@ public class YoungAndroidDefaultURLPropertyEditor extends PropertyEditor {
         public void onValueChange(ValueChangeEvent event) {
           if (setDefaultCheckbox.isChecked()) {
             urlField.setText(defaultURL);
-            property.setValue(defaultURL);
+            property.raisePropertyChangeEvent(defaultURL);
           }
         }
       });

@@ -323,7 +323,7 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     // Add the mock component itself as a property change listener so that it can update its
     // visual aspects according to changes of its properties
     properties.addPropertyChangeListener(this);
-
+    properties.setComponent(this);
     // Allow dragging this component in a drag-and-drop action if this is not the root form
     if (!isForm()) {
       dragSourceSupport = new DragSourceSupport(this);
@@ -959,14 +959,7 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
        * If the editor is not initialized, we fire changes on the form directly.
        * Otherwise, raise the event and run it.
        */
-      if (Ode.getCurrentChannel().equals("")) {
-        getForm().fireComponentPropertyChanged(this, propertyName, newValue);
-      } else {
-        OdeLog.log("fire component property change "+getUuid()+" "+propertyName);
-        getForm().fireComponentEvent(ChangeProperty.create(
-            Ode.getCurrentChannel(), getUuid(), propertyName, newValue
-        ));
-      }
+      //getForm().fireComponentPropertyChanged(this, propertyName, newValue);
     }
   }
 

@@ -154,7 +154,7 @@ public final class YoungAndroidComponentSelectorPropertyEditor
       Window.alert(MESSAGES.noComponentSelected());
       return false;
     }
-    property.setValue(choices.getValueAtIndex(selected));
+    property.raisePropertyChangeEvent(choices.getValueAtIndex(selected));
     return true;
   }
 

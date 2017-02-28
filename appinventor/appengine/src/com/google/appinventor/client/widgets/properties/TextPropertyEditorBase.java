@@ -150,7 +150,7 @@ public class TextPropertyEditorBase extends PropertyEditor {
     String text = textEdit.getText();
     try {
       validate(text);
-      property.setValue(text);
+      property.raisePropertyChangeEvent(text);
     } catch (InvalidTextException e) {
       String error = e.getMessage();
       if (error == null || error.isEmpty()) {
