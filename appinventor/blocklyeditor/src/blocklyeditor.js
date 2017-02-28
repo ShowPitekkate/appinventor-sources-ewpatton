@@ -24,6 +24,8 @@ if (Blockly.BlocklyEditor === undefined) {
   Blockly.BlocklyEditor = {};
 }
 
+Blockly.allWorkspaces = {};
+
 Blockly.configForTypeBlock = {
   frame: 'ai_frame',
   typeBlockDiv: 'ai_type_block',
@@ -188,7 +190,7 @@ Blockly.unprefixName = function (name) {
   }
 };
 
-Blockly.BlocklyEditor['create'] = function(container, readOnly, rtl) {
+Blockly.BlocklyEditor['create'] = function(container, formName, readOnly, rtl) {
   var options = new Blockly.Options({
     'readOnly': readOnly,
     'rtl': rtl,
@@ -214,10 +216,13 @@ Blockly.BlocklyEditor['create'] = function(container, readOnly, rtl) {
   var workspaceDragSurface = new Blockly.workspaceDragSurfaceSvg(subContainer);
 
   var workspace = new Blockly.WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+  Blockly.allWorkspaces[formName] = workspace;
+  workspace.formName = formName;
   workspace.rendered = false;
   workspace.componentDb_ = new Blockly.ComponentDatabase();
   workspace.procedureDb_ = new Blockly.ProcedureDatabase();
   workspace.variableDb_ = new Blockly.VariableDatabase();
+  workspace.addWarningHandler();
   if (!readOnly) {
     var ai_type_block = goog.dom.createElement('div'),
       p = goog.dom.createElement('p'),
@@ -249,6 +254,7 @@ Blockly.BlocklyEditor['create'] = function(container, readOnly, rtl) {
  */
 Blockly.ai_inject = function(container, workspace) {
   Blockly.mainWorkspace = workspace;  // make workspace the 'active' workspace
+  workspace.fireChangeListener(new AI.Events.ScreenSwitch(workspace.projectId, workspace.formName));
   var gridEnabled = top.BlocklyPanel_getGridEnabled && top.BlocklyPanel_getGridEnabled();
   var gridSnap = top.BlocklyPanel_getSnapEnabled && top.BlocklyPanel_getSnapEnabled();
   if (workspace.injected) {

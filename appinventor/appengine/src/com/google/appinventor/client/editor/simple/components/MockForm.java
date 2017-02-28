@@ -14,12 +14,15 @@ import java.util.Map;
 
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.components.utils.PropertiesUtil;
+import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
+import com.google.appinventor.client.editor.youngandroid.events.MoveComponent;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidLengthPropertyEditor;
 import com.google.appinventor.client.editor.youngandroid.properties.YoungAndroidVerticalAlignmentChoicePropertyEditor;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.properties.BadPropertyEditorException;
 import com.google.appinventor.client.widgets.properties.EditableProperties;
 import com.google.appinventor.shared.settings.SettingsConstants;
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.DivElement;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Element;
@@ -627,7 +630,7 @@ public final class MockForm extends MockContainer {
   /**
    * Triggers a component removed event to be sent to the listener on the listener list.
    */
-  protected void fireComponentRemoved(MockComponent component, boolean permanentlyDeleted) {
+  public void fireComponentRemoved(MockComponent component, boolean permanentlyDeleted) {
     for (FormChangeListener listener : formChangeListeners) {
       listener.onComponentRemoved(component, permanentlyDeleted);
     }
@@ -636,7 +639,7 @@ public final class MockForm extends MockContainer {
   /**
    * Triggers a component added event to be sent to the listener on the listener list.
    */
-  protected void fireComponentAdded(MockComponent component) {
+  public void fireComponentAdded(MockComponent component) {
     for (FormChangeListener listener : formChangeListeners) {
       listener.onComponentAdded(component);
     }
@@ -652,13 +655,26 @@ public final class MockForm extends MockContainer {
   }
 
   /**
+   * Triggers a component moved event to be sent to the listener on the listener list.
+   */
+  public void fireComponentMoved(MockComponent component, String newParentId, int index) {
+    for (FormChangeListener listener : formChangeListeners) {
+      listener.onComponentMoved(component, newParentId, index);
+    }
+  }
+  /**
    * Triggers a component selection change event to be sent to the listener on the listener list.
    */
-  protected void fireComponentSelectionChange(MockComponent component, boolean selected) {
+  public void fireComponentSelectionChange(MockComponent component, boolean selected) {
     for (FormChangeListener listener : formChangeListeners) {
       listener.onComponentSelectionChange(component, selected);
     }
   }
+
+  public native void fireComponentEvent(JavaScriptObject json) /*-{
+    json.run();
+  }-*/;
+
 
   /**
    * Changes the component that is currently selected in the form.
@@ -774,4 +790,7 @@ public final class MockForm extends MockContainer {
     return properties;
   }
 
+  public MockComponent getComponentByUuid(String uuid){
+    return ((YaFormEditor) editor).getComponent(uuid);
+  }
 }

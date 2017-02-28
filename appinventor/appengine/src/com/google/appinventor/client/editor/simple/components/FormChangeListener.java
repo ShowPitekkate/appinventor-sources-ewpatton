@@ -53,6 +53,9 @@ public interface FormChangeListener {
    */
   void onComponentRenamed(MockComponent component, String oldName);
 
+
+  void onComponentMoved(MockComponent component, String newParentId, int index);
+
   /**
    * Invoked when a selection change of the form or of one of its components
    * occurs.

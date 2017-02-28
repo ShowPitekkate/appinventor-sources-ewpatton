@@ -14,17 +14,18 @@ import com.google.appinventor.client.boxes.AssetListBox;
 import com.google.appinventor.client.boxes.PaletteBox;
 import com.google.appinventor.client.boxes.PropertiesBox;
 import com.google.appinventor.client.boxes.SourceStructureBox;
+import com.google.appinventor.client.editor.EditorManager;
+import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.ProjectEditor;
+import com.google.appinventor.client.editor.adapters.ComponentAdapter;
+import com.google.appinventor.client.editor.adapters.DesignerAdapter;
 import com.google.appinventor.client.editor.adapters.IComponent;
 import com.google.appinventor.client.editor.adapters.IDesigner;
 import com.google.appinventor.client.editor.simple.SimpleComponentDatabase;
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.SimpleNonVisibleComponentsPanel;
 import com.google.appinventor.client.editor.simple.SimpleVisibleComponentsPanel;
-import com.google.appinventor.client.editor.simple.components.FormChangeListener;
-import com.google.appinventor.client.editor.simple.components.MockComponent;
-import com.google.appinventor.client.editor.simple.components.MockContainer;
-import com.google.appinventor.client.editor.simple.components.MockForm;
+import com.google.appinventor.client.editor.simple.components.*;
 import com.google.appinventor.client.editor.simple.palette.DropTargetProvider;
 import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
 import com.google.appinventor.client.editor.simple.palette.SimplePalettePanel;
@@ -134,6 +135,11 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   private static final int OLD_PROJECT_YAV = 150; // Projects older then this have no authURL
 
   private final Map<String, MockComponent> componentMap = new HashMap<String, MockComponent>();
+
+  static {
+    exportJavascript();
+  }
+
   /**
    * Creates a new YaFormEditor.
    *
@@ -358,6 +364,15 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
   }
 
   @Override
+  public void onComponentMoved(MockComponent component, String newParentId, int index) {
+    if (loadComplete) {
+      onFormStructureChange();
+    } else {
+      OdeLog.elog("onComponentAdded called when loadComplete is false");
+    }
+  }
+
+  @Override
   public void onComponentSelectionChange(MockComponent component, boolean selected) {
     if (loadComplete) {
       if (selected) {
@@ -500,6 +515,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
         content, JSON_PARSER);
     form = createMockForm(propertiesObject.getProperties().get("Properties").asObject());
     componentMap.put(form.getUuid(), form);
+    componentsDb.put("0", form);
     // Initialize the nonVisibleComponentsPanel and visibleComponentsPanel.
     nonVisibleComponentsPanel.setForm(form);
     visibleComponentsPanel.setForm(form);
@@ -522,6 +538,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
    * recursively for nested components. For the initial invocation parent shall be null.
    */
   private MockComponent createMockComponent(JSONObject propertiesObject, MockContainer parent) {
+    OdeLog.log(propertiesObject.toString());
     Map<String, JSONValue> properties = propertiesObject.getProperties();
 
     // Component name and type
@@ -555,8 +572,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
         mockComponent.changeProperty(name, properties.get(name).asString().getString());
       }
     }
-
-
+    componentsDb.put(mockComponent.getUuid(), mockComponent);
 
     //This is for old project which doesn't have the AppName property
     if (mockComponent instanceof MockForm) {
@@ -817,22 +833,40 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     }
   }
 
+  @Override
   public void addComponent(String uuid, String type) {
     if (componentsDb.containsKey(uuid)) {
-      throw new IllegalStateException(/*String.format(ERROR_EXISTING_UUID, uuid)*/);
+      throw new IllegalStateException("Component with UUID \"" + uuid + "\" already exists.");
     }
     MockComponent component = SimpleComponentDescriptor.createMockComponent(type, this);
+    component.onCreateFromPalette();
     component.changeProperty(MockComponent.PROPERTY_NAME_UUID, uuid);
     componentsDb.put(uuid, component);
+    // if component is non-visible, add to non-visible panel directly.
+    if(!component.isVisibleComponent()){
+      this.getForm().addComponent(component);
+      this.getNonVisibleComponentsPanel().addComponent(component);
+      component.select();
+    }
+    getForm().fireComponentAdded(component);
+//    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//    blockEditor.addComponent(component.getType(), component.getName(), component.getUuid());
   }
+
 
   @Override
   public void removeComponent(String uuid) {
     if (!componentsDb.containsKey(uuid)) {
-      throw new IllegalStateException("No component exists with UUID \"" + uuid + "\".");
+      return;
     }
-    MockComponent component = componentsDb.remove(uuid);
-    component.removeFromParent();
+    MockComponent component = componentsDb.get(uuid);
+    componentsDb.remove(uuid);
+    component.getContainer().removeComponent(component, true);
+    getForm().fireComponentRemoved(component, true);
+//    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//    blockEditor.removeComponent(component.getType(), component.getName(), uuid);
   }
 
   @Override
@@ -841,7 +875,14 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     if (component == null) {
       throw new IllegalStateException("No component exists with UUID \"" + uuid + "\"");
     } else {
+      String oldName = component.getPropertyValue(MockComponent.PROPERTY_NAME_NAME);
       component.changeProperty(MockComponent.PROPERTY_NAME_NAME, name);
+      getForm().fireComponentRenamed(component, oldName);
+//      YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
+//      YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
+//      blockEditor.renameComponent(oldName, name, uuid);
+//      onFormStructureChange();
+//      updatePropertiesPanel(component);
     }
   }
 
@@ -851,28 +892,78 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     if (component == null) {
       throw new IllegalStateException("No component exists with UUID \"" + uuid + "\"");
     }
-    // TODO(ewpatton): Implementation
-    return null;
+    String formName = this.getProjectId() + "_" + this.form.getName();
+    return ComponentAdapter.create(DesignerAdapter.make(formName, this), component);
   }
 
   @Override
   public void setProperty(String uuid, String property, String value) {
-    // TODO(ewpatton): Implementation
+    if (!componentsDb.containsKey(uuid)) {
+      throw new IllegalStateException("Component with UUID \"" + uuid + "\" does not exist.");
+    }
+    MockComponent component = componentsDb.get(uuid);
+    component.changeProperty(property, value);
+    getForm().fireComponentPropertyChanged(component, property, value);
   }
 
 
   @Override
   public void moveComponent(String uuid, String parentUuid, int index) {
-    // TODO(ewpatton): Implementation
+    if (!componentsDb.containsKey(uuid)) {
+      throw new IllegalStateException("Component with UUID \"" + uuid + "\" does not exist.");
+    }
+    if (!componentsDb.containsKey(parentUuid)) {
+      throw new IllegalStateException("Component with UUID \"" + parentUuid + "\" does not exist.");
+    }
+    MockComponent component = componentsDb.get(uuid);
+    MockContainer parent = (MockContainer)componentsDb.get(parentUuid);
+    MockContainer oldParent = component.getContainer();
+    if (oldParent != null) {
+      oldParent.removeComponent(component, false);
+    }
+    if (index==-1) {
+      OdeLog.log("component appends to the last");
+      parent.addComponent(component);
+    }else{
+      parent.addVisibleComponent(component, index);
+    }
+    getForm().fireComponentMoved(component, parentUuid, index);
+  }
+
+  /**
+   * 
+   * @param formName The form name as a projectId '_' screenName, e.g. '1234_Screen1'
+   * @return 
+   */
+  public static IDesigner getDesignerForForm(String formName) {
+    YaFormEditor editor = null;
+    String[] parts = formName.split("_");
+    long projectId = Long.parseLong(parts[0]);
+    ProjectEditor projectEditor = Ode.getInstance().getEditorManager().getOpenProjectEditor(projectId);
+    for (FileEditor e : projectEditor.getOpenFileEditors()) {
+      if (e instanceof YaFormEditor) {
+        editor = (YaFormEditor) e;
+      }
+    }
+    if (editor != null) {
+      return DesignerAdapter.make(formName, editor);
+    } else {
+      return null;
+    }
   }
 
   //TODO(xinyue): Remove this once IDesigner and IComponent works
   public MockComponent getComponent(String uuid) {
-    return componentMap.get(uuid);
+    return componentsDb.get(uuid);
   }
 
   public boolean hasComponent(String uuid){
     return componentMap.containsKey(uuid);
   }
+
+  private static native void exportJavascript()/*-{
+    top.getDesignerForForm =
+      $entry(@com.google.appinventor.client.editor.youngandroid.YaFormEditor::getDesignerForForm(Ljava/lang/String;));
+  }-*/;
 
 }

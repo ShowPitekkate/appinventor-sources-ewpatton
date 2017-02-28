@@ -64,4 +64,16 @@ public class DeleteBlock extends JavaScriptObject implements BlocklyEvent {
     // TODO Auto-generated method stub
     
   }
+
+  public String getUserId() {
+    // TODO Auto-generated method stub
+    return "0";
+  }
+
+  @Override
+  public boolean isTransient() {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
 }
