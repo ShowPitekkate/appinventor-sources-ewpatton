@@ -191,7 +191,7 @@ public class CollaborationManager implements FormChangeListener {
             $wnd.DesignToolbar_removeJoinedUser(user);
             break;
           case "leader":
-            $wnd.DesignToolbar_switchLeader(msgJSON["leader"]);
+            $wnd.DesignToolbar_switchLeader(msgJSON["project"], msgJSON["leader"], msgJSON["leaderEmail"]);
             break;
         }
       }
@@ -206,11 +206,12 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.socket.emit("userLeave", msg);
   }-*/;
 
-  public native void switchLeader(String leaderId)/*-{
+  public native void switchLeader(String leaderId, String leaderEmail)/*-{
     var msg = {
       "project": $wnd.project,
       "user": $wnd.userEmail,
-      "leader": leaderId
+      "leader": leaderId,
+      "leaderEmail": leaderEmail
     }
     $wnd.socket.emit("leader", msg);
   }-*/;

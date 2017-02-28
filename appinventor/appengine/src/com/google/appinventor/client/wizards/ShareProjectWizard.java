@@ -6,6 +6,7 @@ import com.google.appinventor.client.widgets.LabeledTextBox;
 import com.google.appinventor.client.widgets.Validator;
 import com.google.appinventor.client.youngandroid.TextValidators;
 import com.google.appinventor.shared.rpc.project.UserProject;
+import com.google.appinventor.shared.rpc.user.User;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DeferredCommand;
@@ -60,13 +61,15 @@ public class ShareProjectWizard extends Wizard{
       public void execute() {
         final String email = emailTextbox.getText();
         // TODO(Xinyue Deng): add email address format checking & check if email is in the system.
-        String userId = Ode.getInstance().getUser().getUserId();
+        final User user = Ode.getInstance().getUser();
         long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
-        Ode.getInstance().getProjectService().shareProject(userId, projectId,
+        Ode.getInstance().getProjectService().shareProject(user.getUserId(), projectId,
             email, 1, new OdeAsyncCallback<Long>() {
               @Override
               public void onSuccess(Long projectId) {
                 publishShareProject(email, projectId.toString());
+                Ode.getInstance().getDesignToolbar().switchLeader(projectId.toString(),
+                    user.getUserId(), user.getUserEmail());
                 Window.alert("Success");
               }
             });

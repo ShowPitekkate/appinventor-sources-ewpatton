@@ -974,11 +974,12 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     getForm().select();
     // Pass true to indicate that the component is being permanently deleted.
     //getContainer().removeComponent(this, true);
-    getForm().fireComponentEvent(DeleteComponent.create(Ode.getCurrentChannel(), this.getUuid()));
-    // tell the component its been removed, so it can remove children's blocks
-    onRemoved();
-    properties.removePropertyChangeListener(this);
-    properties.clear();
+    if(getForm().fireComponentEvent(DeleteComponent.create(Ode.getCurrentChannel(), this.getUuid()))){
+      // tell the component its been removed, so it can remove children's blocks
+      onRemoved();
+      properties.removePropertyChangeListener(this);
+      properties.clear();
+    }
   }
 
   // Layout

@@ -13,7 +13,6 @@ import com.google.appinventor.client.output.OdeLog;
 
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
-import javafx.collections.ListChangeListener;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -427,16 +426,16 @@ final class MockTableLayout extends MockLayout {
 //        // It's just being moved from one container to another.
 //        srcContainer.removeComponent(source, false);
 //      }
-      container.getForm().fireComponentEvent(ChangeProperty.create(
-          Ode.getCurrentChannel(), source.getUuid(), MockVisibleComponent.PROPERTY_NAME_COLUMN, "" + destCell.col
-      ));
-      container.getForm().fireComponentEvent(ChangeProperty.create(
-          Ode.getCurrentChannel(), source.getUuid(), MockVisibleComponent.PROPERTY_NAME_ROW, "" + destCell.row
-      ));
-      container.getForm().fireComponentEvent(MoveComponent.create(
-          Ode.getCurrentChannel(), source.getUuid(), container.getUuid(), -1
-      ));
-      return true;
+      if(container.getForm().fireComponentEvent(ChangeProperty.create(
+          Ode.getCurrentChannel(), source.getUuid(), MockVisibleComponent.PROPERTY_NAME_COLUMN, "" + destCell.col))){
+        container.getForm().fireComponentEvent(ChangeProperty.create(
+            Ode.getCurrentChannel(), source.getUuid(), MockVisibleComponent.PROPERTY_NAME_ROW, "" + destCell.row
+        ));
+        container.getForm().fireComponentEvent(MoveComponent.create(
+            Ode.getCurrentChannel(), source.getUuid(), container.getUuid(), -1
+        ));
+        return true;
+      }
     }
     return false;
   }

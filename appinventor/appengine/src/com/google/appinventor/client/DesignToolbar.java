@@ -8,15 +8,8 @@ package com.google.appinventor.client;
 
 import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.ProjectEditor;
-import com.google.appinventor.client.editor.simple.components.MockComponent;
-import com.google.appinventor.client.editor.simple.components.MockFormLayout;
-import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
 import com.google.appinventor.client.editor.youngandroid.BlocklyPanel;
-import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
-import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
-import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 
-import com.google.appinventor.client.editor.youngandroid.palette.YoungAndroidPalettePanel;
 import com.google.appinventor.client.explorer.commands.AddFormCommand;
 import com.google.appinventor.client.explorer.commands.ChainableCommand;
 import com.google.appinventor.client.explorer.commands.DeleteFileCommand;
@@ -38,13 +31,11 @@ import com.google.appinventor.shared.rpc.user.User;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.Scheduler;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -404,8 +395,8 @@ public class DesignToolbar extends Toolbar {
     public void execute() {
       if (Window.confirm(MESSAGES.reallySwitchLeader())) {
         final long projectId = Ode.getInstance().getCurrentYoungAndroidProjectRootNode().getProjectId();
-        final String userId = Ode.getInstance().getUser().getUserId();
-        Ode.getInstance().getProjectService().setProjectLeader(projectId, userId, new AsyncCallback<Void>() {
+        final User user = Ode.getInstance().getUser();
+        Ode.getInstance().getProjectService().setProjectLeader(projectId, user.getUserId(), new AsyncCallback<Void>() {
           @Override
           public void onFailure(Throwable throwable) {
             Window.alert("Unable to switch leader");
@@ -413,9 +404,9 @@ public class DesignToolbar extends Toolbar {
 
           @Override
           public void onSuccess(Void aVoid) {
-            //TODO(xinyue): publish to others and modify UI
-            switchLeader(userId);
-            Ode.getInstance().getCollaborationManager().switchLeader(userId);
+            String projectId = Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId());
+            switchLeader(projectId, user.getUserId(), user.getUserEmail());
+            Ode.getInstance().getCollaborationManager().switchLeader(user.getUserId(), user.getUserEmail());
           }
         });
       }
@@ -606,7 +597,7 @@ public class DesignToolbar extends Toolbar {
     joinedUserMap.clear();
   }
 
-  public static void switchLeader(String leaderId){
+  public static void switchLeader(String projectId, String leaderId, String leaderEmail){
     User self = Ode.getInstance().getUser();
     // if user self is the leader
     if (leaderId.equals(self.getUserId())) {
@@ -616,9 +607,9 @@ public class DesignToolbar extends Toolbar {
       Ode.getInstance().getTopPanel().setReadOnlyMode(true);
       Ode.getInstance().getDesignToolbar().setButtonEnabled(WIDGET_NAME_SWITCH_LEADER, true);
     }
-    setLeaderInfo(self.getUserEmail());
+    setLeaderInfo(leaderEmail);
     Ode.getInstance().getProjectManager()
-        .getProject(Ode.getInstance().getCurrentYoungAndroidProjectId()).setLeader(leaderId);
+        .getProject(Long.parseLong(projectId)).setLeader(leaderId);
   }
 
   private static native void exportMethodToJavascript()/*-{
@@ -629,7 +620,7 @@ public class DesignToolbar extends Toolbar {
     $wnd.DesignToolbar_removeAllJoinedUser =
       $entry(@com.google.appinventor.client.DesignToolbar::removeAllJoinedUser());
     $wnd.DesignToolbar_switchLeader =
-        $entry(@com.google.appinventor.client.DesignToolbar::switchLeader(Ljava/lang/String;));
+        $entry(@com.google.appinventor.client.DesignToolbar::switchLeader(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 
 }

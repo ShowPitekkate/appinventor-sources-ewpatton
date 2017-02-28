@@ -2366,15 +2366,32 @@ public class Ode implements EntryPoint {
     Ode.getInstance().getCollaborationManager().disableBroadcast();
   }
 
+  public static String getProjectLeaderId(String projectId){
+    return Ode.getInstance().getProjectManager().getProject(Long.parseLong(projectId)).getLeader();
+  }
+
+  public static String getCurrentUserId() {
+    return Ode.getInstance().getUser().getUserId();
+  }
+
   public static native void exportMethodToJavascript()/*-{
     $wnd.Ode_addSharedProject =
-      $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
+        $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
     $wnd.Ode_getCurrentChannel =
-      $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
+        $entry(@com.google.appinventor.client.Ode::getCurrentChannel());
     $wnd.Ode_enableBroadcast =
-      $entry(@com.google.appinventor.client.Ode::enableBroadcast());
+        $entry(@com.google.appinventor.client.Ode::enableBroadcast());
     $wnd.Ode_disableBroadcast =
-      $entry(@com.google.appinventor.client.Ode::disableBroadcast());
+        $entry(@com.google.appinventor.client.Ode::disableBroadcast());
+    $wnd.Ode_getProjectLeaderId =
+        $entry(@com.google.appinventor.client.Ode::getProjectLeaderId(Ljava/lang/String;));
+    $wnd.Ode_getCurrentUserId =
+        $entry(@com.google.appinventor.client.Ode::getCurrentUserId());
+    $wnd.AIFeature_enableProjectLocking =
+        $entry(@com.google.appinventor.common.version.AppInventorFeatures::enableProjectLocking());
+    $wnd.AIFeature_enableComponentLocking =
+        $entry(@com.google.appinventor.common.version.AppInventorFeatures::enableComponentLocking());
+
   }-*/;
 
   // Native code to set the top level rendezvousServer variable

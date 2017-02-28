@@ -125,14 +125,13 @@ public final class SimpleNonVisibleComponentsPanel extends Composite implements 
     MockComponent component = ((SimplePaletteItem) source).createMockComponent();
 
     // Add component to the form
-    form.fireComponentEvent(CreateComponent.create(
-        Ode.getCurrentChannel(), component.getUuid(), component.getType()
-    ));
-
-    MockComponent sourceComponent = form.getComponentByUuid(component.getUuid());
-    // Add component to this panel
-    addComponent(sourceComponent);
-    sourceComponent.select();
+    if(form.fireComponentEvent(CreateComponent.create(
+        Ode.getCurrentChannel(), component.getUuid(), component.getType()))){
+      MockComponent sourceComponent = form.getComponentByUuid(component.getUuid());
+      // Add component to this panel
+      addComponent(sourceComponent);
+      sourceComponent.select();
+    }
   }
 
   @Override
