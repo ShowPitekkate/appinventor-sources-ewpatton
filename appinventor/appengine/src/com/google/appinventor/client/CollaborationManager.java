@@ -15,9 +15,8 @@ public class CollaborationManager implements FormChangeListener {
   public String screenChannel;
 
   public CollaborationManager() {
-    broadcast = false;
+    broadcast = true;
     this.screenChannel = "";
-    EventFactory.exportMethodToJavascript();
   }
 
   public void enableBroadcast() {
@@ -105,8 +104,9 @@ public class CollaborationManager implements FormChangeListener {
         console.log(msgJSON);
         switch(msgJSON["source"]) {
           case "Designer":
+            var componentEvent = AI.Events.ComponentEvent.fromJson(event);
             $wnd.Ode_disableBroadcast();
-            $wnd.EventFactory_run(event["type"], event);
+            componentEvent.run();
             $wnd.Ode_enableBroadcast();
             break;
           case "Block":

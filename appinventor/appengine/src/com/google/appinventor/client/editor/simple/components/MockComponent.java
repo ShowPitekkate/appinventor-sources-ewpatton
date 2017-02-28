@@ -955,11 +955,18 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
        * fireComponentPropertyChanged when we start dragging the component from
        * the palette. We need to explicitly trigger on Form here, because forms
        * are not in containers.
+       *
+       * If the editor is not initialized, we fire changes on the form directly.
+       * Otherwise, raise the event and run it.
        */
-      //getForm().fireComponentPropertyChanged(this, propertyName, newValue);
-      getForm().fireComponentEvent(ChangeProperty.create(
-          Ode.getCurrentChannel(), getUuid(), propertyName, newValue
-      ));
+      if (Ode.getCurrentChannel().equals("")) {
+        getForm().fireComponentPropertyChanged(this, propertyName, newValue);
+      } else {
+        OdeLog.log("fire component property change "+getUuid()+" "+propertyName);
+        getForm().fireComponentEvent(ChangeProperty.create(
+            Ode.getCurrentChannel(), getUuid(), propertyName, newValue
+        ));
+      }
     }
   }
 

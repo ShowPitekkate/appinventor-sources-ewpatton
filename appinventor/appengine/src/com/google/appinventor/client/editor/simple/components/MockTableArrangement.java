@@ -49,18 +49,10 @@ public final class MockTableArrangement extends MockContainer {
   }
 
   public void removeComponent(MockComponent component, boolean permanentlyDeleted) {
-//    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_ROW,
-//        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
-//    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN,
-//        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
-    getForm().fireComponentEvent(ChangeProperty.create(
-        Ode.getCurrentChannel(), component.getUuid(), MockVisibleComponent.PROPERTY_NAME_ROW,
-        "" + ComponentConstants.DEFAULT_ROW_COLUMN
-    ));
-    getForm().fireComponentEvent(ChangeProperty.create(
-        Ode.getCurrentChannel(), component.getUuid(), MockVisibleComponent.PROPERTY_NAME_COLUMN,
-        "" + ComponentConstants.DEFAULT_ROW_COLUMN
-    ));
+    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_ROW,
+        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
+    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN,
+        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
     super.removeComponent(component, permanentlyDeleted);
   }
 

@@ -538,6 +538,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
    * recursively for nested components. For the initial invocation parent shall be null.
    */
   private MockComponent createMockComponent(JSONObject propertiesObject, MockContainer parent) {
+    OdeLog.log(propertiesObject.toString());
     Map<String, JSONValue> properties = propertiesObject.getProperties();
 
     // Component name and type
@@ -571,8 +572,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
         mockComponent.changeProperty(name, properties.get(name).asString().getString());
       }
     }
-
-
+    componentsDb.put(mockComponent.getUuid(), mockComponent);
 
     //This is for old project which doesn't have the AppName property
     if (mockComponent instanceof MockForm) {
@@ -954,7 +954,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
 
   //TODO(xinyue): Remove this once IDesigner and IComponent works
   public MockComponent getComponent(String uuid) {
-    return componentMap.get(uuid);
+    return componentsDb.get(uuid);
   }
 
   public boolean hasComponent(String uuid){

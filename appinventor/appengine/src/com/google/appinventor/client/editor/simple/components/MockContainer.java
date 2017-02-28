@@ -304,7 +304,7 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
     } else {
       throw new IllegalArgumentException();
     }
-    MockComponent sourceComponent = ((YaFormEditor) getForm().editor).getComponent(componentId);
+    MockComponent sourceComponent = getForm().getComponentByUuid(componentId);
 
     OdeLog.log("Layout on drop");
     if (layout.onDrop(sourceComponent, x, y, offsetX, offsetY)) {

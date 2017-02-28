@@ -189,7 +189,7 @@ goog.inherits(AI.Events.ScreenSwitch, AI.Events.ScreenEvent);
 
 AI.Events.ScreenSwitch.prototype.type = AI.Events.SCREEN_SWITCH;
 
-AI.Events.ScreenSwitch.prototype.toJSON = function() {
+AI.Events.ScreenSwitch.prototype.toJson = function() {
   return AI.Events.ScreenSwitch.superClass_.toJSON.call(this);
 };
 /**

@@ -2324,6 +2324,9 @@ public class Ode implements EntryPoint {
   }
 
   public static String getCurrentChannel() {
+    if (Ode.getInstance().getDesignToolbar().getCurrentProject() == null) {
+      return "";
+    }
     return Ode.getInstance().getDesignToolbar().getCurrentProject().projectId + "_" + Ode.getInstance().getDesignToolbar().getCurrentProject().currentScreen;
   }
 

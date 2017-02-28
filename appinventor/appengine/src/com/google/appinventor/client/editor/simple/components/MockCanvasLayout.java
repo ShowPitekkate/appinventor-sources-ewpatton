@@ -142,10 +142,6 @@ final class MockCanvasLayout extends MockLayout {
 
   @Override
   boolean onDrop(MockComponent source, int x, int y, int offsetX, int offsetY) {
-    // Set position of component
-//    source.changeProperty(PROPERTY_NAME_X, toIntegerString(x - offsetX));
-//    source.changeProperty(PROPERTY_NAME_Y, toIntegerString(y - offsetY));
-
     // Perform drop
 //    MockContainer srcContainer = source.getContainer();
 //    if (srcContainer != null) {
@@ -158,12 +154,9 @@ final class MockCanvasLayout extends MockLayout {
     container.getForm().fireComponentEvent(MoveComponent.create(
         Ode.getCurrentChannel(), source.getUuid(), container.getUuid(), -1
     ));
-    container.getForm().fireComponentEvent(ChangeProperty.create(
-        Ode.getCurrentChannel(), source.getUuid(), PROPERTY_NAME_X, toIntegerString(x-offsetX)
-    ));
-    container.getForm().fireComponentEvent(ChangeProperty.create(
-        Ode.getCurrentChannel(), source.getUuid(), PROPERTY_NAME_Y, toIntegerString(y-offsetY)
-    ));
+    // Set position of component
+    source.changeProperty(PROPERTY_NAME_X, toIntegerString(x - offsetX));
+    source.changeProperty(PROPERTY_NAME_Y, toIntegerString(y - offsetY));
     ((MockCanvas) container).reorderComponents((MockSprite) source);
     return true;
   }
