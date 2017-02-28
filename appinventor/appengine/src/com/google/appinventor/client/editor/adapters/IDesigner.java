@@ -1,5 +1,7 @@
 package com.google.appinventor.client.editor.adapters;
 
+import com.google.appinventor.client.editor.simple.components.MockComponent;
+
 public interface IDesigner {
   public void addComponent(String uuid, String type);
   public void removeComponent(String uuid);

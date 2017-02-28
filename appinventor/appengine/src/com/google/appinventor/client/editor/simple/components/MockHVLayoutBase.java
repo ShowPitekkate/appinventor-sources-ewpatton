@@ -11,6 +11,9 @@ import static com.google.appinventor.client.Ode.MESSAGES;
 import java.util.Map;
 
 import com.google.appinventor.client.ErrorReporter;
+import com.google.appinventor.client.Ode;
+import com.google.appinventor.client.editor.youngandroid.events.CreateComponent;
+import com.google.appinventor.client.editor.youngandroid.events.MoveComponent;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.components.common.ComponentConstants;
 import com.google.gwt.user.client.DOM;
@@ -672,14 +675,8 @@ public abstract class MockHVLayoutBase extends MockLayout {
           dstPos--;
         }
       }
-
-      // Perform drop
-      if (srcContainer != null) {
-        // Pass false to indicate that the component isn't being permanently deleted.
-        // It's just being moved from one container to another.
-        srcContainer.removeComponent(source, false);
-      }
-      dstContainer.addVisibleComponent(source, dstPos);
+      container.getForm().fireComponentEvent(MoveComponent.create(Ode.getInstance().getCurrentChannel(),
+          source.getUuid(), dstContainer.getUuid(), dstPos));
       return true;
     }
     return false;
@@ -698,7 +695,7 @@ public abstract class MockHVLayoutBase extends MockLayout {
   /**
    * Set the layout flags centerH and centerV that govern whether the layout performs
    * horizontal or vertical centering.   Called by the arrangement that uses this layout
-   * @param centering is the string value of the centering property "0", "1", "2", or "3"
+   * @param alignment is the string value of the centering property "0", "1", "2", or "3"
    */
 
 

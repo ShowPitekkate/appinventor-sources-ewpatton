@@ -318,6 +318,7 @@ AI.Events.CreateComponent.prototype.toJson = function() {
 };
 
 AI.Events.CreateComponent.prototype.run = function() {
+  console.log(this);
   var editor = top.getDesignerForForm(this.editorId);
   editor.addComponent(this.componentId, this.componentType);
 };
@@ -349,6 +350,7 @@ AI.Events.DeleteComponent.prototype.toJson = function() {
 };
 
 AI.Events.DeleteComponent.prototype.run = function() {
+  console.log(this);
   var editor = top.getDesignerForForm(this.editorId);
   editor.removeComponent(this.componentId);
 };
@@ -386,6 +388,7 @@ AI.Events.MoveComponent.prototype.toJson = function() {
 };
 
 AI.Events.MoveComponent.prototype.run = function() {
+  console.log(this);
   var editor = top.getDesignerForForm(this.editorId);
   editor.moveComponent(this.componentId, this.parentId, this.index);
 };
@@ -421,6 +424,7 @@ AI.Events.ComponentProperty.prototype.toJson = function() {
 };
 
 AI.Events.ComponentProperty.prototype.run = function() {
+  console.log(this);
   var editor = top.getDesignerForForm(this.editorId);
   if(this.property=="Name"){
     editor.renameComponent(this.componentId, this.value);

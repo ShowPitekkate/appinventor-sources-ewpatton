@@ -6,7 +6,9 @@
 
 package com.google.appinventor.client.editor.simple.components;
 
+import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.editor.simple.SimpleEditor;
+import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
 import com.google.appinventor.components.common.ComponentConstants;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
@@ -47,10 +49,18 @@ public final class MockTableArrangement extends MockContainer {
   }
 
   public void removeComponent(MockComponent component, boolean permanentlyDeleted) {
-    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_ROW,
-        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
-    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN,
-        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
+//    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_ROW,
+//        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
+//    component.changeProperty(MockVisibleComponent.PROPERTY_NAME_COLUMN,
+//        "" + ComponentConstants.DEFAULT_ROW_COLUMN);
+    getForm().fireComponentEvent(ChangeProperty.create(
+        Ode.getCurrentChannel(), component.getUuid(), MockVisibleComponent.PROPERTY_NAME_ROW,
+        "" + ComponentConstants.DEFAULT_ROW_COLUMN
+    ));
+    getForm().fireComponentEvent(ChangeProperty.create(
+        Ode.getCurrentChannel(), component.getUuid(), MockVisibleComponent.PROPERTY_NAME_COLUMN,
+        "" + ComponentConstants.DEFAULT_ROW_COLUMN
+    ));
     super.removeComponent(component, permanentlyDeleted);
   }
 

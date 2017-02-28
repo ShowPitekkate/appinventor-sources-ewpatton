@@ -16,6 +16,8 @@ import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.components.utils.PropertiesUtil;
 import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
+import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
+import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
 import com.google.appinventor.client.explorer.SourceStructureExplorerItem;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.output.OdeLog;
@@ -158,9 +160,12 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
         hide();
       } else if (validate(newName)) {
         hide();
-        String oldName = getName();
-        changeProperty(PROPERTY_NAME_NAME, newName);
-        getForm().fireComponentRenamed(MockComponent.this, oldName);
+        //String oldName = getName();
+        //changeProperty(PROPERTY_NAME_NAME, newName);
+        //getForm().fireComponentRenamed(MockComponent.this, oldName);
+        getForm().fireComponentEvent(ChangeProperty.create(
+            Ode.getCurrentChannel(), getUuid(), PROPERTY_NAME_NAME, newName
+        ));
       } else {
         newNameTextBox.setFocus(true);
         newNameTextBox.selectAll();
@@ -951,7 +956,10 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
        * the palette. We need to explicitly trigger on Form here, because forms
        * are not in containers.
        */
-      getForm().fireComponentPropertyChanged(this, propertyName, newValue);
+      //getForm().fireComponentPropertyChanged(this, propertyName, newValue);
+      getForm().fireComponentEvent(ChangeProperty.create(
+          Ode.getCurrentChannel(), getUuid(), propertyName, newValue
+      ));
     }
   }
 
@@ -965,7 +973,8 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     this.editor.getProjectEditor().clearLocation(getName());
     getForm().select();
     // Pass true to indicate that the component is being permanently deleted.
-    getContainer().removeComponent(this, true);
+    //getContainer().removeComponent(this, true);
+    getForm().fireComponentEvent(DeleteComponent.create(Ode.getCurrentChannel(), this.getUuid()));
     // tell the component its been removed, so it can remove children's blocks
     onRemoved();
     properties.removePropertyChangeListener(this);

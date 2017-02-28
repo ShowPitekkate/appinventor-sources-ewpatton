@@ -25,10 +25,7 @@ import com.google.appinventor.client.editor.simple.SimpleComponentDatabase;
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.SimpleNonVisibleComponentsPanel;
 import com.google.appinventor.client.editor.simple.SimpleVisibleComponentsPanel;
-import com.google.appinventor.client.editor.simple.components.FormChangeListener;
-import com.google.appinventor.client.editor.simple.components.MockComponent;
-import com.google.appinventor.client.editor.simple.components.MockContainer;
-import com.google.appinventor.client.editor.simple.components.MockForm;
+import com.google.appinventor.client.editor.simple.components.*;
 import com.google.appinventor.client.editor.simple.palette.DropTargetProvider;
 import com.google.appinventor.client.editor.simple.palette.SimpleComponentDescriptor;
 import com.google.appinventor.client.editor.simple.palette.SimplePalettePanel;
@@ -851,10 +848,12 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
       this.getNonVisibleComponentsPanel().addComponent(component);
       component.select();
     }
+    getForm().fireComponentAdded(component);
 //    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
 //    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
 //    blockEditor.addComponent(component.getType(), component.getName(), component.getUuid());
   }
+
 
   @Override
   public void removeComponent(String uuid) {
@@ -864,6 +863,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     MockComponent component = componentsDb.get(uuid);
     componentsDb.remove(uuid);
     component.getContainer().removeComponent(component, true);
+    getForm().fireComponentRemoved(component, true);
 //    YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
 //    YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
 //    blockEditor.removeComponent(component.getType(), component.getName(), uuid);
@@ -877,7 +877,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     } else {
       String oldName = component.getPropertyValue(MockComponent.PROPERTY_NAME_NAME);
       component.changeProperty(MockComponent.PROPERTY_NAME_NAME, name);
-      this.getForm().fireComponentRenamed(component, oldName);
+      getForm().fireComponentRenamed(component, oldName);
 //      YaProjectEditor yaProjectEditor = (YaProjectEditor) projectEditor;
 //      YaBlocksEditor blockEditor = yaProjectEditor.getBlocksFileEditor(formNode.getFormName());
 //      blockEditor.renameComponent(oldName, name, uuid);
@@ -903,7 +903,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     }
     MockComponent component = componentsDb.get(uuid);
     component.changeProperty(property, value);
-    this.getForm().fireComponentPropertyChanged(component, property, value);
+    getForm().fireComponentPropertyChanged(component, property, value);
   }
 
 
@@ -921,7 +921,13 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     if (oldParent != null) {
       oldParent.removeComponent(component, false);
     }
-    parent.addVisibleComponent(component, index);
+    if (index==-1) {
+      OdeLog.log("component appends to the last");
+      parent.addComponent(component);
+    }else{
+      parent.addVisibleComponent(component, index);
+    }
+    getForm().fireComponentMoved(component, parentUuid, index);
   }
 
   /**

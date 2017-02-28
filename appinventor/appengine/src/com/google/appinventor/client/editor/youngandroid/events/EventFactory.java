@@ -27,46 +27,46 @@ public class EventFactory {
 
 
   private static void runCreateComponent(CreateComponent event) {
-    long projectId = Long.parseLong(event.getProjectId());
-    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
-    if (projectId != currentProject.projectId) {
-      return;
-    }
-    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
-    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
-    MockComponent component = null;
-    if(formEditor.hasComponent(event.getComponentId())){
-      component = formEditor.getComponent(event.getComponentId());
-    }else {
-      component = SimpleComponentDescriptor.createMockComponent(event.getComponentType(), formEditor);
-      component.onCreateFromPalette();
-      component.changeProperty(MockComponent.PROPERTY_NAME_UUID, event.getComponentId());
-    }
-    OdeLog.log(("run create component " + event.getComponentType() + " at index " + event.getBeforeIndex()));
-    if (component.isVisibleComponent()) {
-      OdeLog.log("component is visible");
-      MockContainer container = (MockContainer) formEditor.getComponent(event.getParentId());
-      container.addVisibleComponent(component, event.getBeforeIndex());
-    } else {
-      OdeLog.log("component is non-visible");
-      formEditor.getForm().addComponent(component);
-      formEditor.getNonVisibleComponentsPanel().addComponent(component);
-      component.select();
-    }
+//    long projectId = Long.parseLong(event.getProjectId());
+//    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
+//    if (projectId != currentProject.projectId) {
+//      return;
+//    }
+//    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
+//    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
+//    MockComponent component = null;
+//    if(formEditor.hasComponent(event.getComponentId())){
+//      component = formEditor.getComponent(event.getComponentId());
+//    }else {
+//      component = SimpleComponentDescriptor.createMockComponent(event.getComponentType(), formEditor);
+//      component.onCreateFromPalette();
+//      component.changeProperty(MockComponent.PROPERTY_NAME_UUID, event.getComponentId());
+//    }
+//    OdeLog.log("run create component " + event.getComponentType());
+//    if (component.isVisibleComponent()) {
+//      OdeLog.log("component is visible");
+//      MockContainer container = (MockContainer) formEditor.getComponent(event.getParentId());
+//      container.addVisibleComponent(component, event.getBeforeIndex());
+//    } else {
+//      OdeLog.log("component is non-visible");
+//      formEditor.getForm().addComponent(component);
+//      formEditor.getNonVisibleComponentsPanel().addComponent(component);
+//      component.select();
+//    }
   }
 
   private static void runDeleteComponent(DeleteComponent event) {
-    long projectId = Long.parseLong(event.getProjectId());
-    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
-    if (projectId != currentProject.projectId) {
-      return;
-    }
-
-    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
-    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
-    MockComponent component = formEditor.getComponent(event.getComponentId());
-    MockContainer container = (MockContainer) formEditor.getComponent(event.getParentId());
-    container.removeComponent(component, event.getDeleted());
+//    long projectId = Long.parseLong(event.getProjectId());
+//    DesignToolbar.DesignProject currentProject = Ode.getInstance().getDesignToolbar().getCurrentProject();
+//    if (projectId != currentProject.projectId) {
+//      return;
+//    }
+//
+//    YaProjectEditor projectEditor = (YaProjectEditor) Ode.getInstance().getEditorManager().getOpenProjectEditor(currentProject.projectId);
+//    YaFormEditor formEditor = projectEditor.getFormFileEditor(currentProject.currentScreen);
+//    MockComponent component = formEditor.getComponent(event.getComponentId());
+//    MockContainer container = (MockContainer) formEditor.getComponent(event.getParentId());
+//    container.removeComponent(component, event.getDeleted());
   }
 
   private static void runChangeProperty(ChangeProperty event) {

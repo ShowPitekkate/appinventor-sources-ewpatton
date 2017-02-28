@@ -6,6 +6,9 @@
 
 package com.google.appinventor.client.editor.simple.components;
 
+import com.google.appinventor.client.Ode;
+import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
+import com.google.appinventor.client.editor.youngandroid.events.MoveComponent;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.components.common.ComponentConstants;
 import com.google.gwt.event.dom.client.ErrorEvent;
@@ -140,17 +143,27 @@ final class MockCanvasLayout extends MockLayout {
   @Override
   boolean onDrop(MockComponent source, int x, int y, int offsetX, int offsetY) {
     // Set position of component
-    source.changeProperty(PROPERTY_NAME_X, toIntegerString(x - offsetX));
-    source.changeProperty(PROPERTY_NAME_Y, toIntegerString(y - offsetY));
+//    source.changeProperty(PROPERTY_NAME_X, toIntegerString(x - offsetX));
+//    source.changeProperty(PROPERTY_NAME_Y, toIntegerString(y - offsetY));
 
     // Perform drop
-    MockContainer srcContainer = source.getContainer();
-    if (srcContainer != null) {
-      // Pass false to indicate that the component isn't being permanently deleted.
-      // It's just being moved from one container to another.
-      srcContainer.removeComponent(source, false);
-    }
-    container.addComponent(source);
+//    MockContainer srcContainer = source.getContainer();
+//    if (srcContainer != null) {
+//      // Pass false to indicate that the component isn't being permanently deleted.
+//      // It's just being moved from one container to another.
+//      srcContainer.removeComponent(source, false);
+//    }
+//    container.addComponent(source);
+//
+    container.getForm().fireComponentEvent(MoveComponent.create(
+        Ode.getCurrentChannel(), source.getUuid(), container.getUuid(), -1
+    ));
+    container.getForm().fireComponentEvent(ChangeProperty.create(
+        Ode.getCurrentChannel(), source.getUuid(), PROPERTY_NAME_X, toIntegerString(x-offsetX)
+    ));
+    container.getForm().fireComponentEvent(ChangeProperty.create(
+        Ode.getCurrentChannel(), source.getUuid(), PROPERTY_NAME_Y, toIntegerString(y-offsetY)
+    ));
     ((MockCanvas) container).reorderComponents((MockSprite) source);
     return true;
   }
