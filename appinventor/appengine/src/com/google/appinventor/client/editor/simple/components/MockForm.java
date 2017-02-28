@@ -674,6 +674,7 @@ public final class MockForm extends MockContainer {
   public native boolean fireComponentEvent(JavaScriptObject json) /*-{
     if($wnd.AIFeature_enableProjectLocking()){
       if($wnd.Ode_getProjectLeaderId(json.projectId)!=$wnd.Ode_getCurrentUserId()){
+        console.log(json);
         window.alert("You are not the project leader, switch leader before you can edit!");
         return false;
       }
