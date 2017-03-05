@@ -312,6 +312,8 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
       if (layout.onDrop(sourceComponent, x, y, offsetX, offsetY)) {
         sourceComponent.select();
       }
+    } else {
+      layout.cleanup();
     }
   }
 

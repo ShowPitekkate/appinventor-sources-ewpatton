@@ -446,4 +446,9 @@ final class MockTableLayout extends MockLayout {
       DOM.removeChild(container.getRootPanel().getElement(), dropTargetArea);
     }
   }
+
+  @Override
+  void cleanup() {
+    setDropTargetCell(null);
+  }
 }

@@ -134,12 +134,13 @@ public final class EditableProperty extends Property {
     }
   }
 
-  public void raisePropertyChangeEvent(String value){
+  public boolean raisePropertyChangeEvent(String value){
     if(properties.getComponent()!=null){
-      properties.getComponent().getForm().fireComponentEvent(ChangeProperty.create(
+      return properties.getComponent().getForm().fireComponentEvent(ChangeProperty.create(
           Ode.getCurrentChannel(), properties.getComponent().getUuid(), getName(), value
       ));
     }
+    return false;
   }
   /**
    * Returns the property editor widget for this property.

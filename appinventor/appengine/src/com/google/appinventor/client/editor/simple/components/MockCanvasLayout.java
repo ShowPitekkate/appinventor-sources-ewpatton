@@ -166,6 +166,7 @@ final class MockCanvasLayout extends MockLayout {
     return false;
   }
 
+
   /*
    * So this one is truly priceless: FF3 returns coordinates that are actually not integers, but
    * doubles. And since our code is translated into untyped Javascript coordinates we are now

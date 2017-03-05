@@ -762,4 +762,8 @@ public abstract class MockHVLayoutBase extends MockLayout {
     return childLength;
   }
 
+  @Override
+  void cleanup() {
+    setDividerLocation(-1);
+  }
 }
