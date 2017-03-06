@@ -130,7 +130,7 @@ public final class AppInventorFeatures {
    * @return true to enable project-level locking
    */
   public static boolean enableProjectLocking(){
-    return enableGroupProject() & true;
+    return enableGroupProject() & false;
   }
 
   /**

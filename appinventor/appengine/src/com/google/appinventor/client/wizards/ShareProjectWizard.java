@@ -5,6 +5,7 @@ import com.google.appinventor.client.OdeAsyncCallback;
 import com.google.appinventor.client.widgets.LabeledTextBox;
 import com.google.appinventor.client.widgets.Validator;
 import com.google.appinventor.client.youngandroid.TextValidators;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.shared.rpc.project.UserProject;
 import com.google.appinventor.shared.rpc.user.User;
 import com.google.gwt.event.dom.client.*;
@@ -68,8 +69,10 @@ public class ShareProjectWizard extends Wizard{
               @Override
               public void onSuccess(Long projectId) {
                 publishShareProject(email, projectId.toString());
-                Ode.getInstance().getDesignToolbar().switchLeader(projectId.toString(),
-                    user.getUserId(), user.getUserEmail());
+                if (AppInventorFeatures.enableProjectLocking()) {
+                  Ode.getInstance().getDesignToolbar().switchLeader(projectId.toString(),
+                      user.getUserId(), user.getUserEmail());
+                }
                 Window.alert("Success");
               }
             });

@@ -479,6 +479,7 @@ public final class YaBlocksEditor extends FileEditor
   @Override
   public void onComponentRemoved(MockComponent component, boolean permanentlyDeleted) {
     if (permanentlyDeleted) {
+      OdeLog.log("YaBlockEditor remove component called");
       removeComponent(component.getType(), component.getName(), component.getUuid());
       if (loadComplete) {
         updateSourceStructureExplorer();
@@ -519,6 +520,7 @@ public final class YaBlocksEditor extends FileEditor
   @Override
   public void onComponentMoved(MockComponent component, String newParentId, int index) {
     // nothing changed in block editor
+    updateSourceStructureExplorer();
   }
 
   private void updateSourceStructureExplorer() {

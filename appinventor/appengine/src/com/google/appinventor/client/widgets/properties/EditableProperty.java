@@ -135,10 +135,12 @@ public final class EditableProperty extends Property {
   }
 
   public boolean raisePropertyChangeEvent(String value){
-    if(properties.getComponent()!=null){
-      return properties.getComponent().getForm().fireComponentEvent(ChangeProperty.create(
-          Ode.getCurrentChannel(), properties.getComponent().getUuid(), getName(), value
-      ));
+    if(!value.equals(getValue())){
+      if(properties.getComponent()!=null){
+        return properties.getComponent().getForm().fireComponentEvent(ChangeProperty.create(
+            Ode.getCurrentChannel(), properties.getComponent().getUuid(), getName(), value
+        ));
+      }
     }
     return false;
   }

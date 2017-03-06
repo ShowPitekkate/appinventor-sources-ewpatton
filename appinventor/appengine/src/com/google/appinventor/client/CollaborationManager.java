@@ -126,9 +126,11 @@ public class CollaborationManager implements FormChangeListener {
             }
             if(userLastSelection.has(userFrom)){
               var prevSelected = userLastSelection.get(userFrom);
-              prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
-              prevSelected.svgGroup_.className.animVal = 'blockDraggable';
-              prevSelected.svgPath_.removeAttribute('stroke');
+              if(prevSelected.svgGroup_){
+                prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
+                prevSelected.svgGroup_.className.animVal = 'blockDraggable';
+                prevSelected.svgPath_.removeAttribute('stroke');
+              }
             }
             block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
             block.svgGroup_.className.animVal += ' blocklyOtherSelected';
