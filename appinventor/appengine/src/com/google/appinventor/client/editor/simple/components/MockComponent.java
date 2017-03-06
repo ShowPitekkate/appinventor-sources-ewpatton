@@ -32,6 +32,7 @@ import com.google.appinventor.client.widgets.properties.PropertyChangeListener;
 import com.google.appinventor.client.widgets.properties.PropertyEditor;
 import com.google.appinventor.client.widgets.properties.TextPropertyEditor;
 import com.google.appinventor.client.youngandroid.TextValidators;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.shared.rpc.project.HasAssetsFolder;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidAssetsFolder;

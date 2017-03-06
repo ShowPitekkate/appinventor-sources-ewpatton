@@ -108,7 +108,9 @@ public abstract class ColorChoicePropertyEditor extends PropertyEditor {
       choices.add(new DropDownItem(WIDGET_NAME, color.getHtmlDescription(), new Command() {
         @Override
         public void execute() {
-          property.raisePropertyChangeEvent(hexPrefix + color.alphaString + color.rgbString);
+          if (!property.raisePropertyChangeEvent(hexPrefix + color.alphaString + color.rgbString)) {
+            updateValue(); //Restore to previous state
+          }
         }
       }));
     }

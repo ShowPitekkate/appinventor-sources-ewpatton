@@ -249,8 +249,8 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     // Note: I'm not sure it is possible that we would not be the "current"
     // editor when this is called, but we check just to be safe.
     if (Ode.getInstance().getCurrentFileEditor() == this) {
-      super.onHide();
       unloadDesigner();
+      super.onHide();
     } else {
       OdeLog.wlog("YaFormEditor.onHide: Not doing anything since we're not the "
           + "current file editor!");

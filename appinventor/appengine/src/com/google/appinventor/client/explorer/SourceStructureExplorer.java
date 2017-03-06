@@ -7,10 +7,13 @@
 package com.google.appinventor.client.explorer;
 
 import com.google.appinventor.client.Ode;
+import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.widgets.TextButton;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.*;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 
 import java.util.Iterator;
@@ -108,6 +111,13 @@ public class SourceStructureExplorer extends Composite {
     renameButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
+        // if in project-level collaborative mode, check if the user is the leader
+        if (AppInventorFeatures.enableProjectLocking()
+            && Ode.getInstance().getProjectLeaderId(
+            Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId())) != Ode.getCurrentUserId()) {
+          Window.alert(MESSAGES.notLeaderWarning());
+          return;
+        }
         TreeItem treeItem = tree.getSelectedItem();
         if (treeItem != null) {
           Object userObject = treeItem.getUserObject();
@@ -126,7 +136,14 @@ public class SourceStructureExplorer extends Composite {
     deleteButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        deleteItemFromTree();
+        // if in project-level collaborative mode, check if the user is leader
+        if (!AppInventorFeatures.enableProjectLocking()
+            || Ode.getInstance().getProjectLeaderId(
+            Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId())) == Ode.getCurrentUserId()) {
+          deleteItemFromTree();
+        } else {
+          Window.alert(MESSAGES.notLeaderWarning());
+        }
       }
     });
     buttonPanel.add(deleteButton);

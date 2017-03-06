@@ -6369,4 +6369,8 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("Leader: ")
   @Description("Leader info on toolbar")
   String leaderInfoLabel();
+
+  @DefaultMessage("You are not the project leader, switch leader before you can edit!")
+  @Description("Warning message when users try to modify the project when they are not leader")
+  String notLeaderWarning();
 }

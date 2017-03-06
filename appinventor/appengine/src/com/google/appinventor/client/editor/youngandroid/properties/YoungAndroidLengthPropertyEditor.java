@@ -172,9 +172,9 @@ public class YoungAndroidLengthPropertyEditor extends AdditionalChoicePropertyEd
   @Override
   protected boolean okAction() {
     if (automaticRadioButton.isChecked()) {
-      property.raisePropertyChangeEvent(CONST_AUTOMATIC);
+      return property.raisePropertyChangeEvent(CONST_AUTOMATIC);
     } else if (fillParentRadioButton.isChecked()) {
-      property.raisePropertyChangeEvent(CONST_FILL_PARENT);
+      return property.raisePropertyChangeEvent(CONST_FILL_PARENT);
     } else if (customLengthRadioButton.isChecked()) {
       // Custom length
       String text = customLengthField.getText();
@@ -193,7 +193,7 @@ public class YoungAndroidLengthPropertyEditor extends AdditionalChoicePropertyEd
         Window.alert(MESSAGES.nonnumericInputError());
         return false;
       }
-      property.raisePropertyChangeEvent(text);
+      return property.raisePropertyChangeEvent(text);
     } else {                    // Percent field!
       String text = percentLengthField.getText();
       boolean success = false;
@@ -201,7 +201,7 @@ public class YoungAndroidLengthPropertyEditor extends AdditionalChoicePropertyEd
         int v = Integer.parseInt(text);
         if (v > 0 && v <= 100) {
           success = true;
-          property.raisePropertyChangeEvent("" + (-v + MockVisibleComponent.LENGTH_PERCENT_TAG));
+          return property.raisePropertyChangeEvent("" + (-v + MockVisibleComponent.LENGTH_PERCENT_TAG));
         }
       } catch (NumberFormatException e) {
         // fall through with success == false

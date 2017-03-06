@@ -249,8 +249,8 @@ public final class YaBlocksEditor extends FileEditor
     // editor when this is called, but we check just to be safe.
     OdeLog.log("YaBlocksEditor: got onHide() for " + getFileId());
     if (Ode.getInstance().getCurrentFileEditor() == this) {
-      super.onHide();
       unloadBlocksEditor();
+      super.onHide();
     } else {
       OdeLog.wlog("YaBlocksEditor.onHide: Not doing anything since we're not the "
           + "current file editor!");
