@@ -59,7 +59,7 @@ public class ShareProjectWizard extends Wizard{
     initFinishCommand(new Command() {
       @Override
       public void execute() {
-        final String email = emailTextbox.getText();
+        final String email = emailTextbox.getText().toLowerCase();
         // TODO(Xinyue Deng): add email address format checking & check if email is in the system.
         final User user = Ode.getInstance().getUser();
         long projectId = Ode.getInstance().getCurrentYoungAndroidProjectId();
