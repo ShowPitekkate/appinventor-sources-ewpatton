@@ -110,8 +110,7 @@ public class CollaborationManager implements FormChangeListener {
             $wnd.Ode_enableBroadcast();
             break;
           case "Block":
-            // TODO(xinyue): assign it to the correct workspace
-            var workspace = Blockly.mainWorkspace;
+            var workspace = Blockly.allWorkspaces[channel];
             var newEvent = Blockly.Events.fromJson(event, workspace);
             Blockly.Events.disable();
             newEvent.run(true);
