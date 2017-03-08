@@ -76,6 +76,7 @@
     '../lib/blockly/core/zoom_controls.js',
 
     //finally, include any of our own .js file in any order
+    "./src/adapters.js",
     "./src/events.js",
     "./src/blocklyeditor.js",
     './src/typeblock.js',
