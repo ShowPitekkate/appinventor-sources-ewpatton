@@ -14,7 +14,6 @@ import com.google.appinventor.client.boxes.AssetListBox;
 import com.google.appinventor.client.boxes.PaletteBox;
 import com.google.appinventor.client.boxes.PropertiesBox;
 import com.google.appinventor.client.boxes.SourceStructureBox;
-import com.google.appinventor.client.editor.EditorManager;
 import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.ProjectEditor;
 import com.google.appinventor.client.editor.adapters.ComponentAdapter;
@@ -70,7 +69,7 @@ import java.util.Map;
  * @author markf@google.com (Mark Friedman)
  * @author lizlooney@google.com (Liz Looney)
  */
-public final class YaFormEditor extends SimpleEditor implements FormChangeListener, ComponentDatabaseChangeListener, IDesigner {
+public final class YaFormEditor extends SimpleEditor implements FormChangeListener, ComponentDatabaseChangeListener {
 
   private static class FileContentHolder {
     private String content;
@@ -134,12 +133,15 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
 
   private static final int OLD_PROJECT_YAV = 150; // Projects older then this have no authURL
 
+<<<<<<< HEAD
   private final Map<String, MockComponent> componentMap = new HashMap<String, MockComponent>();
 
   static {
     exportJavascript();
   }
 
+=======
+>>>>>>> latest-blockly/feature/blockly-update
   /**
    * Creates a new YaFormEditor.
    *

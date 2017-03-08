@@ -348,6 +348,7 @@ public class DesignToolbar extends Toolbar {
       Ode.getInstance().getCollaborationManager().setScreenChannel(currentChannel);
       Ode.getInstance().getCollaborationManager().componentSocketEvent(currentChannel);
     }
+    screen.blocksEditor.makeActiveWorkspace();
   }
 
   private class SwitchToBlocksEditorAction implements Command {

@@ -55,6 +55,7 @@ public final class Project {
     if (!loadingInProgress) {
       OdeLog.log("Project: in loading");
       loadingInProgress = true;
+      Ode.CLog("Project.loadProjectNodes(): loadingInProgress = true");
 
       if (settings == null) {
         settings = new ProjectSettings(Project.this);
@@ -70,6 +71,7 @@ public final class Project {
             public void onSuccess(ProjectRootNode result) {
               projectRoot = result;
 
+              Ode.CLog("Project.loadProjectNodes(): loadingInProgress = false");
               loadingInProgress = false;
               fireProjectLoaded();
             }
