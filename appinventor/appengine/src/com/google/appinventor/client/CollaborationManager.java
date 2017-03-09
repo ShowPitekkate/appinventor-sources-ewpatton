@@ -121,8 +121,17 @@ public class CollaborationManager implements FormChangeListener {
             var color = $wnd.userColorMap.get(userFrom);
             var block = workspace.getBlockById(newEvent.blockId);
             if(event["type"]==="create"){
-              block.initSvg();
-              block.render();
+              if (workspace.rendered) {
+                if(workspace.getParentSvg().parentNode.offsetParent){
+                  block.initSvg();
+                  block.render();
+                } else {
+                  workspace.blocksNeedingRendering.push(block);
+                }
+              } else {
+                workspace.blocksNeedingRendering.push(block);
+              }
+
             }
             if(userLastSelection.has(userFrom)){
               var prevSelected = userLastSelection.get(userFrom);
@@ -132,9 +141,13 @@ public class CollaborationManager implements FormChangeListener {
                 prevSelected.svgPath_.removeAttribute('stroke');
               }
             }
-            block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
-            block.svgGroup_.className.animVal += ' blocklyOtherSelected';
-            block.svgPath_.setAttribute('stroke', color);
+            if(block.svgGroup_) {
+              block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
+              block.svgGroup_.className.animVal += ' blocklyOtherSelected';
+              block.svgPath_.setAttribute('stroke', color);
+            }else{
+              console.log("Block svgGroup is not defined.");
+            }
             userLastSelection.set(userFrom, block);
             Blockly.Events.enable();
             break;
