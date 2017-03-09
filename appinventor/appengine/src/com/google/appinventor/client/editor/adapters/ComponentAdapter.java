@@ -5,6 +5,20 @@ import com.google.gwt.core.client.JavaScriptObject;
 
 public class ComponentAdapter extends JavaScriptObject implements IComponent {
 
+  static {
+    setupPrototype();
+  }
+
+  private static native void setupPrototype()/*-{
+    AI.Adapter.Component.prototype.select = function(color){
+      var component = this.component;
+      var args = Array.prototype.slice.call(arguments);
+      $entry(function(){
+        component.@com.google.appinventor.client.editor.simple.components.MockComponent::select(Ljava/lang/String;).apply(component, args)
+      })();
+    }
+  }-*/;
+
   protected ComponentAdapter() {
   }
 

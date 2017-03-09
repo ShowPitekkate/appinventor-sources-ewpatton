@@ -88,3 +88,5 @@ AI.Adapter.Component = function(editor, component) {
   this.editor = editor;
   this.component = component;
 };
+
+AI.Adapter.Component.prototype.select = null;

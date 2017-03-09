@@ -1105,4 +1105,7 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     return this.index;
   }
 
+  public void select(String color){
+    getElement().getStyle().setProperty("borderColor", color);
+  }
 }

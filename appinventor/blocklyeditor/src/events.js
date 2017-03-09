@@ -390,10 +390,13 @@ AI.Events.MoveComponent.prototype.run = function() {
   var editor = top.getDesignerForForm(this.editorId);
   editor.moveComponent(this.componentId, this.parentId, this.index);
 };
+
 /**
+ * Event raised when a Component's property is changed.
  *
- * @param editorId
- * @param component
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
+ * @param {{}} component The changed Component
+ * @extends {AI.Events.ComponentEvent}
  * @constructor
  */
 AI.Events.ComponentProperty = function(editorId, component) {
@@ -430,3 +433,37 @@ AI.Events.ComponentProperty.prototype.run = function() {
     editor.setProperty(this.componentId, this.property, this.value);
   }
 };
+
+/**
+ * Event raised when a Component has been selected by a user.
+ *
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
+ * @param {{}} component The selected Component
+ * @extends {AI.Events.ComponentEvent}
+ * @constructor
+ */
+AI.Events.SelectComponent  = function(editorId, component) {
+  if (!component) {
+    return;  // Blank event for deserialization.
+  }
+  AI.Events.SelectComponent.superClass_.constructor.call(this, editorId, component);
+};
+goog.inherits(AI.Events.SelectComponent, AI.Events.ComponentEvent);
+
+AI.Events.SelectComponent.prototype.type = AI.Events.COMPONENT_SELECT;
+
+AI.Events.SelectComponent.prototype.fromJson = function(json) {
+  AI.Events.SelectComponent.superClass_.fromJson.call(this, json);
+};
+
+AI.Events.SelectComponent.prototype.toJson = function() {
+  var json = AI.Events.SelectComponent.superClass_.toJson.call(this);
+  return json;
+};
+
+AI.Events.SelectComponent.prototype.run = function() {
+  console.log(this);
+  var editor = top.getDesignerForForm(this.editorId);
+  //TODO
+};
+
