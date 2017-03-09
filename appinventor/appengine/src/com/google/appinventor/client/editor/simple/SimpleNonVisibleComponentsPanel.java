@@ -128,8 +128,6 @@ public final class SimpleNonVisibleComponentsPanel extends Composite implements 
     if(form.fireComponentEvent(CreateComponent.create(
         Ode.getCurrentChannel(), component.getUuid(), component.getType()))){
       MockComponent sourceComponent = form.getComponentByUuid(component.getUuid());
-      // Add component to this panel
-      addComponent(sourceComponent);
       sourceComponent.select();
     }
   }
