@@ -77,7 +77,14 @@ public class CollaborationManager implements FormChangeListener {
 
   @Override
   public void onComponentSelectionChange(MockComponent component, boolean selected) {
-
+    if (component.isForm()) {
+      return;
+    }
+    if (broadcast) {
+      SelectComponent event = SelectComponent.create(
+          Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail(), selected);
+      broadcastComponentEvent(event.toJson());
+    }
   }
 
   public native void broadcastComponentEvent(JavaScriptObject eventJson)/*-{
@@ -145,8 +152,6 @@ public class CollaborationManager implements FormChangeListener {
               block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
               block.svgGroup_.className.animVal += ' blocklyOtherSelected';
               block.svgPath_.setAttribute('stroke', color);
-            }else{
-              console.log("Block svgGroup is not defined.");
             }
             userLastSelection.set(userFrom, block);
             Blockly.Events.enable();

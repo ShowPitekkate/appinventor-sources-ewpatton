@@ -89,4 +89,15 @@ AI.Adapter.Component = function(editor, component) {
   this.component = component;
 };
 
+/**
+ * Change the component border color which indicates who selects it.
+ * @type {?function(color: string)}
+ * @param {string} color The color of the border color.
+ */
 AI.Adapter.Component.prototype.select = null;
+
+/**
+ * Remove the component border color which indicates it isn't selected by anyone.
+ * @type {?function()}
+ */
+AI.Adapter.Component.prototype.deselect = null;

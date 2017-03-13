@@ -256,6 +256,8 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
 
   private int index;
 
+  private boolean selected;
+
   /**
    * Creates a new instance of the component.
    *
@@ -330,6 +332,8 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
       dragSourceSupport = new DragSourceSupport(this);
       addMouseListener(dragSourceSupport);
     }
+
+    selected = false;
   }
 
   /**
@@ -609,10 +613,12 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
    */
   protected void onSelectedChange(boolean selected) {
     if (selected) {
+      getElement().getStyle().clearBorderColor();
       addStyleDependentName("selected");
     } else {
       removeStyleDependentName("selected");
     }
+    this.selected = selected;
     getForm().fireComponentSelectionChange(this, selected);
   }
 
@@ -1107,5 +1113,12 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
 
   public void select(String color){
     getElement().getStyle().setProperty("borderColor", color);
+  }
+
+  public void deselect() {
+    getElement().getStyle().clearBorderColor();
+    if (selected) {
+      addStyleDependentName("selected");
+    }
   }
 }

@@ -275,6 +275,7 @@ AI.Events.ComponentEvent.fromJson = function(json) {
       event = new AI.Events.ComponentProperty(null, null);
       break;
     case AI.Events.COMPONENT_SELECT:
+      event = new AI.Events.SelectComponent(null, null);
       break;
     default:
       throw "Unknown component type: "+json["type"];
@@ -447,6 +448,8 @@ AI.Events.SelectComponent  = function(editorId, component) {
     return;  // Blank event for deserialization.
   }
   AI.Events.SelectComponent.superClass_.constructor.call(this, editorId, component);
+  this.userEmail = component.userEmail;
+  this.selected = component.selected;
 };
 goog.inherits(AI.Events.SelectComponent, AI.Events.ComponentEvent);
 
@@ -454,16 +457,29 @@ AI.Events.SelectComponent.prototype.type = AI.Events.COMPONENT_SELECT;
 
 AI.Events.SelectComponent.prototype.fromJson = function(json) {
   AI.Events.SelectComponent.superClass_.fromJson.call(this, json);
+  this.userEmail = json["userEmail"];
+  this.selected = json["selected"];
 };
 
 AI.Events.SelectComponent.prototype.toJson = function() {
   var json = AI.Events.SelectComponent.superClass_.toJson.call(this);
+  json["userEmail"] = this.userEmail;
+  json["selected"] = this.selected;
   return json;
 };
 
 AI.Events.SelectComponent.prototype.run = function() {
   console.log(this);
   var editor = top.getDesignerForForm(this.editorId);
-  //TODO
+  var component = editor.getComponentByUuid(this.componentId);
+  if(this.selected) {
+    if(window.parent.userColorMap){
+      var color = window.parent.userColorMap.get(this.userEmail);
+      component.select(color);
+    }
+  }else {
+    component.deselect();
+  }
+
 };
 
