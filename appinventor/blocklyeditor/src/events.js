@@ -59,10 +59,22 @@ AI.Events.COMPONENT_MOVE = 'component.move';
 AI.Events.COMPONENT_PROPERTY = 'component.property';
 
 /**
- * Type identifier used for serializing ComponentSelect events.
+ * Type identifier used for serializing SelectComponent events.
  * @const {string}
  */
 AI.Events.COMPONENT_SELECT = 'component.select';
+
+/**
+ * Type identifier used for serializing LockComponent events.
+ * @type {string}
+ */
+AI.Events.COMPONENT_LOCK = 'component.lock';
+
+/**
+ * Type identifier used for serializing UnlockComponent events.
+ * @type {string}
+ */
+AI.Events.COMPONENT_UNLOCK = 'component.unlock';
 
 /**
  * Abstract class for all App Inventor events.
@@ -480,6 +492,72 @@ AI.Events.SelectComponent.prototype.run = function() {
   }else {
     component.deselect();
   }
+};
+
+/**
+ * Event raised when a Component has been locked by a user.
+ *
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
+ * @param {{}} component The selected Component
+ * @extends {AI.Events.ComponentEvent}
+ * @constructor
+ */
+AI.Events.LockComponent  = function(editorId, component) {
+  if (!component) {
+    return;  // Blank event for deserialization.
+  }
+  AI.Events.LockComponent.superClass_.constructor.call(this, editorId, component);
+  this.userEmail = component.userEmail;
+};
+goog.inherits(AI.Events.LockComponent, AI.Events.ComponentEvent);
+
+AI.Events.LockComponent.prototype.type = AI.Events.COMPONENT_LOCK;
+
+AI.Events.LockComponent.prototype.fromJson = function(json) {
+  AI.Events.LockComponent.superClass_.fromJson.call(this, json);
+  this.userEmail = json["userEmail"];
+};
+
+AI.Events.LockComponent.prototype.toJson = function() {
+  var json = AI.Events.LockComponent.superClass_.toJson.call(this);
+  json["userEmail"] = this.userEmail;
+  return json;
+};
+
+AI.Events.LockComponent.prototype.run = function() {
 
 };
 
+/**
+ * Event raised when a Component has been unlocked by a user.
+ *
+ * @param {number} editorId Editor ID of the project the designer editor is editing.
+ * @param {{}} component The selected Component
+ * @extends {AI.Events.ComponentEvent}
+ * @constructor
+ */
+AI.Events.UnlockComponent  = function(editorId, component) {
+  if (!component) {
+    return;  // Blank event for deserialization.
+  }
+  AI.Events.UnlockComponent.superClass_.constructor.call(this, editorId, component);
+  this.userEmail = component.userEmail;
+};
+goog.inherits(AI.Events.UnlockComponent, AI.Events.ComponentEvent);
+
+AI.Events.UnlockComponent.prototype.type = AI.Events.COMPONENT_UNLOCK;
+
+AI.Events.UnlockComponent.prototype.fromJson = function(json) {
+  AI.Events.UnlockComponent.superClass_.fromJson.call(this, json);
+  this.userEmail = json["userEmail"];
+};
+
+AI.Events.UnlockComponent.prototype.toJson = function() {
+  var json = AI.Events.UnlockComponent.superClass_.toJson.call(this);
+  json["userEmail"] = this.userEmail;
+  return json;
+};
+
+AI.Events.UnlockComponent.prototype.run = function() {
+
+};

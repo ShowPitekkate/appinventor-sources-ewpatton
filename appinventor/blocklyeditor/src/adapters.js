@@ -101,3 +101,10 @@ AI.Adapter.Component.prototype.select = null;
  * @type {?function()}
  */
 AI.Adapter.Component.prototype.deselect = null;
+
+/**
+ * Change the component item background color in source tree explorer.
+ * @type {?function(color: string)}
+ * @param {string} color The color of the background color.
+ */
+AI.Adapter.Component.prototype.setItemBackgroundColor = null;

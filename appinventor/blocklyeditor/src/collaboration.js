@@ -28,6 +28,25 @@ Blockly.Collaboration = function(workspace){
     console.log(msg);
     window.parent.socket.emit("block", msg);
   });
+
+  var projectId = channel.split("_")[0];
+  if(window.parent.userColorMap.has(projectId)){
+    window.parent.userColorMap.get(projectId).forEach(function(v, k, m){
+      if(!workspace.getParentSvg().getElementById("blocklyLockedPattern-"+k)){
+        Blockly.Collaboration.createPattern(k, v);
+      }
+    });
+  }
+}
+
+Blockly.Collaboration.createPattern = function(uuid, color){
+  var defs = Blockly.mainWorkspace.getParentSvg().querySelector('defs');
+  var patternId = "blocklyLockedPattern-"+uuid;
+  var pattern = Blockly.utils.createSvgElement('pattern',
+    {'id':patternId, 'patternUnits':"userSpaceOnUse", "width":"10", "height":"10"}, defs);
+  Blockly.utils.createSvgElement('rect', {"width":"10", "height":"10", "fill":color}, pattern);
+  Blockly.utils.createSvgElement("path", {"d":"M 0 0 L 10 10 M 10 0 L 0 10", "stroke":"#cc0"}, pattern);
+  return;
 }
 
 

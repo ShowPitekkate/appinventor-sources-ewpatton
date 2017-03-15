@@ -11,6 +11,7 @@ import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.widgets.TextButton;
 import com.google.appinventor.common.version.AppInventorFeatures;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.*;
 import com.google.gwt.user.client.Window;
@@ -287,5 +288,22 @@ public class SourceStructureExplorer extends Composite {
    */
   public void unselectItem(SourceStructureExplorerItem item) {
     selectItem(item, false);
+  }
+
+  /**
+   * Get the HTML element of the given item.
+   *
+   * @param item item to get
+   * @return HTML element
+   */
+  public Element getItem(SourceStructureExplorerItem item) {
+    Iterator<TreeItem> iter = tree.treeItemIterator();
+    while (iter.hasNext()) {
+      TreeItem treeItem = iter.next();
+      if (item.equals(treeItem.getUserObject())) {
+        return treeItem.getElement();
+      }
+    }
+    return null;
   }
 }

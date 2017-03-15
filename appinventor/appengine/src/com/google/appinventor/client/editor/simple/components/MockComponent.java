@@ -7,7 +7,9 @@
 package com.google.appinventor.client.editor.simple.components;
 
 import static com.google.appinventor.client.Ode.MESSAGES;
+import static com.google.appinventor.client.boxes.SourceStructureBox.getSourceStructureBox;
 
+import com.google.appinventor.client.boxes.SourceStructureBox;
 import com.google.appinventor.client.editor.simple.SimpleComponentDatabase;
 import com.google.appinventor.client.ComponentsTranslation;
 import com.google.appinventor.client.Images;
@@ -18,6 +20,7 @@ import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
 import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
 import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
+import com.google.appinventor.client.explorer.SourceStructureExplorer;
 import com.google.appinventor.client.explorer.SourceStructureExplorerItem;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.output.OdeLog;
@@ -40,6 +43,7 @@ import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjec
 import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.appinventor.shared.simple.ComponentDatabaseInterface;
 import com.google.appinventor.shared.storage.StorageUtil;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -1107,18 +1111,40 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     this.index = index;
   }
 
+  /**
+   * Get the index of the component in its parent container.
+   * @return index of the component
+   */
   public int getIndex() {
     return this.index;
   }
 
+  /**
+   * Change the border color of the component in the form when it is selected by others.
+   * @param color border color
+   */
   public void select(String color){
     getElement().getStyle().setProperty("borderColor", color);
   }
 
+  /**
+   * Reset the component style in the form
+   */
   public void deselect() {
     getElement().getStyle().clearBorderColor();
     if (selected) {
       addStyleDependentName("selected");
     }
   }
+
+  /**
+   * Set the background color of this component item in source structure explorer.
+   * @param color background color
+   */
+  public void setItemBackgroundColor(String color) {
+    Element element = SourceStructureBox.getSourceStructureBox()
+        .getSourceStructureExplorer().getItem(this.sourceStructureExplorerItem);
+    element.getStyle().setBackgroundColor(color);
+  }
+
 }

@@ -102,7 +102,13 @@ public class CollaborationManager implements FormChangeListener {
     console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
     $wnd.subscribedChannel.add(channel);
-    var userLastSelection = new Map();
+    var workspace = Blockly.allWorkspaces[channel];
+    // userLastSelection is the latest block selected by other user, mapped by user email
+    // lockedComponent is the components locked by other users. Key is the component id, value is userEmail and timestamp
+    // lockedBlock is the block locked by other users. Key is the block id, value is userEmail and timestamp
+    workspace.userLastSelection = new Map();
+    workspace.lockedComponent = {};
+    workspace.lockedBlock = {};
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
       var event = msgJSON["event"];
@@ -117,7 +123,6 @@ public class CollaborationManager implements FormChangeListener {
             $wnd.Ode_enableBroadcast();
             break;
           case "Block":
-            var workspace = Blockly.allWorkspaces[channel];
             var newEvent = Blockly.Events.fromJson(event, workspace);
             Blockly.Events.disable();
             newEvent.run(true);
@@ -125,7 +130,7 @@ public class CollaborationManager implements FormChangeListener {
               Blockly.Events.enable();
               return;
             }
-            var color = $wnd.userColorMap.get(userFrom);
+            var color = $wnd.userColorMap.get($wnd.project).get(userFrom);
             var block = workspace.getBlockById(newEvent.blockId);
             if(event["type"]==="create"){
               if (workspace.rendered) {
@@ -140,8 +145,8 @@ public class CollaborationManager implements FormChangeListener {
               }
 
             }
-            if(userLastSelection.has(userFrom)){
-              var prevSelected = userLastSelection.get(userFrom);
+            if(workspace.userLastSelection.has(userFrom)){
+              var prevSelected = workspace.userLastSelection.get(userFrom);
               if(prevSelected.svgGroup_){
                 prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
                 prevSelected.svgGroup_.className.animVal = 'blockDraggable';
@@ -153,7 +158,7 @@ public class CollaborationManager implements FormChangeListener {
               block.svgGroup_.className.animVal += ' blocklyOtherSelected';
               block.svgPath_.setAttribute('stroke', color);
             }
-            userLastSelection.set(userFrom, block);
+            workspace.userLastSelection.set(userFrom, block);
             Blockly.Events.enable();
             break;
         }
@@ -185,6 +190,10 @@ public class CollaborationManager implements FormChangeListener {
       "user": $wnd.userEmail
     };
     $wnd.socket.emit("userJoin", msg);
+    if(!$wnd.userColorMap.has(projectId)){
+      $wnd.userColorMap.set(projectId, new $wnd.Map());
+      $wnd.userColorMap.get(projectId).rmv = $wnd.userColorMap.get(projectId)["delete"];
+    }
     $wnd.socket.on(projectId, function(msg){
       var msgJSON = JSON.parse(msg);
       if(msgJSON["project"]!=$wnd.project){
@@ -192,20 +201,25 @@ public class CollaborationManager implements FormChangeListener {
       }
       var c = "";
       var user = msgJSON["user"];
+      var colorMap = $wnd.userColorMap.get(msgJSON["project"]);
       if(user!==$wnd.userEmail){
         switch(msgJSON["type"]){
           case "join":
-            if(!$wnd.userColorMap.has(user)){
+            if(!colorMap.has(user)){
               c = $wnd.colors.pop();
-              $wnd.userColorMap.set(user, c);
+              colorMap.set(user, c);
             }
-            $wnd.DesignToolbar_addJoinedUser(user, $wnd.userColorMap.get(user));
+            $wnd.DesignToolbar_addJoinedUser(user, colorMap.get(user));
+            if(Blockly.mainWorkspace.getParentSvg()
+              && !Blockly.mainWorkspace.getParentSvg().getElementById("blocklyLockedPattern-"+user)){
+                Blockly.Collaboration.createPattern(user, $wnd.userColorMap.get(msgJSON["project"]).get(user));
+            }
             break;
           case "leave":
-            if($wnd.userColorMap.has(user)){
-              c = $wnd.userColorMap.get(user);
+            if(colorMap.has(user)){
+              c = colorMap.get(user);
               $wnd.colors.push(c);
-              $wnd.userColorMap.rmv(user);
+              colorMap.rmv(user);
             }
             $wnd.DesignToolbar_removeJoinedUser(user);
             break;
