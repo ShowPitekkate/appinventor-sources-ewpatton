@@ -321,6 +321,11 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
           }
         }
       }
+
+      @Override
+      public String getObjectId() {
+        return MockComponent.this.getUuid();
+      };
     };
     expanded = true;
 
@@ -1145,6 +1150,15 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
     Element element = SourceStructureBox.getSourceStructureBox()
         .getSourceStructureExplorer().getItem(this.sourceStructureExplorerItem);
     element.getStyle().setBackgroundColor(color);
+  }
+
+  /**
+   * Clear the background color of this component item in source structure explorer.
+   */
+  public void clearItemBackgroundColor() {
+    Element element = SourceStructureBox.getSourceStructureBox()
+        .getSourceStructureExplorer().getItem(this.sourceStructureExplorerItem);
+    element.getStyle().clearBackgroundColor();
   }
 
 }

@@ -116,11 +116,18 @@ public class TextPropertyEditorBase extends PropertyEditor {
     // Calling validateText here means that we will save the changed property value (if it is
     // valid) when the user clicks on another component.
     // In project-level collaborative mode, check if the user is leader first.
-    if(!AppInventorFeatures.enableProjectLocking()
-        || Ode.getProjectLeaderId(
-            Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()))==Ode.getCurrentUserId()){
-      validateText();
+    if(AppInventorFeatures.enableProjectLocking()
+        && Ode.getProjectLeaderId(
+            Long.toString(Ode.getInstance().getCurrentYoungAndroidProjectId()))!=Ode.getCurrentUserId()){
+      return;
     }
+    if (AppInventorFeatures.enableComponentLocking()
+        && Ode.getInstance().getCollaborationManager().isComponentLocked(
+        Ode.getCurrentChannel(), Ode.getInstance().getUser().getUserEmail(),
+        this.property.getComponentId())){
+      return;
+    }
+    validateText();
     super.onUnload();
   }
 

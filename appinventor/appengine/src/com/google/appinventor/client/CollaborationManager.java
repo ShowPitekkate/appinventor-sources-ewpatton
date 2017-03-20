@@ -3,6 +3,7 @@ package com.google.appinventor.client;
 import com.google.appinventor.client.editor.simple.components.FormChangeListener;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.editor.youngandroid.events.*;
+import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.gwt.core.client.JavaScriptObject;
 
 /**
@@ -15,6 +16,7 @@ public class CollaborationManager implements FormChangeListener {
   public String screenChannel;
 
   public CollaborationManager() {
+    exportToJavascriptMethod();
     broadcast = true;
     this.screenChannel = "";
   }
@@ -80,10 +82,28 @@ public class CollaborationManager implements FormChangeListener {
     if (component.isForm()) {
       return;
     }
+    if (AppInventorFeatures.enableComponentLocking()) {
+      if (isComponentLocked(Ode.getCurrentChannel(), Ode.getCurrentUserEmail(), component.getUuid())) {
+        return;
+      }
+    }
     if (broadcast) {
       SelectComponent event = SelectComponent.create(
           Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail(), selected);
       broadcastComponentEvent(event.toJson());
+      if (AppInventorFeatures.enableComponentLocking()) {
+        if (selected) {
+          LockComponent lockEvent = LockComponent.create(
+              Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail());
+          lockEvent.run();
+          broadcastComponentEvent(lockEvent.toJson());
+        } else {
+          UnlockComponent unlockEvent = UnlockComponent.create(
+              Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail());
+          unlockEvent.run();
+          broadcastComponentEvent(unlockEvent.toJson());
+        }
+      }
     }
   }
 
@@ -106,9 +126,13 @@ public class CollaborationManager implements FormChangeListener {
     // userLastSelection is the latest block selected by other user, mapped by user email
     // lockedComponent is the components locked by other users. Key is the component id, value is userEmail and timestamp
     // lockedBlock is the block locked by other users. Key is the block id, value is userEmail and timestamp
-    workspace.userLastSelection = new Map();
-    workspace.lockedComponent = {};
-    workspace.lockedBlock = {};
+    workspace.userLastSelection = {};
+    if(!(channel in $wnd.lockedComponentsByChannel)) {
+      $wnd.lockedComponentsByChannel[channel] = {};
+    }
+    if(!(channel in $wnd.lockedBlocksByChannel)) {
+      $wnd.lockedBlocksByChannel[channel] = {};
+    }
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
       var event = msgJSON["event"];
@@ -125,40 +149,31 @@ public class CollaborationManager implements FormChangeListener {
           case "Block":
             var newEvent = Blockly.Events.fromJson(event, workspace);
             Blockly.Events.disable();
-            newEvent.run(true);
-            if(event["type"]==="delete"){
-              Blockly.Events.enable();
-              return;
-            }
-            var color = $wnd.userColorMap.get($wnd.project).get(userFrom);
-            var block = workspace.getBlockById(newEvent.blockId);
-            if(event["type"]==="create"){
-              if (workspace.rendered) {
-                if(workspace.getParentSvg().parentNode.offsetParent){
-                  block.initSvg();
-                  block.render();
+            switch (newEvent.type) {
+              case Blockly.Events.CREATE:
+                newEvent.run(true);
+                var block = workspace.getBlockById(newEvent.blockId);
+                if (workspace.rendered) {
+                  if(workspace.getParentSvg().parentNode.offsetParent){
+                    block.initSvg();
+                    block.render();
+                  } else {
+                    workspace.blocksNeedingRendering.push(block);
+                  }
                 } else {
                   workspace.blocksNeedingRendering.push(block);
                 }
-              } else {
-                workspace.blocksNeedingRendering.push(block);
-              }
-
+                break;
+              case Blockly.Events.MOVE:
+                newEvent.run(true);
+                new AI.Events.SelectBlock(channel, newEvent.blockId, userFrom).run();
+                break;
+              case Blockly.Events.UI:
+                new AI.Events.SelectBlock(channel, newEvent.newValue, userFrom).run();
+                break;
+              default:
+                newEvent.run(true);
             }
-            if(workspace.userLastSelection.has(userFrom)){
-              var prevSelected = workspace.userLastSelection.get(userFrom);
-              if(prevSelected.svgGroup_){
-                prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
-                prevSelected.svgGroup_.className.animVal = 'blockDraggable';
-                prevSelected.svgPath_.removeAttribute('stroke');
-              }
-            }
-            if(block.svgGroup_) {
-              block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
-              block.svgGroup_.className.animVal += ' blocklyOtherSelected';
-              block.svgPath_.setAttribute('stroke', color);
-            }
-            workspace.userLastSelection.set(userFrom, block);
             Blockly.Events.enable();
             break;
         }
@@ -173,6 +188,8 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.userColorMap = new $wnd.Map();
     $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
     $wnd.subscribedChannel = new $wnd.Set();
+    $wnd.lockedComponentsByChannel = {};
+    $wnd.lockedBlocksByChannel = {};
     $wnd.socket.emit("userChannel", userEmail);
     $wnd.socket.on(userEmail, function(msg){
       var msgJSON = JSON.parse(msg);
@@ -210,7 +227,7 @@ public class CollaborationManager implements FormChangeListener {
               colorMap.set(user, c);
             }
             $wnd.DesignToolbar_addJoinedUser(user, colorMap.get(user));
-            if(Blockly.mainWorkspace.getParentSvg()
+            if(Blockly.mainWorkspace && Blockly.mainWorkspace.getParentSvg()
               && !Blockly.mainWorkspace.getParentSvg().getElementById("blocklyLockedPattern-"+user)){
                 Blockly.Collaboration.createPattern(user, $wnd.userColorMap.get(msgJSON["project"]).get(user));
             }
@@ -222,6 +239,7 @@ public class CollaborationManager implements FormChangeListener {
               colorMap.rmv(user);
             }
             $wnd.DesignToolbar_removeJoinedUser(user);
+            //TODO : remove the locked item when user leave the project.
             break;
           case "leader":
             $wnd.DesignToolbar_switchLeader(msgJSON["project"], msgJSON["leader"], msgJSON["leaderEmail"]);
@@ -247,5 +265,30 @@ public class CollaborationManager implements FormChangeListener {
       "leaderEmail": leaderEmail
     }
     $wnd.socket.emit("leader", msg);
+  }-*/;
+
+  public static native boolean isComponentLocked(String channel, String userEmail, String componentId) /*-{
+    if(componentId in $wnd.lockedComponentsByChannel[channel]){
+      if($wnd.lockedComponentsByChannel[channel][componentId]!=userEmail) {
+        return true;
+      }
+    }
+    return false;
+  }-*/;
+
+  public static native boolean isBlockLocked(String channel, String userEmail, String blockId) /*-{
+    if(blockId in $wnd.lockedBlocksByChannel[channel]){
+      if($wnd.lockedBlocksByChannel[channel][blockId]!=userEmail) {
+        return true;
+      }
+    }
+    return false;
+  }-*/;
+
+  public static native void exportToJavascriptMethod()/*-{
+    $wnd.CollaborationManager_isComponentLocked =
+      $entry(@com.google.appinventor.client.CollaborationManager::isComponentLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+    $wnd.CollaborationManager_isBlockLocked =
+      $entry(@com.google.appinventor.client.CollaborationManager::isBlockLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 }

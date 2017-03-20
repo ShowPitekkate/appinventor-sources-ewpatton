@@ -274,6 +274,13 @@ Blockly.ai_inject = function(container, workspace) {
       goog.array.forEach(workspace.blocksNeedingRendering, function(block) {
         workspace.getWarningHandler().checkErrors(block);
         block.render();
+        if(window.parent.AIFeature_enableComponentLocking()) {
+          var channelId = window.parent.Ode_getCurrentChannel();
+          if(block.id in window.parent.lockedBlocksByChannel[channelId]){
+            new AI.Events.LockBlock(channelId, block.id,
+              window.parent.lockedBlocksByChannel[channelId][block.id]).run();
+          }
+        }
       });
       workspace.blocksNeedingRendering.splice(0);  // clear the array of pending blocks
       workspace.resizeContents();

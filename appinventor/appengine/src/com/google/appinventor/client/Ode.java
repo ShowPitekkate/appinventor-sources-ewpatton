@@ -2391,6 +2391,10 @@ public class Ode implements EntryPoint {
     return Ode.getInstance().getUser().getUserId();
   }
 
+  public static String getCurrentUserEmail() {
+    return Ode.getInstance().getUser().getUserEmail();
+  }
+
   public static native void exportMethodToJavascript()/*-{
     $wnd.Ode_addSharedProject =
         $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
@@ -2404,6 +2408,8 @@ public class Ode implements EntryPoint {
         $entry(@com.google.appinventor.client.Ode::getProjectLeaderId(Ljava/lang/String;));
     $wnd.Ode_getCurrentUserId =
         $entry(@com.google.appinventor.client.Ode::getCurrentUserId());
+    $wnd.Ode_getCurrentUserEmail =
+      $entry(@com.google.appinventor.client.Ode::getCurrentUserEmail());
     $wnd.AIFeature_enableProjectLocking =
         $entry(@com.google.appinventor.common.version.AppInventorFeatures::enableProjectLocking());
     $wnd.AIFeature_enableComponentLocking =

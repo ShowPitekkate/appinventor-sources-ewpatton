@@ -16,7 +16,10 @@ Blockly.Collaboration = function(workspace){
   var channel = window.parent.Ode_getCurrentChannel();
 
   this.workspace.addChangeListener(function(event){
-    if(event.type==Blockly.Events.UI || event.type==AI.Events.SCREEN_SWITCH){
+    if(event.type==AI.Events.SCREEN_SWITCH){
+      return;
+    }
+    if(event.type==Blockly.Events.UI && event.element!="selected"){
       return;
     }
     var msg = {

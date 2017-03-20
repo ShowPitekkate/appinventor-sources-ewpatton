@@ -6377,4 +6377,12 @@ public interface OdeMessages extends Messages {
   @DefaultMessage("You are not the project leader, switch leader before you can edit!")
   @Description("Warning message when users try to modify the project when they are not leader")
   String notLeaderWarning();
+
+  @DefaultMessage("This component is modified by some else, please wait for others finish editing")
+  @Description("Warning message when users try to modify a component when it is edited by someone else")
+  String componentLockedWarning();
+
+  @DefaultMessage("This block is modified by some else, please wait for others finish editing")
+  @Description("Warning message when users try to modify a block when it is edited by someone else")
+  String blockLockedWarning();
 }

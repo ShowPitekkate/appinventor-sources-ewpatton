@@ -757,6 +757,7 @@ public final class MockForm extends MockContainer {
     }
   }
 
+  //TODO: make the language to ODEMESSAGE
   public native boolean fireComponentEvent(JavaScriptObject json) /*-{
     if($wnd.AIFeature_enableProjectLocking()){
       if($wnd.Ode_getProjectLeaderId(json.projectId)!=$wnd.Ode_getCurrentUserId()){
@@ -764,6 +765,14 @@ public final class MockForm extends MockContainer {
         window.alert("You are not the project leader, switch leader before you can edit!");
         return false;
       }
+    }
+    if($wnd.AIFeature_enableComponentLocking()) {
+      if($wnd.CollaborationManager_isComponentLocked(json.editorId, $wnd.Ode_getCurrentUserEmail(), json.componentId)){
+        console.log(json);
+        window.alert("Someone else is working on this component");
+        return false;
+      }
+      //TODO: Check if the any blocks belong to the deleted component
     }
     json.run();
     return true;

@@ -77,6 +77,20 @@ AI.Events.COMPONENT_LOCK = 'component.lock';
 AI.Events.COMPONENT_UNLOCK = 'component.unlock';
 
 /**
+ * Type identifier used for serializing LockBlock events.
+ * @type {string}
+ */
+AI.Events.BLOCK_LOCK = 'block.lock';
+
+/**
+ * Type identifier used for serializing UnlockBlock events.
+ * @type {string}
+ */
+AI.Events.BLOCK_UNLOCK = 'block.unlock';
+
+AI.Events.BLOCK_SELECT = 'block.select';
+
+/**
  * Abstract class for all App Inventor events.
  * @constructor
  */
@@ -289,6 +303,12 @@ AI.Events.ComponentEvent.fromJson = function(json) {
     case AI.Events.COMPONENT_SELECT:
       event = new AI.Events.SelectComponent(null, null);
       break;
+    case AI.Events.COMPONENT_LOCK:
+      event = new AI.Events.LockComponent(null, null);
+      break;
+    case AI.Events.COMPONENT_UNLOCK:
+      event = new AI.Events.UnlockComponent(null, null);
+      break;
     default:
       throw "Unknown component type: "+json["type"];
   }
@@ -486,7 +506,7 @@ AI.Events.SelectComponent.prototype.run = function() {
   var component = editor.getComponentByUuid(this.componentId);
   if(this.selected) {
     if(window.parent.userColorMap){
-      var color = window.parent.userColorMap.get(this.userEmail);
+      var color = window.parent.userColorMap.get(this.projectId).get(this.userEmail);
       component.select(color);
     }
   }else {
@@ -525,7 +545,13 @@ AI.Events.LockComponent.prototype.toJson = function() {
 };
 
 AI.Events.LockComponent.prototype.run = function() {
-
+  var lockedComponents = window.parent.lockedComponentsByChannel[this.editorId];
+  lockedComponents[this.componentId] = this.userEmail;
+  var editor = top.getDesignerForForm(this.editorId);
+  var component = editor.getComponentByUuid(this.componentId);
+  if(window.parent.userColorMap.get(this.projectId).has(this.userEmail)){
+    component.setItemBackgroundColor(window.parent.userColorMap.get(this.projectId).get(this.userEmail));
+  }
 };
 
 /**
@@ -559,5 +585,118 @@ AI.Events.UnlockComponent.prototype.toJson = function() {
 };
 
 AI.Events.UnlockComponent.prototype.run = function() {
+  var lockedComponents = window.parent.lockedComponentsByChannel[this.editorId];
+  if(lockedComponents[this.componentId] == this.userEmail){
+    delete lockedComponents[this.componentId];
+  }
+  var editor = top.getDesignerForForm(this.editorId);
+  var component = editor.getComponentByUuid(this.componentId);
+  component.clearItemBackgroundColor();
+};
 
+/**
+ * Event raised when a Block has been locked by a user. The parents and children of this block
+ * will also be locked.
+ *
+ * @param {String} workspaceId Workspace ID of the project the blocks editor is editing.
+ * @param {String} blockId The selected block
+ * @constructor
+ */
+AI.Events.LockBlock = function(workspaceId, blockId, userEmail) {
+  this.workspaceId = workspaceId;
+  this.blockId = blockId;
+  this.userEmail = userEmail;
+};
+
+AI.Events.LockBlock.prototype.type = AI.Events.BLOCK_LOCK;
+
+AI.Events.LockBlock.prototype.run = function() {
+  var workspace = Blockly.allWorkspaces[this.workspaceId];
+  var rootBlock = workspace.getBlockById(this.blockId);
+  var lockedBlock = window.parent.lockedBlocksByChannel[this.workspaceId];
+  while(rootBlock.parentBlock_){
+    rootBlock = rootBlock.parentBlock_;
+  }
+  var blockQueue = [rootBlock];
+  while(blockQueue.length!=0) {
+    var block = blockQueue.shift();
+    block.svgPath_.setAttribute('fill', 'url(#blocklyLockedPattern-'+this.userEmail+')');
+    lockedBlock[block.id] = this.userEmail;
+    block.childBlocks_.forEach(function(e){
+      blockQueue.push(e);
+    });
+  }
+};
+
+/**
+ * Event raised when a Block has been unlocked by a user. The parents and children of this block
+ * will also be unlocked.
+ *
+ * @param {String} workspaceId Workspace ID of the project the blocks editor is editing.
+ * @param {String} blockId The selected block
+ * @constructor
+ */
+AI.Events.UnlockBlock = function(workspaceId, blockId, userEmail) {
+  this.workspaceId = workspaceId;
+  this.blockId = blockId;
+  this.userEmail = userEmail;
+};
+
+AI.Events.UnlockBlock.prototype.type = AI.Events.BLOCK_UNLOCK;
+
+AI.Events.UnlockBlock.prototype.run = function() {
+  var workspace = Blockly.allWorkspaces[this.workspaceId];
+  var rootBlock = workspace.getBlockById(this.blockId);
+  var lockedBlock = window.parent.lockedBlocksByChannel[this.workspaceId];
+  while(rootBlock.parentBlock_){
+    rootBlock = rootBlock.parentBlock_;
+  }
+  var blockQueue = [rootBlock];
+  while(blockQueue.length!=0) {
+    var block = blockQueue.shift();
+    block.svgPath_.setAttribute('fill', block.colour_);
+    if(lockedBlock[block.id] = this.userEmail) {
+      delete lockedBlock[block.id];
+    }
+    block.childBlocks_.forEach(function(e){
+      blockQueue.push(e);
+    });
+  }
+};
+
+AI.Events.SelectBlock = function(workspaceId, blockId, userEmail) {
+  this.workspaceId = workspaceId;
+  this.blockId = blockId;
+  this.userEmail = userEmail;
+};
+
+AI.Events.SelectBlock.prototype.type = AI.Events.BLOCK_SELECT;
+
+AI.Events.SelectBlock.prototype.run = function() {
+  var workspace = Blockly.allWorkspaces[this.workspaceId];
+  if(this.userEmail in workspace.userLastSelection){
+    var prevSelected = workspace.userLastSelection[this.userEmail];
+    if(prevSelected.svgGroup_){
+      prevSelected.svgGroup_.className.baseVal = 'blockDraggable';
+      prevSelected.svgGroup_.className.animVal = 'blockDraggable';
+      prevSelected.svgPath_.removeAttribute('stroke');
+    }
+    delete workspace.userLastSelection[this.userEmail];
+    if($wnd.AIFeature_enableComponentLocking()) {
+      new AI.Events.UnlockBlock(this.workspaceId, prevSelected.id, this.userEmail).run();
+    }
+  }
+  if(this.blockId) {
+    var block = workspace.getBlockById(this.blockId);
+    var color = window.parent.userColorMap.get(window.parent.project).get(this.userEmail);
+    if(block.svgGroup_) {
+      block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
+      block.svgGroup_.className.animVal += ' blocklyOtherSelected';
+      block.svgPath_.setAttribute('stroke', color);
+    }
+    workspace.userLastSelection[this.userEmail] = block;
+    if($wnd.AIFeature_enableComponentLocking()) {
+      new AI.Events.LockBlock(this.workspaceId, block.id, this.userEmail).run();
+    }
+  }
 };

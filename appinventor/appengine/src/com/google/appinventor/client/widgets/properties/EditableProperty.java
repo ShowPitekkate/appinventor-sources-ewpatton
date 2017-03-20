@@ -178,4 +178,8 @@ public final class EditableProperty extends Property {
     this.type = aType;
   }
 
+  public String getComponentId() {
+    return this.properties.getComponent().getUuid();
+  }
+
 }

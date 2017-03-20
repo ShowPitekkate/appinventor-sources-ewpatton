@@ -108,3 +108,9 @@ AI.Adapter.Component.prototype.deselect = null;
  * @param {string} color The color of the background color.
  */
 AI.Adapter.Component.prototype.setItemBackgroundColor = null;
+
+/**
+ * Clear the component item background color in source tree explorer.
+ * @type {?function()}
+ */
+AI.Adapter.Component.prototype.clearItemBackgroundColor = null;

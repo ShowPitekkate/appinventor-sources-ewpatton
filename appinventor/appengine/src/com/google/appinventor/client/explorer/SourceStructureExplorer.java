@@ -119,11 +119,19 @@ public class SourceStructureExplorer extends Composite {
           Window.alert(MESSAGES.notLeaderWarning());
           return;
         }
+
         TreeItem treeItem = tree.getSelectedItem();
         if (treeItem != null) {
           Object userObject = treeItem.getUserObject();
           if (userObject instanceof SourceStructureExplorerItem) {
             SourceStructureExplorerItem item = (SourceStructureExplorerItem) userObject;
+            if (AppInventorFeatures.enableComponentLocking()
+                && Ode.getInstance().getCollaborationManager().isComponentLocked(
+                    Ode.getCurrentChannel(), Ode.getInstance().getUser().getUserEmail(),
+                item.getObjectId())){
+              Window.alert(MESSAGES.componentLockedWarning());
+              return;
+            }
             item.rename();
           }
         }
@@ -164,6 +172,13 @@ public class SourceStructureExplorer extends Composite {
       Object userObject = treeItem.getUserObject();
       if (userObject instanceof SourceStructureExplorerItem) {
         SourceStructureExplorerItem item = (SourceStructureExplorerItem) userObject;
+        if (AppInventorFeatures.enableComponentLocking()
+            && Ode.getInstance().getCollaborationManager().isComponentLocked(
+            Ode.getCurrentChannel(), Ode.getInstance().getUser().getUserEmail(),
+            item.getObjectId())){
+          Window.alert(MESSAGES.componentLockedWarning());
+          return;
+        }
         item.delete();
       }
     }
@@ -242,6 +257,7 @@ public class SourceStructureExplorer extends Composite {
     } else {
       disableButtons();
     }
+    // TODO(xinyue): in component-level mode, update other users' locked component in tree
   }
 
   /**
