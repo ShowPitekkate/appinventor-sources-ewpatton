@@ -285,6 +285,22 @@ public class CollaborationManager implements FormChangeListener {
     return false;
   }-*/;
 
+  public static native void updateSourceTree(String channel, String userEmail) /*-{
+    var lockedComponent = $wnd.lockedComponentsByChannel[channel];
+    var editor = top.getDesignerForForm(channel);
+    for (var componentId in lockedComponent) {
+      if (lockedComponent.hasOwnProperty(componentId)) {
+        var component = editor.getComponentByUuid(componentId);
+        var userLocked = lockedComponent[componentId];
+        if(userEmail!=userLocked){
+          if($wnd.userColorMap.get(editor.projectId).has(userLocked)){
+            component.setItemBackgroundColor($wnd.userColorMap.get(editor.projectId).get(userLocked));
+          }
+        }
+      }
+    }
+  }-*/;
+
   public static native void exportToJavascriptMethod()/*-{
     $wnd.CollaborationManager_isComponentLocked =
       $entry(@com.google.appinventor.client.CollaborationManager::isComponentLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));

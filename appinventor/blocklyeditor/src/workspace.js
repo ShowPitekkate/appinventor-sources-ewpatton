@@ -141,3 +141,29 @@ Blockly.Workspace.prototype.dispose = (function(func) {
       return wrappedFunc;
     }
   })(Blockly.Workspace.prototype.dispose);
+
+// Blockly.Workspace.prototype.fireChangeListener = (function(f) {
+//   if (f.isWrapped) {
+//     return f;
+//   } else {
+//     var wrappedFunc = function(e) {
+//       if (window.parent.AIFeature_enableComponentLocking()) {
+//         if (e.type!=Blockly.Events.UI) {
+//           console.log(e);
+//           if (!window.parent.CollaborationManager_isBlockLocked(
+//               window.parent.Ode_getCurrentChannel(),
+//               window.parent.Ode_getCurrentUserEmail(),
+//               e.blockId)) {
+//             f.call(this, e);
+//           }
+//         }else{
+//           f.call(this, e);
+//         }
+//       } else {
+//         f.call(this, e);
+//       }
+//     };
+//     wrappedFunc.isWrapped = true;
+//     return wrappedFunc;
+//   }
+// })(Blockly.Workspace.prototype.fireChangeListener);

@@ -238,6 +238,8 @@ public class SourceStructureExplorer extends Composite {
     TreeItem items[] = new TreeItem[1];
     items[0] = root;
     updateTree(items, itemToSelect);
+    Ode.getInstance().getCollaborationManager().updateSourceTree(
+        Ode.getCurrentChannel(), Ode.getCurrentUserEmail());
   }
 
   

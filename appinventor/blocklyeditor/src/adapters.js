@@ -21,7 +21,7 @@ goog.provide('AI.Adapter');
  */
 AI.Adapter.Designer = function(formName, editor) {
   this.editor = editor;
-  var parts = formName.split(/ /);
+  var parts = formName.split('_');
   this.projectId = parts[0];
   this.formName = formName;
 };
