@@ -509,6 +509,10 @@ Blockly.BlockSvg.prototype.getTopWorkspace = function() {
  * Add the selection highlight to the block.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
+  if (this.workspace.options.readOnly ||
+      (this.workspace.targetWorkspace && this.workspace.targetWorkspace.options.readOnly)) {
+    return;
+  }
   Blockly.utils.addClass(this.svgGroup_, 'blocklySelected');
   var block_0 = this;
   do {
