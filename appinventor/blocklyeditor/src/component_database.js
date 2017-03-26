@@ -271,9 +271,19 @@ Blockly.ComponentDatabase.prototype.getComponentNamesByType = function(component
   if (componentNameArray.length == 0) {
     return [[' ', 'none']]
   } else {
+    // Sort the components by name
+    componentNameArray.sort(function(a, b) {
+      if (a[0] < b[0]) {
+        return -1;
+      } else if (a[0] > b[0]) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
     return componentNameArray;
   }
-}
+};
 
 /**
  * Populate the types database.

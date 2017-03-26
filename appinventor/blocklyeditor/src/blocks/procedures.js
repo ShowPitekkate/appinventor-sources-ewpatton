@@ -374,9 +374,10 @@ Blockly.Blocks['procedures_defnoreturn'] = {
     if (editable) {
       // Dispose of any callers.
       //Blockly.Procedures.disposeCallers(name, workspace);
+      Blockly.AIProcedure.removeProcedureValues(name, workspace);
       var procDb = workspace.getProcedureDatabase();
-      if (procDb && typeof name === 'string') {  // only true for the top-level workspaces, not flyouts/flydowns
-        procDb.removeProcedure(name);
+      if (procDb) {  // only true for the top-level workspaces, not flyouts/flydowns
+        procDb.removeProcedure(this.id);
       }
     }
 

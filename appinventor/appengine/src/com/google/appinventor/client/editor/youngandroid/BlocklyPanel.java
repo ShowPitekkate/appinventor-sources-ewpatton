@@ -373,6 +373,7 @@ public class BlocklyPanel extends HTMLPanel {
     DialogBoxContents.add(message);
     DialogBoxContents.add(holder);
     dialogBox.setWidget(DialogBoxContents);
+    terminateDrag();  // cancel a drag before showing the modal dialog
     dialogBox.show();
     return dialogBox;
   }
@@ -836,6 +837,13 @@ public class BlocklyPanel extends HTMLPanel {
    */
   public static native void setInitialBackpack(String backpack)/*-{
     Blockly.Backpack.shared_contents = JSON.parse(backpack);
+  }-*/;
+
+  /**
+   * Cancel an ongoing drag operation.
+   */
+  public static native void terminateDrag()/*-{
+    if (Blockly) Blockly.terminateDrag_();
   }-*/;
 
   /**

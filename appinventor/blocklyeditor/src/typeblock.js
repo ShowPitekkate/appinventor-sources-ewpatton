@@ -37,6 +37,15 @@ goog.require('goog.ui.ac.Renderer');
  */
 Blockly.TypeBlock = function( htmlConfig, workspace ){
   this.workspace_ = workspace;
+  /**
+   * Used as an optimisation trick to avoid reloading components and built-ins unless there is a real
+   * need to do so. needsReload.components can be set to true when a component changes.
+   * Defaults to true so that it loads the first time (set to null after loading in lazyLoadOfOptions_())
+   * @type {{components: boolean}}
+   */
+  this.needsReload = {
+    components: true
+  };
   var frame = htmlConfig['frame'];
   this.typeBlockDiv_ = htmlConfig['typeBlockDiv'];
   this.inputText_ = htmlConfig['inputText'];
@@ -146,11 +155,14 @@ Blockly.TypeBlock.prototype.handleKey = function(e){
     }
     if (e.keyCode === 27){ //Dismiss the panel with esc
       this.hide();
+      Blockly.mainWorkspace.getParentSvg().parentNode.focus();  // refocus workspace div
       return;
     }
     if (goog.style.isElementShown(goog.dom.getElement(this.typeBlockDiv_))) {
       // Enter in the panel makes it select an option
-      if (e.keyCode === 13) Blockly.TypeBlock.hide();
+      if (e.keyCode === 13) {
+        this.hide();
+      }
     }
     else if (e.keyCode != 13) {
       this.show();
@@ -193,16 +205,6 @@ Blockly.TypeBlock.prototype.show = function(){
   this.handleKeyWrapper_ = this.handleKey.bind(this);
   goog.events.listen(this.inputKh_, 'key', this.handleKeyWrapper_);
   this.visible = true;
-};
-
-/**
- * Used as an optimisation trick to avoid reloading components and built-ins unless there is a real
- * need to do so. needsReload.components can be set to true when a component changes.
- * Defaults to true so that it loads the first time (set to null after loading in lazyLoadOfOptions_())
- * @type {{components: boolean}}
- */
-Blockly.TypeBlock.prototype.needsReload = {
-  components: true
 };
 
 /**
@@ -319,7 +321,7 @@ Blockly.TypeBlock.prototype.loadProcedures_ = function(){
 
   var procsReturn = createTypeBlockForProcedures_.call(this, true);
   goog.array.forEach(procsReturn, function(pro){
-    Blockly.TypeBlock.TBOptions_[pro.translatedName] = {
+    self.TBOptions_[pro.translatedName] = {
       canonicName: 'procedures_callreturn',
       dropDown: pro.dropDown,
       isProcedure: true
@@ -528,6 +530,7 @@ Blockly.TypeBlock.prototype.createAutoComplete_ = function(inputText){
         block.select();
       }
       self.hide();
+      self.workspace_.getParentSvg().parentNode.focus();  // refocus workspace div
     }
   );
 };
