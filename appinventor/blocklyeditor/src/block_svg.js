@@ -54,6 +54,10 @@ Blockly.BlockSvg.prototype.onMouseDown_ = (function(func) {
     return func;
   } else {
     var wrappedFunc = function(e){
+      var workspace = this.getTopWorkspace();
+      if (workspace && workspace.getParentSvg() && workspace.getParentSvg().parentNode) {
+        workspace.getParentSvg().parentNode.focus();
+      }
       if (Blockly.FieldFlydown.openFieldFlydown_) {
         if (goog.dom.contains(Blockly.getMainWorkspace().flydown_.svgGroup_, this.svgGroup_)) {
           //prevent hiding the flyout if a child block is the target
@@ -509,6 +513,10 @@ Blockly.BlockSvg.prototype.getTopWorkspace = function() {
  * Add the selection highlight to the block.
  */
 Blockly.BlockSvg.prototype.addSelect = function() {
+  if (this.workspace.options.readOnly ||
+      (this.workspace.targetWorkspace && this.workspace.targetWorkspace.options.readOnly)) {
+    return;
+  }
   Blockly.utils.addClass(this.svgGroup_, 'blocklySelected');
   var block_0 = this;
   do {
