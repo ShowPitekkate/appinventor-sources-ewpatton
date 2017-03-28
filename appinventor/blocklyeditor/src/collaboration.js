@@ -52,5 +52,46 @@ Blockly.Collaboration.createPattern = function(uuid, color){
   return;
 }
 
+goog.require('Blockly.FieldTextInput');
+goog.require('Blockly.FieldDropdown');
+goog.require('Blockly.FieldColour');
+goog.require('Blockly.Block');
 
+function wrapFieldForCollaboration(f) {
+  if (f.isWrapped) {
+    return f;
+  } else {
+    var wrappedFunc = function() {
+      // Suppress editing if the sourceBlock_ is logged
+      var lockedBlocks = top.lockedBlocksByChannel && top.lockedBlocksByChannel[this.sourceBlock_.workspace.formName];
+      if (lockedBlocks && this.sourceBlock_.id in lockedBlocks && lockedBlocks[this.sourceBlock_.id] !== top.userEmail) {
+        return;
+      }
+      f.apply(this, Array.prototype.splice.call(arguments));
+    };
+    wrappedFunc.isWrapped = true;
+    return wrappedFunc;
+  }
+}
 
+function wrapForCollaboration(f) {
+  if (f.isWrapped) {
+    return f;
+  } else {
+    var wrappedFunc = function() {
+      // Suppress editing if the sourceBlock_ is logged
+      var lockedBlocks = top.lockedBlocksByChannel && top.lockedBlocksByChannel[this.workspace.formName];
+      if (lockedBlocks && this.id in lockedBlocks && lockedBlocks[this.id] !== top.userEmail) {
+        return false;
+      }
+      return f.apply(this, Array.prototype.splice.call(arguments));
+    };
+    wrappedFunc.isWrapped = true;
+    return wrappedFunc;
+  }
+}
+
+Blockly.FieldTextInput.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldTextInput.prototype.showEditor_);
+Blockly.FieldDropdown.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldDropdown.prototype.showEditor_);
+Blockly.FieldColour.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldColour.prototype.showEditor_);
+Blockly.Block.prototype.isEditable = wrapForCollaboration(Blockly.Block.prototype.isEditable);

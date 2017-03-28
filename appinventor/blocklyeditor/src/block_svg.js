@@ -64,6 +64,15 @@ Blockly.BlockSvg.prototype.onMouseDown_ = (function(func) {
           Blockly.getMainWorkspace().flydown_.shouldHide = false;
         }
       }
+
+      // handle block locking for collaboration
+      var lockedBlocks = top.lockedBlocksByChannel && top.lockedBlocksByChannel[workspace.formName];
+      if (lockedBlocks && this.id in lockedBlocks && lockedBlocks[this.id] !== top.userEmail) {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+
       var retval = func.call(this, e);
       var xy = goog.style.getPageOffset(this.svgGroup_);
       this.startX = xy.x;
