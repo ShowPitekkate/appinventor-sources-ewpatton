@@ -165,6 +165,7 @@ public class CollaborationManager implements FormChangeListener {
                 }
                 break;
               case Blockly.Events.MOVE:
+                new AI.Events.UnlockBlock(channel, newEvent.blockId, userFrom).run();
                 newEvent.run(true);
                 new AI.Events.SelectBlock(channel, newEvent.blockId, userFrom).run();
                 break;
