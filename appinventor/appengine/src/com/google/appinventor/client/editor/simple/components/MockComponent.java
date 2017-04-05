@@ -7,7 +7,6 @@
 package com.google.appinventor.client.editor.simple.components;
 
 import static com.google.appinventor.client.Ode.MESSAGES;
-import static com.google.appinventor.client.boxes.SourceStructureBox.getSourceStructureBox;
 
 import com.google.appinventor.client.boxes.SourceStructureBox;
 import com.google.appinventor.client.editor.simple.SimpleComponentDatabase;
@@ -20,7 +19,6 @@ import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
 import com.google.appinventor.client.editor.youngandroid.YaFormEditor;
 import com.google.appinventor.client.editor.youngandroid.events.ChangeProperty;
 import com.google.appinventor.client.editor.youngandroid.events.DeleteComponent;
-import com.google.appinventor.client.explorer.SourceStructureExplorer;
 import com.google.appinventor.client.explorer.SourceStructureExplorerItem;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.output.OdeLog;
@@ -35,13 +33,11 @@ import com.google.appinventor.client.widgets.properties.PropertyChangeListener;
 import com.google.appinventor.client.widgets.properties.PropertyEditor;
 import com.google.appinventor.client.widgets.properties.TextPropertyEditor;
 import com.google.appinventor.client.youngandroid.TextValidators;
-import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.shared.rpc.project.HasAssetsFolder;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidAssetsFolder;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjectNode;
 import com.google.appinventor.shared.settings.SettingsConstants;
-import com.google.appinventor.shared.simple.ComponentDatabaseInterface;
 import com.google.appinventor.shared.storage.StorageUtil;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -1149,7 +1145,9 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
   public void setItemBackgroundColor(String color) {
     Element element = SourceStructureBox.getSourceStructureBox()
         .getSourceStructureExplorer().getItem(this.sourceStructureExplorerItem);
-    element.getStyle().setBackgroundColor(color);
+    if (element != null) {
+      element.getStyle().setBackgroundColor(color);
+    }
   }
 
   /**
@@ -1158,7 +1156,10 @@ public abstract class MockComponent extends Composite implements PropertyChangeL
   public void clearItemBackgroundColor() {
     Element element = SourceStructureBox.getSourceStructureBox()
         .getSourceStructureExplorer().getItem(this.sourceStructureExplorerItem);
-    element.getStyle().clearBackgroundColor();
+    if (element != null) {
+      element.getStyle().clearBackgroundColor();
+    }
+
   }
 
 }

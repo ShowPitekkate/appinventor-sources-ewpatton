@@ -688,7 +688,8 @@ AI.Events.SelectBlock.prototype.run = function() {
   }
   if(this.blockId) {
     var block = workspace.getBlockById(this.blockId);
-    var color = window.parent.userColorMap.get(window.parent.project).get(this.userEmail);
+    var project = this.workspaceId.split('_')[0];
+    var color = window.parent.userColorMap.get(project).get(this.userEmail);
     if(block.svgGroup_) {
       block.svgGroup_.className.baseVal += ' blocklyOtherSelected';
       block.svgGroup_.className.animVal += ' blocklyOtherSelected';

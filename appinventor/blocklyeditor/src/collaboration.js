@@ -22,6 +22,13 @@ Blockly.Collaboration = function(workspace){
     if(event.type==Blockly.Events.UI && event.element!="selected"){
       return;
     }
+    if(event.type==Blockly.Events.UI) {
+      if(event.newValue){
+        window.parent.userLockedBlock[channel] = event.newValue;
+      }else{
+        delete window.parent.userLockedBlock[channel];
+      }
+    }
     var msg = {
       "channel": channel,
       "user": window.parent.userEmail,

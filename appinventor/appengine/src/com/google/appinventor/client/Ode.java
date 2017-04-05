@@ -30,6 +30,7 @@ import com.google.appinventor.client.boxes.ViewerBox;
 import com.google.appinventor.client.editor.EditorManager;
 import com.google.appinventor.client.editor.FileEditor;
 import com.google.appinventor.client.editor.youngandroid.BlocklyPanel;
+import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 import com.google.appinventor.client.explorer.commands.ChainableCommand;
 import com.google.appinventor.client.explorer.commands.CommandRegistry;
 import com.google.appinventor.client.explorer.commands.SaveAllEditorsCommand;
@@ -86,6 +87,7 @@ import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.MouseWheelEvent;
@@ -2395,6 +2397,16 @@ public class Ode implements EntryPoint {
     return Ode.getInstance().getUser().getUserEmail();
   }
 
+  public static JsArrayString getChannelsByProject(String projectId){
+    YaProjectEditor projectEditor = (YaProjectEditor)(Ode.getInstance().getEditorManager()
+        .getOpenProjectEditor(Long.parseLong(projectId)));
+    JsArrayString result = JsArrayString.createArray().cast();
+    for (String formName : projectEditor.getFormNames()) {
+      result.push(projectId + "_" + formName);
+    }
+    return result;
+  }
+
   public static native void exportMethodToJavascript()/*-{
     $wnd.Ode_addSharedProject =
         $entry(@com.google.appinventor.client.Ode::addSharedProject(Ljava/lang/String;));
@@ -2410,6 +2422,8 @@ public class Ode implements EntryPoint {
         $entry(@com.google.appinventor.client.Ode::getCurrentUserId());
     $wnd.Ode_getCurrentUserEmail =
       $entry(@com.google.appinventor.client.Ode::getCurrentUserEmail());
+    $wnd.Ode_getChannelsByProject =
+      $entry(@com.google.appinventor.client.Ode::getChannelsByProject(Ljava/lang/String;));
     $wnd.AIFeature_enableProjectLocking =
         $entry(@com.google.appinventor.common.version.AppInventorFeatures::enableProjectLocking());
     $wnd.AIFeature_enableComponentLocking =

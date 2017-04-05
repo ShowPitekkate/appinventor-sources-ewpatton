@@ -6,6 +6,7 @@ import com.google.appinventor.client.editor.youngandroid.events.*;
 import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.gwt.core.client.JavaScriptObject;
 
+
 /**
  * This class manages group collaboration.
  */
@@ -18,7 +19,7 @@ public class CollaborationManager implements FormChangeListener {
   public CollaborationManager() {
     exportToJavascriptMethod();
     broadcast = true;
-    this.screenChannel = "";
+    screenChannel = "";
   }
 
   public void enableBroadcast() {
@@ -97,16 +98,25 @@ public class CollaborationManager implements FormChangeListener {
               Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail());
           lockEvent.run();
           broadcastComponentEvent(lockEvent.toJson());
+          setLockedComponent(Ode.getCurrentChannel(), component.getUuid());
         } else {
           UnlockComponent unlockEvent = UnlockComponent.create(
               Ode.getCurrentChannel(), component.getUuid(), Ode.getInstance().getUser().getUserEmail());
           unlockEvent.run();
           broadcastComponentEvent(unlockEvent.toJson());
+          removeLockedComponent(Ode.getCurrentChannel());
         }
       }
     }
   }
 
+  public native void setLockedComponent(String channel, String componentId) /*-{
+    $wnd.userLockedComponent[channel] = componentId;
+  }-*/;
+
+  public native void removeLockedComponent(String channel) /*-{
+    delete $wnd.userLockedComponent[channel];
+  }-*/;
   public native void broadcastComponentEvent(JavaScriptObject eventJson)/*-{
     var msg = {
       "channel": $wnd.Ode_getCurrentChannel(),
@@ -127,27 +137,36 @@ public class CollaborationManager implements FormChangeListener {
     // lockedComponent is the components locked by other users. Key is the component id, value is userEmail and timestamp
     // lockedBlock is the block locked by other users. Key is the block id, value is userEmail and timestamp
     workspace.userLastSelection = {};
+    // get status of this channel from other users
+    var getStatusMsg = {
+      "channel" : channel,
+      "user" : $wnd.userEmail,
+      "source" : "GetStatus"
+    };
+    $wnd.socket.emit("getStatus", getStatusMsg);
     if(!(channel in $wnd.lockedComponentsByChannel)) {
       $wnd.lockedComponentsByChannel[channel] = {};
     }
     if(!(channel in $wnd.lockedBlocksByChannel)) {
       $wnd.lockedBlocksByChannel[channel] = {};
     }
+    if($wnd.socketEvents[channel]){
+      return;
+    }
     $wnd.socket.on(channel, function(msg){
       var msgJSON = JSON.parse(msg);
-      var event = msgJSON["event"];
       var userFrom = msgJSON["user"];
       if($wnd.userEmail != userFrom){
         console.log(msgJSON);
         switch(msgJSON["source"]) {
           case "Designer":
-            var componentEvent = AI.Events.ComponentEvent.fromJson(event);
+            var componentEvent = AI.Events.ComponentEvent.fromJson(msgJSON["event"]);
             $wnd.Ode_disableBroadcast();
             componentEvent.run();
             $wnd.Ode_enableBroadcast();
             break;
           case "Block":
-            var newEvent = Blockly.Events.fromJson(event, workspace);
+            var newEvent = Blockly.Events.fromJson(msgJSON["event"], workspace);
             Blockly.Events.disable();
             switch (newEvent.type) {
               case Blockly.Events.CREATE:
@@ -177,8 +196,30 @@ public class CollaborationManager implements FormChangeListener {
             }
             Blockly.Events.enable();
             break;
+          case "Status":
+            if(msgJSON["lockedComponentId"]){
+              new AI.Events.LockComponent(channel, {id: msgJSON["lockedComponentId"], userEmail: userFrom}).run();
+            }
+            if(msgJSON["lockedBlockId"]){
+              new AI.Events.SelectBlock(channel, msgJSON["lockedBlockId"], userFrom).run();
+            }
+            break;
+          case "GetStatus":
+            var msg = {
+              "channel" : channel,
+              "user" : $wnd.userEmail,
+              "source" : "Status"
+            };
+            if(channel in $wnd.userLockedComponent){
+              msg["lockedComponentId"] = $wnd.userLockedComponent[channel];
+            }
+            if(channel in $wnd.userLockedBlock){
+              msg["lockedBlockId"] = $wnd.userLockedBlock[channel];
+            }
+            $wnd.socket.emit("status", msg);
         }
       }
+      $wnd.socketEvents[channel] = true;
     });
   }-*/;
 
@@ -189,8 +230,13 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.userColorMap = new $wnd.Map();
     $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
     $wnd.subscribedChannel = new $wnd.Set();
+    $wnd.socketEvents = {};
+    // track locked components and blocks by all users
     $wnd.lockedComponentsByChannel = {};
     $wnd.lockedBlocksByChannel = {};
+    // track locked component and block by client self
+    $wnd.userLockedComponent = {};
+    $wnd.userLockedBlock = {};
     $wnd.socket.emit("userChannel", userEmail);
     $wnd.socket.on(userEmail, function(msg){
       var msgJSON = JSON.parse(msg);
@@ -211,6 +257,9 @@ public class CollaborationManager implements FormChangeListener {
     if(!$wnd.userColorMap.has(projectId)){
       $wnd.userColorMap.set(projectId, new $wnd.Map());
       $wnd.userColorMap.get(projectId).rmv = $wnd.userColorMap.get(projectId)["delete"];
+    }
+    if($wnd.socketEvents[projectId]){
+      return;
     }
     $wnd.socket.on(projectId, function(msg){
       var msgJSON = JSON.parse(msg);
@@ -248,6 +297,7 @@ public class CollaborationManager implements FormChangeListener {
         }
       }
     });
+    $wnd.socketEvents[projectId] = true;
   }-*/;
   public native void leaveProject()/*-{
     var msg = {
@@ -255,6 +305,7 @@ public class CollaborationManager implements FormChangeListener {
       "user": $wnd.userEmail
     };
     $wnd.project = "";
+    $wnd.CollaborationManager_setCurrentScreenChannel("");
     $wnd.socket.emit("userLeave", msg);
   }-*/;
 
@@ -302,10 +353,16 @@ public class CollaborationManager implements FormChangeListener {
     }
   }-*/;
 
+  public static void setCurrentScreenChannel(String channel) {
+    Ode.getInstance().getCollaborationManager().setScreenChannel(channel);
+  }
+
   public static native void exportToJavascriptMethod()/*-{
     $wnd.CollaborationManager_isComponentLocked =
       $entry(@com.google.appinventor.client.CollaborationManager::isComponentLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     $wnd.CollaborationManager_isBlockLocked =
       $entry(@com.google.appinventor.client.CollaborationManager::isBlockLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+    $wnd.CollaborationManager_setCurrentScreenChannel =
+      $entry(@com.google.appinventor.client.CollaborationManager::setCurrentScreenChannel(Ljava/lang/String;));
   }-*/;
 }
