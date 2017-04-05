@@ -98,7 +98,30 @@ function wrapForCollaboration(f) {
   }
 }
 
+function wrapConnectionForCollaboration(f) {
+  if (f.isWrapped) {
+    return f;
+  } else {
+    /**
+     *
+     * @param {Blockly.RenderedConnection} candidate
+     * @param {number} maxRadius
+     */
+    var wrappedFunc = function(candidate, maxRadius) {
+      var sourceBlock = candidate.getSourceBlock();
+      var lockedBlocks = top.lockedBlocksByChannel && top.lockedBlocksByChannel[sourceBlock.workspace.formName];
+      if (lockedBlocks && sourceBlock.id in lockedBlocks && lockedBlocks[sourceBlock.id] !== top.userEmail) {
+        return false;
+      }
+      return f.call(this, candidate, maxRadius);
+    };
+    wrappedFunc.isWrapped = true;
+    return wrappedFunc;
+  }
+}
+
 Blockly.FieldTextInput.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldTextInput.prototype.showEditor_);
 Blockly.FieldDropdown.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldDropdown.prototype.showEditor_);
 Blockly.FieldColour.prototype.showEditor_ = wrapFieldForCollaboration(Blockly.FieldColour.prototype.showEditor_);
 Blockly.Block.prototype.isEditable = wrapForCollaboration(Blockly.Block.prototype.isEditable);
+Blockly.RenderedConnection.prototype.isConnectionAllowed = wrapConnectionForCollaboration(Blockly.RenderedConnection.prototype.isConnectionAllowed);
