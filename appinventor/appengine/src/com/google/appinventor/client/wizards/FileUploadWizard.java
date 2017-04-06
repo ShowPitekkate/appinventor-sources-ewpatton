@@ -223,9 +223,11 @@ public class FileUploadWizard extends Wizard {
       long modificationDate, final FileUploadedCallback fileUploadedCallback) {
     Ode.getInstance().updateModificationDate(folderNode.getProjectId(), modificationDate);
     finishUpload(folderNode, filename, fileUploadedCallback);
+    Ode.getInstance().getCollaborationManager()
+        .broadcastFileEvent(Long.toString(folderNode.getProjectId()), filename);
   }
 
-  private void finishUpload(FolderNode folderNode, String filename,
+  public static void finishUpload(FolderNode folderNode, String filename,
       FileUploadedCallback fileUploadedCallback) {
     String uploadedFileId = folderNode.getFileId() + "/" + filename;
     FileNode uploadedFileNode;

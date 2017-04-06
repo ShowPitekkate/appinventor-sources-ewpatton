@@ -3,7 +3,11 @@ package com.google.appinventor.client;
 import com.google.appinventor.client.editor.simple.components.FormChangeListener;
 import com.google.appinventor.client.editor.simple.components.MockComponent;
 import com.google.appinventor.client.editor.youngandroid.events.*;
+import com.google.appinventor.client.explorer.project.Project;
+import com.google.appinventor.client.wizards.FileUploadWizard;
 import com.google.appinventor.common.version.AppInventorFeatures;
+import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidAssetsFolder;
+import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjectNode;
 import com.google.gwt.core.client.JavaScriptObject;
 
 
@@ -128,6 +132,17 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.socket.emit("component", msg);
   }-*/;
 
+  public native void broadcastFileEvent(String projectId, String fileName) /*-{
+    var msg = {
+      "channel" : $wnd.Ode_getCurrentChannel(),
+      "user": $wnd.userEmail,
+      "source": "Media",
+      "projectId": projectId,
+      "fileName": fileName
+    };
+    $wnd.socket.emit("file", msg);
+  }-*/;
+
   public native void componentSocketEvent(String channel)/*-{
     console.log("component socket event "+channel);
     $wnd.socket.emit("screenChannel", channel);
@@ -217,6 +232,10 @@ public class CollaborationManager implements FormChangeListener {
               msg["lockedBlockId"] = $wnd.userLockedBlock[channel];
             }
             $wnd.socket.emit("status", msg);
+            break;
+          case "Media":
+            console.log(msgJSON);
+            $wnd.CollaborationManager_uploadAsset(msgJSON["projectId"], msgJSON["fileName"]);
         }
       }
       $wnd.socketEvents[channel] = true;
@@ -357,12 +376,21 @@ public class CollaborationManager implements FormChangeListener {
     Ode.getInstance().getCollaborationManager().setScreenChannel(channel);
   }
 
+  public static void uploadAsset(String projectIdString, String fileName) {
+    long projectId = Long.parseLong(projectIdString);
+    Project project = Ode.getInstance().getProjectManager().getProject(projectId);
+    YoungAndroidAssetsFolder assetsFolder = ((YoungAndroidProjectNode) project.getRootNode()).getAssetsFolder();
+    FileUploadWizard.finishUpload(assetsFolder, fileName, null);
+  }
+
   public static native void exportToJavascriptMethod()/*-{
     $wnd.CollaborationManager_isComponentLocked =
-      $entry(@com.google.appinventor.client.CollaborationManager::isComponentLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+        $entry(@com.google.appinventor.client.CollaborationManager::isComponentLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     $wnd.CollaborationManager_isBlockLocked =
-      $entry(@com.google.appinventor.client.CollaborationManager::isBlockLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
+        $entry(@com.google.appinventor.client.CollaborationManager::isBlockLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     $wnd.CollaborationManager_setCurrentScreenChannel =
-      $entry(@com.google.appinventor.client.CollaborationManager::setCurrentScreenChannel(Ljava/lang/String;));
+        $entry(@com.google.appinventor.client.CollaborationManager::setCurrentScreenChannel(Ljava/lang/String;));
+    $wnd.CollaborationManager_uploadAsset =
+        $entry(@com.google.appinventor.client.CollaborationManager::uploadAsset(Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 }

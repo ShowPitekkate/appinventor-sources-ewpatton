@@ -1754,9 +1754,10 @@ public class ObjectifyStorageIo implements  StorageIo {
           Key<FileData> fileKey = projectFileKey(projectKey(projectId), fileName);
           memcache.delete(fileKey.getString());
           FileData fileData = datastore.find(fileKey);
+          ProjectData projectData = datastore.find(projectKey(projectId));
           if (fileData != null) {
             if (fileData.userId != null && !fileData.userId.equals("")) {
-              if (!fileData.userId.equals(userId)) {
+              if (!fileData.userId.equals(userId) && !projectData.userPermission.containsKey(userId)) {
                 throw CrashReport.createAndLogError(LOG, null,
                   collectUserProjectErrorInfo(userId, projectId),
                   new UnauthorizedAccessException(userId, projectId, null));
