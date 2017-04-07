@@ -6,6 +6,8 @@ import com.google.appinventor.client.editor.youngandroid.events.*;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.wizards.FileUploadWizard;
 import com.google.appinventor.common.version.AppInventorFeatures;
+import com.google.appinventor.shared.rpc.project.ProjectNode;
+import com.google.appinventor.shared.rpc.project.ProjectRootNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidAssetsFolder;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjectNode;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -15,6 +17,8 @@ import com.google.gwt.core.client.JavaScriptObject;
  * This class manages group collaboration.
  */
 public class CollaborationManager implements FormChangeListener {
+  public static final String FILE_UPLOAD = "file_upload";
+  public static final String FILE_DELETE = "file_delete";
 
   private boolean broadcast;
   // TODO(xinyue): Modify this to support multi screen
@@ -132,12 +136,13 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.socket.emit("component", msg);
   }-*/;
 
-  public native void broadcastFileEvent(String projectId, String fileName) /*-{
+  public native void broadcastFileEvent(String type, String projectId, String fileName) /*-{
     var msg = {
       "channel" : $wnd.Ode_getCurrentChannel(),
       "user": $wnd.userEmail,
       "source": "Media",
       "projectId": projectId,
+      "type": type,
       "fileName": fileName
     };
     $wnd.socket.emit("file", msg);
@@ -152,18 +157,20 @@ public class CollaborationManager implements FormChangeListener {
     // lockedComponent is the components locked by other users. Key is the component id, value is userEmail and timestamp
     // lockedBlock is the block locked by other users. Key is the block id, value is userEmail and timestamp
     workspace.userLastSelection = {};
-    // get status of this channel from other users
-    var getStatusMsg = {
-      "channel" : channel,
-      "user" : $wnd.userEmail,
-      "source" : "GetStatus"
-    };
-    $wnd.socket.emit("getStatus", getStatusMsg);
-    if(!(channel in $wnd.lockedComponentsByChannel)) {
-      $wnd.lockedComponentsByChannel[channel] = {};
-    }
-    if(!(channel in $wnd.lockedBlocksByChannel)) {
-      $wnd.lockedBlocksByChannel[channel] = {};
+    if($wnd.AIFeature_enableComponentLocking()){
+      // get status of this channel from other users
+      var getStatusMsg = {
+        "channel" : channel,
+        "user" : $wnd.userEmail,
+        "source" : "GetStatus"
+      };
+      $wnd.socket.emit("getStatus", getStatusMsg);
+      if(!(channel in $wnd.lockedComponentsByChannel)) {
+        $wnd.lockedComponentsByChannel[channel] = {};
+      }
+      if(!(channel in $wnd.lockedBlocksByChannel)) {
+        $wnd.lockedBlocksByChannel[channel] = {};
+      }
     }
     if($wnd.socketEvents[channel]){
       return;
@@ -199,7 +206,9 @@ public class CollaborationManager implements FormChangeListener {
                 }
                 break;
               case Blockly.Events.MOVE:
-                new AI.Events.UnlockBlock(channel, newEvent.blockId, userFrom).run();
+                if($wnd.AIFeature_enableComponentLocking()){
+                  new AI.Events.UnlockBlock(channel, newEvent.blockId, userFrom).run();
+                }
                 newEvent.run(true);
                 new AI.Events.SelectBlock(channel, newEvent.blockId, userFrom).run();
                 break;
@@ -235,7 +244,7 @@ public class CollaborationManager implements FormChangeListener {
             break;
           case "Media":
             console.log(msgJSON);
-            $wnd.CollaborationManager_uploadAsset(msgJSON["projectId"], msgJSON["fileName"]);
+            $wnd.CollaborationManager_updateAsset(msgJSON["type"], msgJSON["projectId"], msgJSON["fileName"]);
         }
       }
       $wnd.socketEvents[channel] = true;
@@ -250,9 +259,11 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
     $wnd.subscribedChannel = new $wnd.Set();
     $wnd.socketEvents = {};
-    // track locked components and blocks by all users
-    $wnd.lockedComponentsByChannel = {};
-    $wnd.lockedBlocksByChannel = {};
+    if($wnd.AIFeature_enableComponentLocking()){
+      // track locked components and blocks by all users
+      $wnd.lockedComponentsByChannel = {};
+      $wnd.lockedBlocksByChannel = {};
+    }
     // track locked component and block by client self
     $wnd.userLockedComponent = {};
     $wnd.userLockedBlock = {};
@@ -296,9 +307,11 @@ public class CollaborationManager implements FormChangeListener {
               colorMap.set(user, c);
             }
             $wnd.DesignToolbar_addJoinedUser(user, colorMap.get(user));
-            if(Blockly.mainWorkspace && Blockly.mainWorkspace.getParentSvg()
-              && !Blockly.mainWorkspace.getParentSvg().getElementById("blocklyLockedPattern-"+user)){
+            if($wnd.AIFeature_enableComponentLocking()){
+              if(Blockly.mainWorkspace && Blockly.mainWorkspace.getParentSvg()
+                  && !Blockly.mainWorkspace.getParentSvg().getElementById("blocklyLockedPattern-"+user)){
                 Blockly.Collaboration.createPattern(user, $wnd.userColorMap.get(msgJSON["project"]).get(user));
+              }
             }
             break;
           case "leave":
@@ -376,11 +389,20 @@ public class CollaborationManager implements FormChangeListener {
     Ode.getInstance().getCollaborationManager().setScreenChannel(channel);
   }
 
-  public static void uploadAsset(String projectIdString, String fileName) {
+  public static void updateAsset(String type, String projectIdString, String fileName) {
     long projectId = Long.parseLong(projectIdString);
     Project project = Ode.getInstance().getProjectManager().getProject(projectId);
-    YoungAndroidAssetsFolder assetsFolder = ((YoungAndroidProjectNode) project.getRootNode()).getAssetsFolder();
-    FileUploadWizard.finishUpload(assetsFolder, fileName, null);
+    if(type.equals(FILE_UPLOAD)){
+      YoungAndroidAssetsFolder assetsFolder = ((YoungAndroidProjectNode) project.getRootNode()).getAssetsFolder();
+      FileUploadWizard.finishUpload(assetsFolder, fileName, null);
+      return;
+    }
+    if (type.equals(FILE_DELETE)) {
+      ProjectNode deleteNode = project.getRootNode().findNode(fileName);
+      project.deleteNode(deleteNode);
+      return;
+    }
+    return;
   }
 
   public static native void exportToJavascriptMethod()/*-{
@@ -390,7 +412,7 @@ public class CollaborationManager implements FormChangeListener {
         $entry(@com.google.appinventor.client.CollaborationManager::isBlockLocked(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
     $wnd.CollaborationManager_setCurrentScreenChannel =
         $entry(@com.google.appinventor.client.CollaborationManager::setCurrentScreenChannel(Ljava/lang/String;));
-    $wnd.CollaborationManager_uploadAsset =
-        $entry(@com.google.appinventor.client.CollaborationManager::uploadAsset(Ljava/lang/String;Ljava/lang/String;));
+    $wnd.CollaborationManager_updateAsset =
+        $entry(@com.google.appinventor.client.CollaborationManager::updateAsset(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;));
   }-*/;
 }

@@ -22,7 +22,7 @@ Blockly.Collaboration = function(workspace){
     if(event.type==Blockly.Events.UI && event.element!="selected"){
       return;
     }
-    if(event.type==Blockly.Events.UI) {
+    if(window.parent.AIFeature_enableComponentLocking() && event.type==Blockly.Events.UI) {
       if(event.newValue){
         window.parent.userLockedBlock[channel] = event.newValue;
       }else{
@@ -38,14 +38,15 @@ Blockly.Collaboration = function(workspace){
     console.log(msg);
     window.parent.socket.emit("block", msg);
   });
-
-  var projectId = channel.split("_")[0];
-  if(window.parent.userColorMap.has(projectId)){
-    window.parent.userColorMap.get(projectId).forEach(function(v, k, m){
-      if(!workspace.getParentSvg().getElementById("blocklyLockedPattern-"+k)){
-        Blockly.Collaboration.createPattern(k, v);
-      }
-    });
+  if(window.parent.AIFeature_enableComponentLocking()){
+    var projectId = channel.split("_")[0];
+    if(window.parent.userColorMap.has(projectId)){
+      window.parent.userColorMap.get(projectId).forEach(function(v, k, m){
+        if(!workspace.getParentSvg().getElementById("blocklyLockedPattern-"+k)){
+          Blockly.Collaboration.createPattern(k, v);
+        }
+      });
+    }
   }
 }
 
