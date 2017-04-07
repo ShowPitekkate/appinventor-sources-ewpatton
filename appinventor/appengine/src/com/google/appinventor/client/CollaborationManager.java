@@ -259,6 +259,9 @@ public class CollaborationManager implements FormChangeListener {
     $wnd.userColorMap.rmv = $wnd.userColorMap["delete"];
     $wnd.subscribedChannel = new $wnd.Set();
     $wnd.socketEvents = {};
+    if($wnd.AIFeature_enableProjectLocking()){
+      $wnd.projectLeader = {};
+    }
     if($wnd.AIFeature_enableComponentLocking()){
       // track locked components and blocks by all users
       $wnd.lockedComponentsByChannel = {};
@@ -383,6 +386,19 @@ public class CollaborationManager implements FormChangeListener {
         }
       }
     }
+  }-*/;
+
+  public native void setWorkspaceReadOnly(String projectId, boolean readOnly) /*-{
+    for(var formName in Blockly.allWorkspaces){
+      if(formName.split('_')[0]==projectId){
+        Blockly.allWorkspaces[formName].options.readOnly = readOnly;
+      }
+    }
+    return;
+  }-*/;
+
+  public native void setProjectLeader(String project, String leader) /*-{
+    $wnd.projectLeader[project] = leader;
   }-*/;
 
   public static void setCurrentScreenChannel(String channel) {

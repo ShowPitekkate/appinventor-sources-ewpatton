@@ -604,13 +604,16 @@ public class DesignToolbar extends Toolbar {
     if (leaderId.equals(self.getUserId())) {
       Ode.getInstance().getTopPanel().setReadOnlyMode(false);
       Ode.getInstance().getDesignToolbar().setButtonEnabled(WIDGET_NAME_SWITCH_LEADER, false);
+      Ode.getInstance().getCollaborationManager().setWorkspaceReadOnly(projectId, false);
     }else{
       Ode.getInstance().getTopPanel().setReadOnlyMode(true);
       Ode.getInstance().getDesignToolbar().setButtonEnabled(WIDGET_NAME_SWITCH_LEADER, true);
+      Ode.getInstance().getCollaborationManager().setWorkspaceReadOnly(projectId, true);
     }
     setLeaderInfo(leaderEmail);
     Ode.getInstance().getProjectManager()
         .getProject(Long.parseLong(projectId)).setLeader(leaderId);
+    Ode.getInstance().getCollaborationManager().setProjectLeader(projectId, leaderId);
   }
 
   private static native void exportMethodToJavascript()/*-{

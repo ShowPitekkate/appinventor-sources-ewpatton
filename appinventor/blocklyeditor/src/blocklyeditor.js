@@ -415,6 +415,11 @@ Blockly.ai_inject = function(container, workspace) {
   // add collaboration code
   console.log("Create workspace collaboration");
   workspace.collaboration = new Blockly.Collaboration(workspace);
+  if($wnd.AIFeature_enableProjectLocking()) {
+    if($wnd.projectLeader[workspace.formName.split('_')[0]] != $wnd.Ode_getCurrentUserId()){
+      workspace.options.readOnly = true;
+    }
+  }
   return workspace;
 };
 

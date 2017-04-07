@@ -238,8 +238,10 @@ public class SourceStructureExplorer extends Composite {
     TreeItem items[] = new TreeItem[1];
     items[0] = root;
     updateTree(items, itemToSelect);
-    Ode.getInstance().getCollaborationManager().updateSourceTree(
-        Ode.getCurrentChannel(), Ode.getCurrentUserEmail());
+    if (AppInventorFeatures.enableComponentLocking()) {
+      Ode.getInstance().getCollaborationManager().updateSourceTree(
+          Ode.getCurrentChannel(), Ode.getCurrentUserEmail());
+    }
   }
 
   
@@ -259,7 +261,6 @@ public class SourceStructureExplorer extends Composite {
     } else {
       disableButtons();
     }
-    // TODO(xinyue): in component-level mode, update other users' locked component in tree
   }
 
   /**
