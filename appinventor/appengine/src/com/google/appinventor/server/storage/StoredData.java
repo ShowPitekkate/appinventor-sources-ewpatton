@@ -138,6 +138,8 @@ public class StoredData {
     // User specific project settings
     // TODO(user): is this ever used?
     String settings;
+
+    String condition;
   }
 
   // Non-project-specific files (tied to user)

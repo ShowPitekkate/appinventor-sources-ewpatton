@@ -707,6 +707,17 @@ public class ObjectifyStorageIo implements  StorageIo {
           upd.settings = projectSettings;
           upd.state = UserProjectData.StateEnum.OPEN;
           upd.userKey = userKey(userId);
+          if (AppInventorFeatures.enableGroupProject()) {
+            if (AppInventorFeatures.enableProjectLocking()) {
+              upd.condition = "projectLocking";
+            } else if (AppInventorFeatures.enableComponentLocking()) {
+              upd.condition = "componentLocking";
+            } else {
+              upd.condition = "realtime";
+            }
+          } else {
+            upd.condition = null;
+          }
           datastore.put(upd);
         }
       }, true);
@@ -856,7 +867,19 @@ public class ObjectifyStorageIo implements  StorageIo {
         public void run(Objectify datastore) {
           Key<UserData> userKey = userKey(userId);
           for (UserProjectData upd : datastore.query(UserProjectData.class).ancestor(userKey)) {
-            projects.add(upd.projectId);
+            if (AppInventorFeatures.enableGroupProject()) {
+              if (upd.condition == null) continue;
+              if (AppInventorFeatures.enableProjectLocking() && upd.condition.equals("projectLocking")) {
+                projects.add(upd.projectId);
+              } else if (AppInventorFeatures.enableComponentLocking() && upd.condition.equals("componentLocking")) {
+                projects.add(upd.projectId);
+              } else if (!AppInventorFeatures.enableProjectLocking() && !AppInventorFeatures.enableComponentLocking() &&
+                         upd.condition.equals("realtime")) {
+                projects.add(upd.projectId);
+              }
+            } else {
+              projects.add(upd.projectId);
+            }
           }
         }
       }, false);
