@@ -493,7 +493,7 @@ Blockly.Blocks['procedures_defreturn'] = {
     };
     this.appendDummyInput('HEADER')
         .appendField(Blockly.Msg.LANG_PROCEDURES_DEFRETURN_DEFINE)
-        .appendField(new Blockly.FieldTextInput(name, validateThenCreateOrRename), 'NAME');
+        .appendField(new AI.Blockly.FieldProcedureName(name), 'NAME');
     this.horizontalParameters = true; // horizontal by default
     this.appendIndentedValueInput('RETURN')
         .appendField(Blockly.Msg.LANG_PROCEDURES_DEFRETURN_RETURN);
