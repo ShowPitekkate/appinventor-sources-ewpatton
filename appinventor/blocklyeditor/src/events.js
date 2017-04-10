@@ -592,6 +592,7 @@ AI.Events.UnlockComponent.prototype.run = function() {
   var editor = top.getDesignerForForm(this.editorId);
   var component = editor.getComponentByUuid(this.componentId);
   component.clearItemBackgroundColor();
+  component.deselect();
 };
 
 /**
@@ -655,12 +656,17 @@ AI.Events.UnlockBlock.prototype.run = function() {
   while(blockQueue.length!=0) {
     var block = blockQueue.shift();
     block.svgPath_.setAttribute('fill', block.colour_);
+    block.svgGroup_.className.baseVal = 'blockDraggable';
+    block.svgGroup_.className.animVal = 'blockDraggable';
+    block.svgPath_.removeAttribute('stroke');
+
     if(lockedBlock[block.id] = this.userEmail) {
       delete lockedBlock[block.id];
     }
     block.childBlocks_.forEach(function(e){
       blockQueue.push(e);
     });
+
   }
 };
 

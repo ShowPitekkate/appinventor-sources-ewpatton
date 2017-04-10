@@ -60,6 +60,32 @@ Blockly.Collaboration.createPattern = function(uuid, color){
   return;
 }
 
+Blockly.Collaboration.removeLockedComponent = function(channel, user) {
+  var lockedComponent = $wnd.lockedComponentsByChannel[channel];
+  for(var componentId in lockedComponent) {
+    if(lockedComponent.hasOwnProperty(componentId)) {
+      var userLocked = lockedComponent[componentId];
+      if(userLocked==user) {
+        new AI.Events.UnlockComponent(channel, {id: componentId, userEmail: user}).run();
+      }
+    }
+  }
+  return;
+};
+
+Blockly.Collaboration.removeLockedBlock = function(channel, user) {
+  var lockedBlock = $wnd.lockedBlocksByChannel[channel];
+  for(var blockId in lockedBlock) {
+    if(lockedBlock.hasOwnProperty(blockId)) {
+      var userLocked = lockedBlock[blockId];
+      if(userLocked==user) {
+        new AI.Events.UnlockBlock(channel, blockId, user).run();
+      }
+    }
+  }
+  return;
+};
+
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldColour');

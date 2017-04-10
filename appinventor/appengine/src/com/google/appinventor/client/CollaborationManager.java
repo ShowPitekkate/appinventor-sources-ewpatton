@@ -324,7 +324,18 @@ public class CollaborationManager implements FormChangeListener {
               colorMap.rmv(user);
             }
             $wnd.DesignToolbar_removeJoinedUser(user);
-            //TODO : remove the locked item when user leave the project.
+            if($wnd.AIFeature_enableComponentLocking()){
+              for(var channel in $wnd.lockedComponentsByChannel) {
+                if(channel.split('_')[0] == msgJSON["project"]) {
+                  Blockly.Collaboration.removeLockedComponent(channel, user);
+                }
+              }
+              for(var channel in $wnd.lockedBlocksByChannel) {
+                if(channel.split('_')[0] == msgJSON["project"]) {
+                  Blockly.Collaboration.removeLockedBlock(channel, user);
+                }
+              }
+            }
             break;
           case "leader":
             $wnd.DesignToolbar_switchLeader(msgJSON["project"], msgJSON["leader"], msgJSON["leaderEmail"]);
