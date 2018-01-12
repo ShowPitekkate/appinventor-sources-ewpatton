@@ -109,6 +109,8 @@
 		06B5872C1DC02B190092C9DD /* AssetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06B5872B1DC02B190092C9DD /* AssetManager.swift */; };
 		06BA52A3203E845A00879F00 /* CsvUtilTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06BA52A2203E845A00879F00 /* CsvUtilTests.swift */; };
 		06C94A391D99D10400341AAE /* EventDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C94A381D99D10400341AAE /* EventDispatcher.swift */; };
+		06CCC63C2005CB9C007A3CE4 /* simple_components.json in Resources */ = {isa = PBXBuildFile; fileRef = 06CCC63B2005CB9B007A3CE4 /* simple_components.json */; };
+		06CCC63E2005CBD8007A3CE4 /* Coverage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06CCC63D2005CBD8007A3CE4 /* Coverage.swift */; };
 		06D151901DC45E9700FC981E /* ErrorMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06D1518F1DC45E9700FC981E /* ErrorMessages.swift */; };
 		06D1519B1DC4736800FC981E /* NSString_SHA1.h in Headers */ = {isa = PBXBuildFile; fileRef = 06D151991DC4736800FC981E /* NSString_SHA1.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06D1519C1DC4736900FC981E /* NSString_SHA1.m in Sources */ = {isa = PBXBuildFile; fileRef = 06D1519A1DC4736800FC981E /* NSString_SHA1.m */; };
@@ -346,6 +348,8 @@
 		06B5872B1DC02B190092C9DD /* AssetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetManager.swift; sourceTree = "<group>"; };
 		06BA52A2203E845A00879F00 /* CsvUtilTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsvUtilTests.swift; sourceTree = "<group>"; };
 		06C94A381D99D10400341AAE /* EventDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDispatcher.swift; sourceTree = "<group>"; };
+		06CCC63B2005CB9B007A3CE4 /* simple_components.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = simple_components.json; sourceTree = "<group>"; };
+		06CCC63D2005CBD8007A3CE4 /* Coverage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coverage.swift; sourceTree = "<group>"; };
 		06D1518F1DC45E9700FC981E /* ErrorMessages.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.swift; path = ErrorMessages.swift; sourceTree = "<group>"; tabWidth = 2; };
 		06D151991DC4736800FC981E /* NSString_SHA1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSString_SHA1.h; sourceTree = "<group>"; };
 		06D1519A1DC4736800FC981E /* NSString_SHA1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSString_SHA1.m; sourceTree = "<group>"; };
@@ -574,12 +578,14 @@
 			children = (
 				06E2D6001FDB16CC00A1D52A /* yail */,
 				CBC78695202E0B73005363A3 /* Unit Tests */,
+				06CCC63B2005CB9B007A3CE4 /* simple_components.json */,
 				06AC1CC71DB4559800A59EB3 /* AIComponentKitTests.m */,
 				0618A2911D8CF4EE0013A191 /* AIComponentKitTests.swift */,
 				06AC1CC61DB4559800A59EB3 /* AIComponentKitTests-Bridging-Header.h */,
 				061F8571203F28AC00683091 /* AppInventorTestCase.swift */,
 				06E2D5FC1FDB15F100A1D52A /* BuiltinBlockTests.swift */,
 				06A623852507BDA800961743 /* CoercionTests.swift */,
+				06CCC63D2005CBD8007A3CE4 /* Coverage.swift */,
 				06BA52A2203E845A00879F00 /* CsvUtilTests.swift */,
 				0602B26F203481F900ED60A8 /* FormTests.swift */,
 				06009FF3227CF8D100E4EC4A /* FormatTests.swift */,
@@ -1107,6 +1113,7 @@
 				067D2BCF2040FB4B00D1EB16 /* variables.yail in Resources */,
 				0658E9BE20126FFA009D6A15 /* logic.yail in Resources */,
 				0658E9C2201399FA009D6A15 /* text.yail in Resources */,
+				06CCC63C2005CB9C007A3CE4 /* simple_components.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1391,6 +1398,7 @@
 				0665ADE7210F592D0044C887 /* FileTests.swift in Sources */,
 				06F15C0F24059B0100C783E3 /* TextBoxTests.swift in Sources */,
 				DE85F126209CD9AB00A809AA /* SliderTests.swift in Sources */,
+				06CCC63E2005CBD8007A3CE4 /* Coverage.swift in Sources */,
 				0653CBD81F9719920052065A /* RuntimeTests.swift in Sources */,
 				06AC1CC81DB4559800A59EB3 /* AIComponentKitTests.m in Sources */,
 				DE102DB920F53189002C71F0 /* FontUtilTests.swift in Sources */,
