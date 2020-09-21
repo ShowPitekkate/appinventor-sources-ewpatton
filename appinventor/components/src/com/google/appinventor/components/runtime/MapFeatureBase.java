@@ -32,6 +32,7 @@ import org.osmdroid.util.GeoPoint;
 public abstract class MapFeatureBase implements MapFeature, HasStroke {
   protected MapFeatureContainer container = null;
   protected Map map = null;
+  private String name;
   private boolean visible = true;
   private int strokeColor = COLOR_BLACK;
   private float strokeOpacity = 1;
@@ -408,6 +409,21 @@ public abstract class MapFeatureBase implements MapFeature, HasStroke {
   @Override
   public HandlesEventDispatching getDispatchDelegate() {
     return map.getDispatchDelegate();
+  }
+
+  @Override
+  public void Name(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the name of the %type%.
+   *
+   * @return the name of the component
+   */
+  @SimpleProperty
+  public String Name() {
+    return name;
   }
 
   @Override

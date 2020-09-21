@@ -90,6 +90,9 @@ A button that, when clicked on, displays a list of the contacts to choose among.
 : Specifies the path of the `ContactPicker`'s image. If there is both an `Image` and a
  [`BackgroundColor`](#ContactPicker.BackgroundColor) specified, only the `Image` will be visible.
 
+{:id="ContactPicker.Name" .text .ro .bo} *Name*
+: Gets the name of the ContactPicker.
+
 {:id="ContactPicker.PhoneNumber" .text .ro .bo} *PhoneNumber*
 : Returns the primary phone number associated with the selected contact, or the empty string if
  no phone number is associated with the contact.
@@ -226,6 +229,9 @@ An `EmailPicker` is a kind of text box. If the user begins entering the name or 
 {:id="EmailPicker.Hint" .text} *Hint*
 : `EmailPicker` hint for the user.
 
+{:id="EmailPicker.Name" .text .ro .bo} *Name*
+: Gets the name of the EmailPicker.
+
 {:id="EmailPicker.Text" .text} *Text*
 : The text in the `EmailPicker`, which can be set by the programmer in the Designer or Blocks Editor,
  or it can be entered by the user (unless the [`Enabled`](#EmailPicker.Enabled) property is false).
@@ -294,6 +300,9 @@ An `EmailPicker` is a kind of text box. If the user begins entering the name or 
 ### Properties  {#PhoneCall-Properties}
 
 {:.properties}
+
+{:id="PhoneCall.Name" .text .ro .bo} *Name*
+: Gets the name of the PhoneCall.
 
 {:id="PhoneCall.PhoneNumber" .text} *PhoneNumber*
 : Specifies the phone number to call.
@@ -402,6 +411,9 @@ A button that, when clicked on, displays a list of the contacts' phone numbers t
 : Specifies the path of the `PhoneNumberPicker`'s image. If there is both an `Image` and a
  [`BackgroundColor`](#PhoneNumberPicker.BackgroundColor) specified, only the `Image` will be visible.
 
+{:id="PhoneNumberPicker.Name" .text .ro .bo} *Name*
+: Gets the name of the PhoneNumberPicker.
+
 {:id="PhoneNumberPicker.PhoneNumber" .text .ro .bo} *PhoneNumber*
 : Returns the primary phone number associated with the selected contact, or the empty string if
  no phone number is associated with the contact.
@@ -504,8 +516,9 @@ Sharing is a non-visible component that enables sharing files and/or messages be
 ### Properties  {#Sharing-Properties}
 
 {:.properties}
-None
 
+{:id="Sharing.Name" .text .ro .bo} *Name*
+: Gets the name of the Sharing.
 
 ### Events  {#Sharing-Events}
 
@@ -580,6 +593,9 @@ None
 : The message that will be sent when the [`SendMessage`](#Texting.SendMessage) method is called.
  The maximum length of a standard SMS message is usually 170. It may be less for languages
  using diacritical marks.
+
+{:id="Texting.Name" .text .ro .bo} *Name*
+: Gets the name of the Texting.
 
 {:id="Texting.PhoneNumber" .text} *PhoneNumber*
 : The number that the message will be sent to when the SendMessage method is called.  The 
@@ -699,6 +715,9 @@ A non-visible component that enables communication with [Twitter](https://twitte
  
    The value of this property will then be set to the list of mentions (and will maintain its
  value until any subsequent calls to [`RequestMentions`](#Twitter.RequestMentions)).
+
+{:id="Twitter.Name" .text .ro .bo} *Name*
+: Gets the name of the Twitter.
 
 {:id="Twitter.SearchResults" .list .ro .bo} *SearchResults*
 : This property, which is initially empty, is set to a list of search results after the program:

@@ -64,6 +64,7 @@ import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.components.runtime.collect.Lists;
 import com.google.appinventor.components.runtime.collect.Maps;
 import com.google.appinventor.components.runtime.collect.Sets;
+import com.google.appinventor.components.runtime.errors.DispatchableError;
 import com.google.appinventor.components.runtime.errors.PermissionException;
 import com.google.appinventor.components.runtime.multidex.MultiDex;
 import com.google.appinventor.components.runtime.util.AlignmentUtil;
@@ -1978,6 +1979,40 @@ public class Form extends AppInventorCompatActivity
   }
 
   /**
+   * Gets the component with the given name. If no such component exists, then the
+   * {@link #ErrorOccurred} event will be run to indicate this.
+   *
+   * @param name the name of the desired component
+   * @return the component with the given name
+   * @throws DispatchableError if the component doesn't exist
+   */
+  @SimpleFunction
+  public Component GetComponent(String name) {
+    Component component = $lookupComponentByName(name);
+    if (component == null) {
+      throw new DispatchableError(ErrorMessages.ERROR_UNKNOWN_COMPONENT, name);
+    }
+    return component;
+  }
+
+  /**
+   * Gets the name for the given component. This can be used in place of the
+   * any component blocks for the Name property if the type of the component is
+   * not known at compile time.
+   *
+   * @param component the component whose name is desired
+   * @return the name of the component
+   */
+  @SimpleFunction
+  public String NameForComponent(Component component) {
+    return component.Name();
+  }
+
+  protected Component $lookupComponentByName(String name) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
    * Gets the name of the underlying platform running the app. Currently, this is the text
    * "Android". Other platforms may be supported in the future.
    *
@@ -2097,6 +2132,21 @@ public class Form extends AppInventorCompatActivity
   @Override
   public HandlesEventDispatching getDispatchDelegate() {
     return this;
+  }
+
+  @Override
+  public void Name(String name) {
+    throw new UnsupportedOperationException("Call setFormName instead");
+  }
+
+  /**
+   * Gets the name of the Screen.
+   *
+   * @return the name of the form
+   */
+  @SimpleProperty
+  public String Name() {
+    return formName;
   }
 
   // ComponentContainer implementation

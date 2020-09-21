@@ -200,6 +200,8 @@
   <dt id="ContactPicker.Image" class="text"><em>Image</em></dt>
   <dd>Specifies the path of the <code class="highlighter-rouge">ContactPicker</code>’s image. If there is both an <code class="highlighter-rouge">Image</code> and a
  <a href="#ContactPicker.BackgroundColor"><code class="highlighter-rouge">BackgroundColor</code></a> specified, only the <code class="highlighter-rouge">Image</code> will be visible.</dd>
+  <dt id="ContactPicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the ContactPicker.</dd>
   <dt id="ContactPicker.PhoneNumber" class="text ro bo"><em>PhoneNumber</em></dt>
   <dd>Returns the primary phone number associated with the selected contact, or the empty string if
  no phone number is associated with the contact.</dd>
@@ -309,6 +311,8 @@
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
   <dt id="EmailPicker.Hint" class="text"><em>Hint</em></dt>
   <dd><code class="highlighter-rouge">EmailPicker</code> hint for the user.</dd>
+  <dt id="EmailPicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the EmailPicker.</dd>
   <dt id="EmailPicker.Text" class="text"><em>Text</em></dt>
   <dd>The text in the <code class="highlighter-rouge">EmailPicker</code>, which can be set by the programmer in the Designer or Blocks Editor,
  or it can be entered by the user (unless the <a href="#EmailPicker.Enabled"><code class="highlighter-rouge">Enabled</code></a> property is false).</dd>
@@ -370,6 +374,8 @@
 <h3 id="PhoneCall-Properties">Properties</h3>
 
 <dl class="properties">
+  <dt id="PhoneCall.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the PhoneCall.</dd>
   <dt id="PhoneCall.PhoneNumber" class="text"><em>PhoneNumber</em></dt>
   <dd>Specifies the phone number to call.</dd>
 </dl>
@@ -467,6 +473,8 @@
   <dt id="PhoneNumberPicker.Image" class="text"><em>Image</em></dt>
   <dd>Specifies the path of the <code class="highlighter-rouge">PhoneNumberPicker</code>’s image. If there is both an <code class="highlighter-rouge">Image</code> and a
  <a href="#PhoneNumberPicker.BackgroundColor"><code class="highlighter-rouge">BackgroundColor</code></a> specified, only the <code class="highlighter-rouge">Image</code> will be visible.</dd>
+  <dt id="PhoneNumberPicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the PhoneNumberPicker.</dd>
   <dt id="PhoneNumberPicker.PhoneNumber" class="text ro bo"><em>PhoneNumber</em></dt>
   <dd>Returns the primary phone number associated with the selected contact, or the empty string if
  no phone number is associated with the contact.</dd>
@@ -553,7 +561,10 @@
 
 <h3 id="Sharing-Properties">Properties</h3>
 
-<p class="properties">None</p>
+<dl class="properties">
+  <dt id="Sharing.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Sharing.</dd>
+</dl>
 
 <h3 id="Sharing-Events">Events</h3>
 
@@ -620,6 +631,8 @@
   <dd>The message that will be sent when the <a href="#Texting.SendMessage"><code class="highlighter-rouge">SendMessage</code></a> method is called.
  The maximum length of a standard SMS message is usually 170. It may be less for languages
  using diacritical marks.</dd>
+  <dt id="Texting.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Texting.</dd>
   <dt id="Texting.PhoneNumber" class="text"><em>PhoneNumber</em></dt>
   <dd>The number that the message will be sent to when the SendMessage method is called.  The 
  number is a text string with the specified digits (e.g., 6505551212).  Dashes, dots, 
@@ -743,6 +756,8 @@
     <p>The value of this property will then be set to the list of mentions (and will maintain its
  value until any subsequent calls to <a href="#Twitter.RequestMentions"><code class="highlighter-rouge">RequestMentions</code></a>).</p>
   </dd>
+  <dt id="Twitter.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Twitter.</dd>
   <dt id="Twitter.SearchResults" class="list ro bo"><em>SearchResults</em></dt>
   <dd>This property, which is initially empty, is set to a list of search results after the program:
 

@@ -6,6 +6,8 @@
 
 package com.google.appinventor.components.runtime;
 
+import android.view.View;
+
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.PropertyCategory;
 import com.google.appinventor.components.annotations.SimpleObject;
@@ -14,8 +16,6 @@ import com.google.appinventor.components.annotations.SimplePropertyCopier;
 import com.google.appinventor.components.common.ComponentConstants;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
-
-import android.view.View;
 
 /**
  * Underlying base class for all components with views; not accessible to Simple programmers.
@@ -27,6 +27,7 @@ import android.view.View;
 public abstract class AndroidViewComponent extends VisibleComponent {
 
   protected final ComponentContainer container;
+  private String name;
 
   private int percentWidthHolder = LENGTH_UNKNOWN;
   private int percentHeightHolder = LENGTH_UNKNOWN;
@@ -275,5 +276,20 @@ public abstract class AndroidViewComponent extends VisibleComponent {
   @Override
   public HandlesEventDispatching getDispatchDelegate() {
     return container.$form();
+  }
+
+  @Override
+  public void Name(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the name of the %type%.
+   *
+   * @return the name of the component
+   */
+  @SimpleProperty
+  public String Name() {
+    return name;
   }
 }

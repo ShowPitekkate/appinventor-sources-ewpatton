@@ -7,6 +7,7 @@
 package com.google.appinventor.components.runtime;
 
 import com.google.appinventor.components.annotations.SimpleObject;
+import com.google.appinventor.components.annotations.SimpleProperty;
 
 /**
  * Base class for all non-visible components.
@@ -17,6 +18,7 @@ import com.google.appinventor.components.annotations.SimpleObject;
 public abstract class AndroidNonvisibleComponent implements Component {
 
   protected final Form form;
+  private String name;
 
   /**
    * Creates a new AndroidNonvisibleComponent.
@@ -32,5 +34,20 @@ public abstract class AndroidNonvisibleComponent implements Component {
   @Override
   public HandlesEventDispatching getDispatchDelegate() {
     return form;
+  }
+
+  @Override
+  public void Name(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the name of the %type%.
+   *
+   * @return the name of the component
+   */
+  @SimpleProperty
+  public String Name() {
+    return name;
   }
 }

@@ -178,6 +178,8 @@
   <dd>Sets or gets the longitude of the center of the circle, in degrees. Positive values represent
  east of the prime meridian and negative values represent west of the prime meridian. To update
  the latitude and longitude simultaneously, use the <a href="#Circle.SetLocation"><code class="highlighter-rouge">SetLocation</code></a> method.</dd>
+  <dt id="Circle.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Circle.</dd>
   <dt id="Circle.Radius" class="number"><em>Radius</em></dt>
   <dd>Sets or gets the radius of the circle, in meters.</dd>
   <dt id="Circle.StrokeColor" class="color"><em>StrokeColor</em></dt>
@@ -264,6 +266,8 @@
   <dt id="FeatureCollection.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">FeatureCollection</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="FeatureCollection.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the FeatureCollection.</dd>
   <dt id="FeatureCollection.Source" class="text ro"><em>Source</em></dt>
   <dd>Specifies the source URL used to populate the feature collection. If the feature collection was not loaded from a URL, this will be the empty string.</dd>
   <dt id="FeatureCollection.Visible" class="boolean"><em>Visible</em></dt>
@@ -365,6 +369,8 @@
  long-pressing and then dragging the <code class="highlighter-rouge">LineString</code> to a new location.</dd>
   <dt id="LineString.EnableInfobox" class="boolean"><em>EnableInfobox</em></dt>
   <dd>Enables or disables the infobox window display when the user taps the <code class="highlighter-rouge">LineString</code>.</dd>
+  <dt id="LineString.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the LineString.</dd>
   <dt id="LineString.Points" class="list bo"><em>Points</em></dt>
   <dd>The list of points, as pairs of latitudes and longitudes, in the <code class="highlighter-rouge">LineString</code>.</dd>
   <dt id="LineString.PointsFromString" class="text wo"><em>PointsFromString</em></dt>
@@ -495,6 +501,8 @@
     <p><strong>Note:</strong> Road layers are provided by OpenStreetMap and aerial and terrain layers are
  provided by the U.S. Geological Survey.</p>
   </dd>
+  <dt id="Map.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Map.</dd>
   <dt id="Map.Rotation" class="number"><em>Rotation</em></dt>
   <dd>Specifies the rotation of the map in decimal degrees, if any.</dd>
   <dt id="Map.ScaleUnits" class="number"><em>ScaleUnits</em></dt>
@@ -685,6 +693,8 @@
  of the prime meridian and negative values representing west of the prime meridian. To update
  the <a href="#Marker.Latitude"><code class="highlighter-rouge">Latitude</code></a> and <code class="highlighter-rouge">Longitude</code> simultaneously, use the
  <a href="#Marker.SetLocation"><code class="highlighter-rouge">SetLocation</code></a> method.</dd>
+  <dt id="Marker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Marker.</dd>
   <dt id="Marker.StrokeColor" class="color"><em>StrokeColor</em></dt>
   <dd>Sets or gets the color used to outline the <code class="highlighter-rouge">Marker</code>.</dd>
   <dt id="Marker.StrokeOpacity" class="number"><em>StrokeOpacity</em></dt>
@@ -774,6 +784,8 @@
   <dd>The longitude of the end location.</dd>
   <dt id="Navigation.Language" class="text"><em>Language</em></dt>
   <dd>The language to use for textual directions. Default is “en” for English.</dd>
+  <dt id="Navigation.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Navigation.</dd>
   <dt id="Navigation.ResponseContent" class="dictionary ro bo"><em>ResponseContent</em></dt>
   <dd>The raw response from the server. This can be used to access more details beyond what the
  <a href="#Navigation.GotDirections"><code class="highlighter-rouge">GotDirections</code></a> event provides.</dd>
@@ -853,6 +865,8 @@ be passed to <a href="#LineString.Points"><code class="highlighter-rouge">LineSt
   <dd>Specifies holes in a <code class="highlighter-rouge">Polygon</code>from a GeoJSON string. In contrast to
  <a href="#Polygon.HolePoints"><code class="highlighter-rouge">HolePoints</code></a>, the longitude of each point comes before the latitude as
  stated in the GeoJSON specification.</dd>
+  <dt id="Polygon.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Polygon.</dd>
   <dt id="Polygon.Points" class="list bo"><em>Points</em></dt>
   <dd>Specifies the Points used for drawing the <code class="highlighter-rouge">Polygon</code>. The Points are specified as a list of
  lists containing latitude and longitude values, such as <code class="highlighter-rouge">[[lat1, long1], [lat2, long2], ...]</code>.</dd>
@@ -942,6 +956,8 @@ be passed to <a href="#LineString.Points"><code class="highlighter-rouge">LineSt
   <dt id="Rectangle.FillOpacity" class="number"><em>FillOpacity</em></dt>
   <dd>Sets or gets the opacity of the color used to fill the <code class="highlighter-rouge">Rectangle</code>. A value of 0.0 will be
  completely invisible and a value of 1.0 will be completely opaque.</dd>
+  <dt id="Rectangle.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Rectangle.</dd>
   <dt id="Rectangle.NorthLatitude" class="number"><em>NorthLatitude</em></dt>
   <dd>Specifies the north-most edge of the <code class="highlighter-rouge">Rectangle</code>, in decimal degrees north of the equator.</dd>
   <dt id="Rectangle.SouthLatitude" class="number"><em>SouthLatitude</em></dt>

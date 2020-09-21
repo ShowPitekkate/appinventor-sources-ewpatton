@@ -175,6 +175,8 @@
  property is set to True and the detected color changes</dd>
   <dt id="Ev3ColorSensor.Mode" class="text"><em>Mode</em></dt>
   <dd>Returns the mode of the sensor.</dd>
+  <dt id="Ev3ColorSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3ColorSensor.</dd>
   <dt id="Ev3ColorSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>
@@ -229,6 +231,8 @@
   <dt id="Ev3Commands.BluetoothClient" class="component"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer</strong>.</dd>
+  <dt id="Ev3Commands.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3Commands.</dd>
 </dl>
 
 <h3 id="Ev3Commands-Events">Events</h3>
@@ -271,6 +275,8 @@
  <strong>Must be set in the Designer</strong>.</dd>
   <dt id="Ev3GyroSensor.Mode" class="text"><em>Mode</em></dt>
   <dd>Returns the mode of the sensor.</dd>
+  <dt id="Ev3GyroSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3GyroSensor.</dd>
   <dt id="Ev3GyroSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>
@@ -314,6 +320,8 @@
   <dd>Returns whether to keep motor rotation at constant speed.</dd>
   <dt id="Ev3Motors.MotorPorts" class="text do"><em>MotorPorts</em></dt>
   <dd>Specifies the motor port.</dd>
+  <dt id="Ev3Motors.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3Motors.</dd>
   <dt id="Ev3Motors.ReverseDirection" class="boolean"><em>ReverseDirection</em></dt>
   <dd>Returns if the direction of the motors is reversed.</dd>
   <dt id="Ev3Motors.StopBeforeDisconnect" class="boolean"><em>StopBeforeDisconnect</em></dt>
@@ -373,6 +381,8 @@
   <dt id="Ev3Sound.BluetoothClient" class="component"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer</strong>.</dd>
+  <dt id="Ev3Sound.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3Sound.</dd>
 </dl>
 
 <h3 id="Ev3Sound-Events">Events</h3>
@@ -401,6 +411,8 @@
   <dt id="Ev3TouchSensor.BluetoothClient" class="component"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer</strong>.</dd>
+  <dt id="Ev3TouchSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3TouchSensor.</dd>
   <dt id="Ev3TouchSensor.PressedEventEnabled" class="boolean"><em>PressedEventEnabled</em></dt>
   <dd>Returns whether the Pressed event should fire when the touch sensor is
  pressed.</dd>
@@ -441,6 +453,8 @@
   <dt id="Ev3UI.BluetoothClient" class="component"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer</strong>.</dd>
+  <dt id="Ev3UI.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3UI.</dd>
 </dl>
 
 <h3 id="Ev3UI-Events">Events</h3>
@@ -486,6 +500,8 @@
   <dt id="Ev3UltrasonicSensor.BottomOfRange" class="number"><em>BottomOfRange</em></dt>
   <dd>Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.</dd>
+  <dt id="Ev3UltrasonicSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Ev3UltrasonicSensor.</dd>
   <dt id="Ev3UltrasonicSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>
@@ -555,6 +571,8 @@
  Only None, Red, Green, or Blue are valid values.
  The sensor will not generate color when the DetectColor property is set to
  True.</dd>
+  <dt id="NxtColorSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtColorSensor.</dd>
   <dt id="NxtColorSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>
@@ -602,6 +620,8 @@
   <dt id="NxtDirectCommands.BluetoothClient" class="component do"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer.</strong></dd>
+  <dt id="NxtDirectCommands.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtDirectCommands.</dd>
 </dl>
 
 <h3 id="NxtDirectCommands-Events">Events</h3>
@@ -685,6 +705,8 @@
  <strong>Must be set in the Designer.</strong></dd>
   <dt id="NxtDrive.DriveMotors" class="text do"><em>DriveMotors</em></dt>
   <dd>Specifies the motor ports that are used for driving.</dd>
+  <dt id="NxtDrive.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtDrive.</dd>
   <dt id="NxtDrive.StopBeforeDisconnect" class="boolean"><em>StopBeforeDisconnect</em></dt>
   <dd>Specifies whether to stop the drive motors before disconnecting.</dd>
   <dt id="NxtDrive.WheelDiameter" class="number do"><em>WheelDiameter</em></dt>
@@ -738,6 +760,8 @@
  and AboveRange events.</dd>
   <dt id="NxtLightSensor.GenerateLight" class="boolean"><em>GenerateLight</em></dt>
   <dd>Specifies whether the light sensor should generate light.</dd>
+  <dt id="NxtLightSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtLightSensor.</dd>
   <dt id="NxtLightSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be specified in the Designer.</strong></dd>
@@ -789,6 +813,8 @@
   <dt id="NxtSoundSensor.BottomOfRange" class="number"><em>BottomOfRange</em></dt>
   <dd>Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.</dd>
+  <dt id="NxtSoundSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtSoundSensor.</dd>
   <dt id="NxtSoundSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>
@@ -831,6 +857,8 @@
   <dt id="NxtTouchSensor.BluetoothClient" class="component do"><em>BluetoothClient</em></dt>
   <dd>Specifies the BluetoothClient component that should be used for communication.
  <strong>Must be set in the Designer.</strong></dd>
+  <dt id="NxtTouchSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtTouchSensor.</dd>
   <dt id="NxtTouchSensor.PressedEventEnabled" class="boolean"><em>PressedEventEnabled</em></dt>
   <dd>Specifies whether the Pressed event should fire when the touch sensor is
  pressed.</dd>
@@ -880,6 +908,8 @@
   <dt id="NxtUltrasonicSensor.BottomOfRange" class="number"><em>BottomOfRange</em></dt>
   <dd>Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.</dd>
+  <dt id="NxtUltrasonicSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NxtUltrasonicSensor.</dd>
   <dt id="NxtUltrasonicSensor.SensorPort" class="text do"><em>SensorPort</em></dt>
   <dd>Specifies the sensor port that the sensor is connected to.
  <strong>Must be set in the Designer.</strong></dd>

@@ -38,6 +38,9 @@ The Firebase component communicates with a Web service to store
  The default value is currently my private Firebase URL, but this will
  eventually changed once the App Inventor Candle plan is activated.
 
+{:id="FirebaseDB.Name" .text .ro .bo} *Name*
+: Gets the name of the FirebaseDB.
+
 {:id="FirebaseDB.Persist" .boolean .wo .do} *Persist*
 : If true, variables will retain their values when off-line and the App exits. Values will be uploaded to Firebase the next time the App is run while connected to the network. This is useful for applications which will gather data while not connected to the network. Note: AppendValue and RemoveFirst will not work correctly when off-line, they require a network connection.<br/><br/> <i>Note</i>: If you set Persist on any Firebase component, on any screen, it makes all Firebase components on all screens persistent. This is a limitation of the low level Firebase library. Also be aware that if you want to set persist to true, you should do so before connecting the Companion for incremental development.
 

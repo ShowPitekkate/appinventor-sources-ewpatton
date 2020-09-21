@@ -95,6 +95,7 @@
          (existing-component (lookup-in-current-form-environment component-name))
          (component-to-add (make component-type container)))
     (add-to-current-form-environment component-name component-to-add)
+    (%set-and-coerce-property! component-to-add 'Name component-name 'text)
     (add-init-thunk component-name
      (lambda ()
        (when init-props-thunk (init-props-thunk))
@@ -336,6 +337,9 @@
              (gnu.mapping.Environment:get form-environment name)
              default-value))
 
+       (define ($lookupComponentByName name :: java.lang.String) :: com.google.appinventor.components.runtime.Component
+         (lookup-in-form-environment (string->symbol name)))
+
        (define (is-bound-in-form-environment name :: gnu.mapping.Symbol)
          (gnu.mapping.Environment:isBound form-environment name))
 
@@ -563,6 +567,7 @@
                          (let ((component-object (make component-type component-container)))
                            ;; Construct the component and assign it to its corresponding field
                            (set! (field (this) component-name) component-object)
+                           (invoke component-object 'Name component-name)
                            ;; Add the mapping from component name -> component object to the
                            ;; form-environment
                            (add-to-form-environment component-name component-object))))

@@ -27,6 +27,9 @@ The `CloudDB` component is a Non-visible component that allows you to store data
 
 {:.properties}
 
+{:id="CloudDB.Name" .text .ro .bo} *Name*
+: Gets the name of the CloudDB.
+
 {:id="CloudDB.ProjectID" .text .ro} *ProjectID*
 : Gets the ProjectID for this CloudDB project.
 
@@ -125,6 +128,9 @@ Non-visible component for storing and retrieving files. Use this component to wr
    **Note:** Apps that enable this property will likely stop working after upgrading to
  Android 11, which strongly enforces that apps only write to app-private directories.
 
+{:id="File.Name" .text .ro .bo} *Name*
+: Gets the name of the File.
+
 ### Events  {#File-Events}
 
 {:.events}
@@ -198,6 +204,9 @@ Non-visible component for storing and retrieving files. Use this component to wr
 
 {:.properties}
 
+{:id="TinyDB.Name" .text .ro .bo} *Name*
+: Gets the name of the TinyDB.
+
 {:id="TinyDB.Namespace" .text} *Namespace*
 : Namespace for storing data.
 
@@ -248,6 +257,9 @@ The `TinyWebDB` component communicates with a Web service to store
 ### Properties  {#TinyWebDB-Properties}
 
 {:.properties}
+
+{:id="TinyWebDB.Name" .text .ro .bo} *Name*
+: Gets the name of the TinyWebDB.
 
 {:id="TinyWebDB.ServiceURL" .text} *ServiceURL*
 : Specifies the URL of the  Web service.

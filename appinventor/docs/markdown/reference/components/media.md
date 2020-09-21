@@ -33,8 +33,9 @@ Table of Contents:
 ### Properties  {#Camcorder-Properties}
 
 {:.properties}
-None
 
+{:id="Camcorder.Name" .text .ro .bo} *Name*
+: Gets the name of the Camcorder.
 
 ### Events  {#Camcorder-Events}
 
@@ -68,8 +69,9 @@ None
 ### Properties  {#Camera-Properties}
 
 {:.properties}
-None
 
+{:id="Camera.Name" .text .ro .bo} *Name*
+: Gets the name of the Camera.
 
 ### Events  {#Camera-Events}
 
@@ -133,6 +135,9 @@ A special-purpose button. When the user taps an `ImagePicker`, the device's imag
 {:id="ImagePicker.Image" .text} *Image*
 : Specifies the path of the `ImagePicker`'s image. If there is both an `Image` and a
  [`BackgroundColor`](#ImagePicker.BackgroundColor) specified, only the `Image` will be visible.
+
+{:id="ImagePicker.Name" .text .ro .bo} *Name*
+: Gets the name of the ImagePicker.
 
 {:id="ImagePicker.Selection" .text .ro .bo} *Selection*
 : Path to the file containing the image that was selected.
@@ -230,6 +235,9 @@ Multimedia component that plays audio and controls phone vibration. The name of 
 : If true, the `Player` will loop when it plays. Setting `Loop` while the player is playing will
  affect the current playing.
 
+{:id="Player.Name" .text .ro .bo} *Name*
+: Gets the name of the Player.
+
 {:id="Player.PlayOnlyInForeground" .boolean} *PlayOnlyInForeground*
 : If true, the `Player` will pause playing when leaving the current screen; if false
  (default option), the `Player` continues playing whenever the current screen is displaying or
@@ -293,6 +301,9 @@ A multimedia component that plays sound files and optionally vibrates for the nu
  Once the sound starts playing, all further [`Play`](#Sound.Play) calls will be ignored
  until the interval has elapsed.
 
+{:id="Sound.Name" .text .ro .bo} *Name*
+: Gets the name of the Sound.
+
 {:id="Sound.Source" .text} *Source*
 : The name of the sound file. Only certain formats are supported.
  See http://developer.android.com/guide/appendix/media-formats.html.
@@ -333,6 +344,9 @@ None
 ### Properties  {#SoundRecorder-Properties}
 
 {:.properties}
+
+{:id="SoundRecorder.Name" .text .ro .bo} *Name*
+: Gets the name of the SoundRecorder.
 
 {:id="SoundRecorder.SavedRecording" .text} *SavedRecording*
 : Specifies the path to the file where the recording should be stored. If this property is the
@@ -375,6 +389,9 @@ None
 ### Properties  {#SpeechRecognizer-Properties}
 
 {:.properties}
+
+{:id="SpeechRecognizer.Name" .text .ro .bo} *Name*
+: Gets the name of the SpeechRecognizer.
 
 {:id="SpeechRecognizer.Result" .text .ro .bo} *Result*
 : Returns the last text produced by the recognizer.
@@ -457,6 +474,9 @@ The `TextToSpeech` component speaks a given text aloud. You can set the pitch
  actual language that is spoken. For example, setting the language to French and speaking
  English text will sound like someone speaking English with a French accent.
 
+{:id="TextToSpeech.Name" .text .ro .bo} *Name*
+: Gets the name of the TextToSpeech.
+
 {:id="TextToSpeech.Pitch" .number} *Pitch*
 : Sets the speech pitch for the TextToSpeech.
 
@@ -534,6 +554,9 @@ A multimedia component capable of playing videos. When the application is run, t
 : Specifies the `VideoPlayer`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
 
+{:id="VideoPlayer.Name" .text .ro .bo} *Name*
+: Gets the name of the VideoPlayer.
+
 {:id="VideoPlayer.Source" .text .wo} *Source*
 : Sets the "path" to the video. Usually, this will be the name of the video file, which should be
  added in the Designer.
@@ -608,6 +631,9 @@ Use this component to translate words and sentences between different languages.
  will be used. Otherwise should be set to a valid API key which can be obtained
  from https://tech.yandex.com/translate/. If the platform doesn't have a default
  key and one isn't provided here, an error will be raised.
+
+{:id="YandexTranslate.Name" .text .ro .bo} *Name*
+: Gets the name of the YandexTranslate.
 
 ### Events  {#YandexTranslate-Events}
 

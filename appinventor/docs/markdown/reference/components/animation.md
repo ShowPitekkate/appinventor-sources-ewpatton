@@ -46,6 +46,9 @@ A round 'sprite' that can be placed on a [`Canvas`](#Canvas), where it can react
  `Interval` is 50 and the [`Speed`](#Ball.Speed) is 10, then the `Ball` will move 10 pixels
  every 50 milliseconds.
 
+{:id="Ball.Name" .text .ro .bo} *Name*
+: Gets the name of the Ball.
+
 {:id="Ball.OriginAtCenter" .boolean .wo .do} *OriginAtCenter*
 : Whether the x- and y-coordinates should represent the center of the `Ball`
  (`true`{:.logic.block}) or its left and top edges (`false`{:.logic.block}).
@@ -211,6 +214,9 @@ A two-dimensional touch-sensitive rectangular panel on which drawing can
 {:id="Canvas.LineWidth" .number} *LineWidth*
 : Specifies the width of lines drawn on the Canvas.
 
+{:id="Canvas.Name" .text .ro .bo} *Name*
+: Gets the name of the Canvas.
+
 {:id="Canvas.PaintColor" .color} *PaintColor*
 : Specifies the paint color as an alpha-red-green-blue integer,
  i.e., `0xAARRGGBB`.  An alpha of `00` indicates fully
@@ -364,6 +370,9 @@ A 'sprite' that can be placed on a [`Canvas`](#Canvas), where it can react to to
 : The interval in milliseconds at which the `ImageSprite`'s position is updated. For example, if the
  `Interval` is 50 and the [`Speed`](#ImageSprite.Speed) is 10, then the `ImageSprite` will move 10 pixels
  every 50 milliseconds.
+
+{:id="ImageSprite.Name" .text .ro .bo} *Name*
+: Gets the name of the ImageSprite.
 
 {:id="ImageSprite.Picture" .text} *Picture*
 : Specifies the path of the sprite's picture.

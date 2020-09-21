@@ -60,6 +60,9 @@ Table of Contents:
 {:id="Ev3ColorSensor.Mode" .text} *Mode*
 : Returns the mode of the sensor.
 
+{:id="Ev3ColorSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3ColorSensor.
+
 {:id="Ev3ColorSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
  **Must be set in the Designer.**
@@ -127,6 +130,9 @@ Table of Contents:
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer**.
 
+{:id="Ev3Commands.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3Commands.
+
 ### Events  {#Ev3Commands-Events}
 
 {:.events}
@@ -181,6 +187,9 @@ None
 {:id="Ev3GyroSensor.Mode" .text} *Mode*
 : Returns the mode of the sensor.
 
+{:id="Ev3GyroSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3GyroSensor.
+
 {:id="Ev3GyroSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
  **Must be set in the Designer.**
@@ -231,6 +240,9 @@ None
 
 {:id="Ev3Motors.MotorPorts" .text .do} *MotorPorts*
 : Specifies the motor port.
+
+{:id="Ev3Motors.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3Motors.
 
 {:id="Ev3Motors.ReverseDirection" .boolean} *ReverseDirection*
 : Returns if the direction of the motors is reversed.
@@ -308,6 +320,9 @@ None
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer**.
 
+{:id="Ev3Sound.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3Sound.
+
 ### Events  {#Ev3Sound-Events}
 
 {:.events}
@@ -340,6 +355,9 @@ None
 {:id="Ev3TouchSensor.BluetoothClient" .component} *BluetoothClient*
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer**.
+
+{:id="Ev3TouchSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3TouchSensor.
 
 {:id="Ev3TouchSensor.PressedEventEnabled" .boolean} *PressedEventEnabled*
 : Returns whether the Pressed event should fire when the touch sensor is
@@ -386,6 +404,9 @@ None
 {:id="Ev3UI.BluetoothClient" .component} *BluetoothClient*
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer**.
+
+{:id="Ev3UI.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3UI.
 
 ### Events  {#Ev3UI-Events}
 
@@ -443,6 +464,9 @@ None
 {:id="Ev3UltrasonicSensor.BottomOfRange" .number} *BottomOfRange*
 : Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.
+
+{:id="Ev3UltrasonicSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the Ev3UltrasonicSensor.
 
 {:id="Ev3UltrasonicSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
@@ -529,6 +553,9 @@ None
  The sensor will not generate color when the DetectColor property is set to
  True.
 
+{:id="NxtColorSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtColorSensor.
+
 {:id="NxtColorSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
  **Must be set in the Designer.**
@@ -584,6 +611,9 @@ None
 {:id="NxtDirectCommands.BluetoothClient" .component .do} *BluetoothClient*
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer.**
+
+{:id="NxtDirectCommands.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtDirectCommands.
 
 ### Events  {#NxtDirectCommands-Events}
 
@@ -693,6 +723,9 @@ None
 {:id="NxtDrive.DriveMotors" .text .do} *DriveMotors*
 : Specifies the motor ports that are used for driving.
 
+{:id="NxtDrive.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtDrive.
+
 {:id="NxtDrive.StopBeforeDisconnect" .boolean} *StopBeforeDisconnect*
 : Specifies whether to stop the drive motors before disconnecting.
 
@@ -762,6 +795,9 @@ None
 {:id="NxtLightSensor.GenerateLight" .boolean} *GenerateLight*
 : Specifies whether the light sensor should generate light.
 
+{:id="NxtLightSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtLightSensor.
+
 {:id="NxtLightSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
  **Must be specified in the Designer.**
@@ -823,6 +859,9 @@ None
 : Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.
 
+{:id="NxtSoundSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtSoundSensor.
+
 {:id="NxtSoundSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.
  **Must be set in the Designer.**
@@ -871,6 +910,9 @@ None
 {:id="NxtTouchSensor.BluetoothClient" .component .do} *BluetoothClient*
 : Specifies the BluetoothClient component that should be used for communication.
  **Must be set in the Designer.**
+
+{:id="NxtTouchSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtTouchSensor.
 
 {:id="NxtTouchSensor.PressedEventEnabled" .boolean} *PressedEventEnabled*
 : Specifies whether the Pressed event should fire when the touch sensor is
@@ -929,6 +971,9 @@ None
 {:id="NxtUltrasonicSensor.BottomOfRange" .number} *BottomOfRange*
 : Specifies the bottom of the range used for the BelowRange, WithinRange,
  and AboveRange events.
+
+{:id="NxtUltrasonicSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the NxtUltrasonicSensor.
 
 {:id="NxtUltrasonicSensor.SensorPort" .text .do} *SensorPort*
 : Specifies the sensor port that the sensor is connected to.

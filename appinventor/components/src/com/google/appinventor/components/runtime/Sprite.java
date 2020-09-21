@@ -54,6 +54,7 @@ public abstract class Sprite extends VisibleComponent
   // Events are only raised when sprites are added to this collision set.  They
   // are removed when they no longer collide.
   private final Set<Sprite> registeredCollisions;
+  private String name;
 
   // This variable prevents events from being raised before construction of
   // all components has taken place.  This was added to fix bug 2262218.
@@ -1001,6 +1002,21 @@ public abstract class Sprite extends VisibleComponent
   @Override
   public HandlesEventDispatching getDispatchDelegate() {
     return canvas.$form();
+  }
+
+  @Override
+  public void Name(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the name of the %type%.
+   *
+   * @return the name of the component
+   */
+  @SimpleProperty
+  public String Name() {
+    return name;
   }
 
   // OnDestroyListener implementation

@@ -7,6 +7,7 @@
 package com.google.appinventor.components.runtime;
 
 import com.google.appinventor.components.annotations.SimpleObject;
+import com.google.appinventor.components.annotations.SimpleProperty;
 import com.google.appinventor.components.common.ComponentConstants;
 
 /**
@@ -20,6 +21,22 @@ public interface Component {
    * for this component.
    */
   public HandlesEventDispatching getDispatchDelegate();
+
+  /**
+   * Sets the name of the component.
+   *
+   * @param name the name of the component
+   */
+  @SuppressWarnings("CheckStyle")
+  void Name(String name);
+
+  /**
+   * Gets the name of the %type%.
+   *
+   * @return the component's name
+   */
+  @SimpleProperty
+  String Name();
 
   /*
    * Components asset directory.

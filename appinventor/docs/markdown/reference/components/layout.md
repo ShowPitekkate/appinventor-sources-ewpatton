@@ -76,6 +76,9 @@ Table of Contents:
 {:id="HorizontalArrangement.Image" .text} *Image*
 : Specifies the path of the background image of the `HorizontalArrangement`.
 
+{:id="HorizontalArrangement.Name" .text .ro .bo} *Name*
+: Gets the name of the HorizontalArrangement.
+
 {:id="HorizontalArrangement.Visible" .boolean} *Visible*
 : Specifies whether the `HorizontalArrangement` should be visible on the screen.  Value is `true`{:.logic.block}
  if the `HorizontalArrangement` is showing and `false`{:.logic.block} if hidden.
@@ -138,6 +141,9 @@ A formatting element in which to place components that should be displayed from 
 {:id="HorizontalScrollArrangement.Image" .text} *Image*
 : Specifies the path of the background image of the `HorizontalScrollArrangement`.
 
+{:id="HorizontalScrollArrangement.Name" .text .ro .bo} *Name*
+: Gets the name of the HorizontalScrollArrangement.
+
 {:id="HorizontalScrollArrangement.Visible" .boolean} *Visible*
 : Specifies whether the `HorizontalScrollArrangement` should be visible on the screen.  Value is `true`{:.logic.block}
  if the `HorizontalScrollArrangement` is showing and `false`{:.logic.block} if hidden.
@@ -199,6 +205,9 @@ Use a table arrangement component to display a group of components in a tabular 
 {:id="TableArrangement.HeightPercent" .number .wo .bo} *HeightPercent*
 : Specifies the `TableArrangement`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
+
+{:id="TableArrangement.Name" .text .ro .bo} *Name*
+: Gets the name of the TableArrangement.
 
 {:id="TableArrangement.Rows" .number .do} *Rows*
 : Determines the number of rows in the table.
@@ -288,6 +297,9 @@ None
 {:id="VerticalArrangement.Image" .text} *Image*
 : Specifies the path of the background image of the `VerticalArrangement`.
 
+{:id="VerticalArrangement.Name" .text .ro .bo} *Name*
+: Gets the name of the VerticalArrangement.
+
 {:id="VerticalArrangement.Visible" .boolean} *Visible*
 : Specifies whether the `VerticalArrangement` should be visible on the screen.  Value is `true`{:.logic.block}
  if the `VerticalArrangement` is showing and `false`{:.logic.block} if hidden.
@@ -349,6 +361,9 @@ A formatting element in which to place components that should be displayed one b
 
 {:id="VerticalScrollArrangement.Image" .text} *Image*
 : Specifies the path of the background image of the `VerticalScrollArrangement`.
+
+{:id="VerticalScrollArrangement.Name" .text .ro .bo} *Name*
+: Gets the name of the VerticalScrollArrangement.
 
 {:id="VerticalScrollArrangement.Visible" .boolean} *Visible*
 : Specifies whether the `VerticalScrollArrangement` should be visible on the screen.  Value is `true`{:.logic.block}

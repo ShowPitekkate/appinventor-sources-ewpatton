@@ -64,6 +64,9 @@ The `Circle` component visualizes a circle of a given [`Radius`](#Circle.Radius)
  east of the prime meridian and negative values represent west of the prime meridian. To update
  the latitude and longitude simultaneously, use the [`SetLocation`](#Circle.SetLocation) method.
 
+{:id="Circle.Name" .text .ro .bo} *Name*
+: Gets the name of the Circle.
+
 {:id="Circle.Radius" .number} *Radius*
 : Sets or gets the radius of the circle, in meters.
 
@@ -169,6 +172,9 @@ A `FeatureCollection` groups one or more map features together. Any events that 
 {:id="FeatureCollection.HeightPercent" .number .wo .bo} *HeightPercent*
 : Specifies the `FeatureCollection`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
+
+{:id="FeatureCollection.Name" .text .ro .bo} *Name*
+: Gets the name of the FeatureCollection.
 
 {:id="FeatureCollection.Source" .text .ro} *Source*
 : Specifies the source URL used to populate the feature collection. If the feature collection was not loaded from a URL, this will be the empty string.
@@ -282,6 +288,9 @@ A `FeatureCollection` groups one or more map features together. Any events that 
 
 {:id="LineString.EnableInfobox" .boolean} *EnableInfobox*
 : Enables or disables the infobox window display when the user taps the `LineString`.
+
+{:id="LineString.Name" .text .ro .bo} *Name*
+: Gets the name of the LineString.
 
 {:id="LineString.Points" .list .bo} *Points*
 : The list of points, as pairs of latitudes and longitudes, in the `LineString`.
@@ -436,6 +445,9 @@ A two-dimensional container that renders map tiles in the background and allows 
 
    **Note:** Road layers are provided by OpenStreetMap and aerial and terrain layers are
  provided by the U.S. Geological Survey.
+
+{:id="Map.Name" .text .ro .bo} *Name*
+: Gets the name of the Map.
 
 {:id="Map.Rotation" .number} *Rotation*
 : Specifies the rotation of the map in decimal degrees, if any.
@@ -666,6 +678,9 @@ The `Marker` component indicates points on a [`Map`](#Map), such as buildings or
  the [`Latitude`](#Marker.Latitude) and `Longitude` simultaneously, use the
  [`SetLocation`](#Marker.SetLocation) method.
 
+{:id="Marker.Name" .text .ro .bo} *Name*
+: Gets the name of the Marker.
+
 {:id="Marker.StrokeColor" .color} *StrokeColor*
 : Sets or gets the color used to outline the `Marker`.
 
@@ -779,6 +794,9 @@ The Navigation component generates directions between two locations using a serv
 {:id="Navigation.Language" .text} *Language*
 : The language to use for textual directions. Default is "en" for English.
 
+{:id="Navigation.Name" .text .ro .bo} *Name*
+: Gets the name of the Navigation.
+
 {:id="Navigation.ResponseContent" .dictionary .ro .bo} *ResponseContent*
 : The raw response from the server. This can be used to access more details beyond what the
  [`GotDirections`](#Navigation.GotDirections) event provides.
@@ -864,6 +882,9 @@ The Navigation component generates directions between two locations using a serv
 : Specifies holes in a `Polygon`from a GeoJSON string. In contrast to
  [`HolePoints`](#Polygon.HolePoints), the longitude of each point comes before the latitude as
  stated in the GeoJSON specification.
+
+{:id="Polygon.Name" .text .ro .bo} *Name*
+: Gets the name of the Polygon.
 
 {:id="Polygon.Points" .list .bo} *Points*
 : Specifies the Points used for drawing the `Polygon`. The Points are specified as a list of
@@ -976,6 +997,9 @@ The Navigation component generates directions between two locations using a serv
 {:id="Rectangle.FillOpacity" .number} *FillOpacity*
 : Sets or gets the opacity of the color used to fill the `Rectangle`. A value of 0.0 will be
  completely invisible and a value of 1.0 will be completely opaque.
+
+{:id="Rectangle.Name" .text .ro .bo} *Name*
+: Gets the name of the Rectangle.
 
 {:id="Rectangle.NorthLatitude" .number} *NorthLatitude*
 : Specifies the north-most edge of the `Rectangle`, in decimal degrees north of the equator.

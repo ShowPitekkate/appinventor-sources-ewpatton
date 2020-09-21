@@ -183,6 +183,8 @@
   <dt id="Button.Image" class="text"><em>Image</em></dt>
   <dd>Specifies the path of the <code class="highlighter-rouge">Button</code>’s image. If there is both an <code class="highlighter-rouge">Image</code> and a
  <a href="#Button.BackgroundColor"><code class="highlighter-rouge">BackgroundColor</code></a> specified, only the <code class="highlighter-rouge">Image</code> will be visible.</dd>
+  <dt id="Button.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Button.</dd>
   <dt id="Button.Shape" class="number do"><em>Shape</em></dt>
   <dd>Specifies the shape of the <code class="highlighter-rouge">Button</code>. The valid values for this property are <code class="highlighter-rouge">0</code> (default),
  <code class="highlighter-rouge">1</code> (rounded), <code class="highlighter-rouge">2</code> (rectangle), and <code class="highlighter-rouge">3</code> (oval). The <code class="highlighter-rouge">Shape</code> will not be visible if an
@@ -268,6 +270,8 @@
   <dt id="CheckBox.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">CheckBox</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="CheckBox.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the CheckBox.</dd>
   <dt id="CheckBox.Text" class="text"><em>Text</em></dt>
   <dd>Specifies the text displayed by the <code class="highlighter-rouge">CheckBox</code>.</dd>
   <dt id="CheckBox.TextColor" class="color"><em>TextColor</em></dt>
@@ -341,6 +345,8 @@
   <dd>Returns the number of the Month that was last picked using the DatePicker.</dd>
   <dt id="DatePicker.MonthInText" class="text ro bo"><em>MonthInText</em></dt>
   <dd>Returns the name of the Month that was last picked using the DatePicker.</dd>
+  <dt id="DatePicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the DatePicker.</dd>
   <dt id="DatePicker.Shape" class="number do"><em>Shape</em></dt>
   <dd>Specifies the shape of the <code class="highlighter-rouge">DatePicker</code>. The valid values for this property are <code class="highlighter-rouge">0</code> (default),
  <code class="highlighter-rouge">1</code> (rounded), <code class="highlighter-rouge">2</code> (rectangle), and <code class="highlighter-rouge">3</code> (oval). The <code class="highlighter-rouge">Shape</code> will not be visible if an
@@ -421,6 +427,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dt id="Image.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">Image</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="Image.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Image.</dd>
   <dt id="Image.Picture" class="text"><em>Picture</em></dt>
   <dd>Specifies the path of the <code class="highlighter-rouge">Image</code>’s <code class="highlighter-rouge">Picture</code>.</dd>
   <dt id="Image.RotationAngle" class="number"><em>RotationAngle</em></dt>
@@ -491,6 +499,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dt id="Label.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">Label</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="Label.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Label.</dd>
   <dt id="Label.Text" class="text"><em>Text</em></dt>
   <dd>Specifies the text displayed by the label.</dd>
   <dt id="Label.TextAlignment" class="number do"><em>TextAlignment</em></dt>
@@ -567,6 +577,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>The background color of the <code class="highlighter-rouge">ListPicker</code> items.</dd>
   <dt id="ListPicker.ItemTextColor" class="color"><em>ItemTextColor</em></dt>
   <dd>The text color of the ListPicker items.</dd>
+  <dt id="ListPicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the ListPicker.</dd>
   <dt id="ListPicker.Selection" class="text"><em>Selection</em></dt>
   <dd>The selected item. When directly changed by the programmer, the <a href="#ListPicker.SelectionIndex"><code class="highlighter-rouge">SelectionIndex</code></a>
  property is also changed to the first item in the <a href="#ListPicker"><code class="highlighter-rouge">ListPicker</code></a> with the given value.
@@ -656,6 +668,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dt id="ListView.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">ListView</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="ListView.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the ListView.</dd>
   <dt id="ListView.Selection" class="text"><em>Selection</em></dt>
   <dd>Returns the text in the <code class="highlighter-rouge">ListView</code> at the position of <a href="#ListView.SelectionIndex"><code class="highlighter-rouge">SelectionIndex</code></a>.</dd>
   <dt id="ListView.SelectionColor" class="color"><em>SelectionColor</em></dt>
@@ -704,6 +718,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
 <dl class="properties">
   <dt id="Notifier.BackgroundColor" class="color wo"><em>BackgroundColor</em></dt>
   <dd>Specifies the background color for alerts (not dialogs).</dd>
+  <dt id="Notifier.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Notifier.</dd>
   <dt id="Notifier.NotifierLength" class="number do"><em>NotifierLength</em></dt>
   <dd>Specifies the length of time that the alert is shown – either “short” or “long”.</dd>
   <dt id="Notifier.TextColor" class="color"><em>TextColor</em></dt>
@@ -814,6 +830,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
   <dt id="PasswordTextBox.Hint" class="text"><em>Hint</em></dt>
   <dd><code class="highlighter-rouge">PasswordTextBox</code> hint for the user.</dd>
+  <dt id="PasswordTextBox.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the PasswordTextBox.</dd>
   <dt id="PasswordTextBox.PasswordVisible" class="boolean bo"><em>PasswordVisible</em></dt>
   <dd>Specifies whether the password is hidden (default) or shown.</dd>
   <dt id="PasswordTextBox.Text" class="text"><em>Text</em></dt>
@@ -898,6 +916,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>The image used for your App’s display icon should be a square png or jpeg image with dimensions
  up to 1024x1024 pixels. Larger images may cause compiling or installing the app to fail.
  The build server will generate images of standard dimensions for Android devices.</dd>
+  <dt id="Screen.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Screen.</dd>
   <dt id="Screen.OpenScreenAnimation" class="text"><em>OpenScreenAnimation</em></dt>
   <dd>The animation for switching to another screen. Valid options are <code class="highlighter-rouge">default</code>, <code class="highlighter-rouge">fade</code>, <code class="highlighter-rouge">zoom</code>,
  <code class="highlighter-rouge">slidehorizontal</code>, <code class="highlighter-rouge">slidevertical</code>, and <code class="highlighter-rouge">none</code>.</dd>
@@ -1012,8 +1032,15 @@ having dark grey components.</li>
  in your <a href="#Screen.Initialize"><code class="highlighter-rouge">Initialize</code></a> event unless access to that permission is critical to the
  behavior of your app and is needed up front, such as location services for a navigation app.</p>
   </dd>
+  <dt id="Screen.GetComponent" class="method returns component"><i></i> GetComponent(<em class="text">name</em>)</dt>
+  <dd>Gets the component with the given name. If no such component exists, then the
+ <a href="#Screen.ErrorOccurred"><code class="highlighter-rouge">ErrorOccurred</code></a> event will be run to indicate this.</dd>
   <dt id="Screen.HideKeyboard" class="method"><i></i> HideKeyboard()</dt>
   <dd>Hide the soft keyboard</dd>
+  <dt id="Screen.NameForComponent" class="method returns text"><i></i> NameForComponent(<em class="component">component</em>)</dt>
+  <dd>Gets the name for the given component. This can be used in place of the
+ any component blocks for the Name property if the type of the component is
+ not known at compile time.</dd>
 </dl>
 
 <h2 id="Slider">Slider</h2>
@@ -1063,6 +1090,8 @@ having dark grey components.</li>
  Setting <code class="highlighter-rouge">MinValue</code> resets the thumb position to halfway between <code class="highlighter-rouge">MinValue</code>
  and <a href="#Slider.MaxValue"><code class="highlighter-rouge">MaxValue</code></a> and signals the <a href="#Slider.PositionChanged"><code class="highlighter-rouge">PositionChanged</code></a>`
  event.</dd>
+  <dt id="Slider.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Slider.</dd>
   <dt id="Slider.ThumbEnabled" class="boolean"><em>ThumbEnabled</em></dt>
   <dd>Whether or not the slider thumb is being be shown.</dd>
   <dt id="Slider.ThumbPosition" class="number"><em>ThumbPosition</em></dt>
@@ -1112,6 +1141,8 @@ having dark grey components.</li>
   <dt id="Spinner.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">Spinner</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="Spinner.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Spinner.</dd>
   <dt id="Spinner.Prompt" class="text"><em>Prompt</em></dt>
   <dd>Specifies the text used for the title of the Spinner window.</dd>
   <dt id="Spinner.Selection" class="text"><em>Selection</em></dt>
@@ -1177,6 +1208,8 @@ having dark grey components.</li>
   <dt id="Switch.HeightPercent" class="number wo bo"><em>HeightPercent</em></dt>
   <dd>Specifies the <code class="highlighter-rouge">Switch</code>’s vertical height as a percentage
  of the <a href="userinterface.html#Screen.Height"><code class="highlighter-rouge">Screen</code>’s <code class="highlighter-rouge">Height</code></a>.</dd>
+  <dt id="Switch.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Switch.</dd>
   <dt id="Switch.On" class="boolean"><em>On</em></dt>
   <dd>True if the switch is in the On state, false otherwise.</dd>
   <dt id="Switch.Text" class="text"><em>Text</em></dt>
@@ -1274,6 +1307,8 @@ having dark grey components.</li>
  return key. For single line text boxes there is a Done key instead of a return key, and
  pressing Done hides the keyboard. The app should call the HideKeyboard method to hide the
  keyboard for a mutiline text box.</dd>
+  <dt id="TextBox.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the TextBox.</dd>
   <dt id="TextBox.NumbersOnly" class="boolean"><em>NumbersOnly</em></dt>
   <dd>If true, then this <code class="highlighter-rouge">TextBox</code><code class="highlighter-rouge"> accepts only numbers as keyboard input. Numbers can include a
  decimal point and an optional leading minus sign. This applies to keyboard input only. Even
@@ -1365,6 +1400,8 @@ having dark grey components.</li>
   <dt id="TimePicker.Minute" class="number ro bo"><em>Minute</em></dt>
   <dd>Returns the hour of the time that was last picked using the <code class="highlighter-rouge">TimePicker</code>.
  The time returned is always in the 24hour format.</dd>
+  <dt id="TimePicker.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the TimePicker.</dd>
   <dt id="TimePicker.Shape" class="number do"><em>Shape</em></dt>
   <dd>Specifies the shape of the <code class="highlighter-rouge">TimePicker</code>. The valid values for this property are <code class="highlighter-rouge">0</code> (default),
  <code class="highlighter-rouge">1</code> (rounded), <code class="highlighter-rouge">2</code> (rectangle), and <code class="highlighter-rouge">3</code> (oval). The <code class="highlighter-rouge">Shape</code> will not be visible if an
@@ -1485,6 +1522,8 @@ having dark grey components.</li>
   <dt id="WebViewer.IgnoreSslErrors" class="boolean"><em>IgnoreSslErrors</em></dt>
   <dd>Determine whether or not to ignore SSL errors. Set to <code class="logic block highlighter-rouge">true</code> to ignore errors.
  Use this to accept self signed certificates from websites.</dd>
+  <dt id="WebViewer.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the WebViewer.</dd>
   <dt id="WebViewer.PromptforPermission" class="boolean"><em>PromptforPermission</em></dt>
   <dd>Determine if the user should be prompted for permission to use the geolocation API while in
  the <code class="highlighter-rouge">WebViewer</code>. If <code class="logic block highlighter-rouge">true</code>, prompt the user of the <code class="highlighter-rouge">WebViewer</code> to give

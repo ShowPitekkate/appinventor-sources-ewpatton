@@ -77,6 +77,9 @@ A component that can launch an activity using the StartActivity method.
 {:id="ActivityStarter.Extras" .list .bo} *Extras*
 : Returns the list of key-value pairs that will be passed as extra data to the activity.
 
+{:id="ActivityStarter.Name" .text .ro .bo} *Name*
+: Gets the name of the ActivityStarter.
+
 {:id="ActivityStarter.Result" .text .ro .bo} *Result*
 : Returns the result from the activity.
 
@@ -153,6 +156,9 @@ Use `BluetoothClient` to connect your device to other devices using Bluetooth. T
 
 {:id="BluetoothClient.IsConnected" .boolean .ro .bo} *IsConnected*
 : Returns `frue`{:.logic.block} if a connection to a Bluetooth device has been made.
+
+{:id="BluetoothClient.Name" .text .ro .bo} *Name*
+: Gets the name of the BluetoothClient.
 
 {:id="BluetoothClient.Secure" .boolean} *Secure*
 : Specifies whether a secure connection should be used.
@@ -291,6 +297,9 @@ Use the `BluetoothServer` component to turn your device into a server that recei
 {:id="BluetoothServer.IsConnected" .boolean .ro .bo} *IsConnected*
 : Returns `frue`{:.logic.block} if a connection to a Bluetooth device has been made.
 
+{:id="BluetoothServer.Name" .text .ro .bo} *Name*
+: Gets the name of the BluetoothServer.
+
 {:id="BluetoothServer.Secure" .boolean} *Secure*
 : Specifies whether a secure connection should be used.
 
@@ -414,6 +423,9 @@ Component for Serial
 {:id="Serial.IsOpen" .boolean .ro .bo} *IsOpen*
 : Returns true when the Serial connection is open.
 
+{:id="Serial.Name" .text .ro .bo} *Name*
+: Gets the name of the Serial.
+
 ### Events  {#Serial-Events}
 
 {:.events}
@@ -454,6 +466,9 @@ Non-visible component that provides functions for HTTP GET, POST, PUT, and DELET
 
 {:id="Web.AllowCookies" .boolean} *AllowCookies*
 : Specifies whether cookies should be allowed
+
+{:id="Web.Name" .text .ro .bo} *Name*
+: Gets the name of the Web.
 
 {:id="Web.RequestHeaders" .list .bo} *RequestHeaders*
 : Sets the request headers.

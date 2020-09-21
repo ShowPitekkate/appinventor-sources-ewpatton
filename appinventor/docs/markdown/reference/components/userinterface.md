@@ -71,6 +71,9 @@ Button with the ability to detect clicks. Many aspects of its appearance can be 
 : Specifies the path of the `Button`'s image. If there is both an `Image` and a
  [`BackgroundColor`](#Button.BackgroundColor) specified, only the `Image` will be visible.
 
+{:id="Button.Name" .text .ro .bo} *Name*
+: Gets the name of the Button.
+
 {:id="Button.Shape" .number .do} *Shape*
 : Specifies the shape of the `Button`. The valid values for this property are `0` (default),
  `1` (rounded), `2` (rectangle), and `3` (oval). The `Shape` will not be visible if an
@@ -181,6 +184,9 @@ None
 : Specifies the `CheckBox`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
 
+{:id="CheckBox.Name" .text .ro .bo} *Name*
+: Gets the name of the CheckBox.
+
 {:id="CheckBox.Text" .text} *Text*
 : Specifies the text displayed by the `CheckBox`.
 
@@ -276,6 +282,9 @@ A button that, when clicked on, launches a popup dialog to allow the user to sel
 
 {:id="DatePicker.MonthInText" .text .ro .bo} *MonthInText*
 : Returns the name of the Month that was last picked using the DatePicker.
+
+{:id="DatePicker.Name" .text .ro .bo} *Name*
+: Gets the name of the DatePicker.
 
 {:id="DatePicker.Shape" .number .do} *Shape*
 : Specifies the shape of the `DatePicker`. The valid values for this property are `0` (default),
@@ -377,6 +386,9 @@ Component for displaying images and basic animations.
 : Specifies the `Image`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
 
+{:id="Image.Name" .text .ro .bo} *Name*
+: Gets the name of the Image.
+
 {:id="Image.Picture" .text} *Picture*
 : Specifies the path of the `Image`'s `Picture`.
 
@@ -466,6 +478,9 @@ Labels are components used to show text.
 {:id="Label.HeightPercent" .number .wo .bo} *HeightPercent*
 : Specifies the `Label`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
+
+{:id="Label.Name" .text .ro .bo} *Name*
+: Gets the name of the Label.
 
 {:id="Label.Text" .text} *Text*
 : Specifies the text displayed by the label.
@@ -566,6 +581,9 @@ A button that, when clicked on, displays a list of texts for the user to choose 
 
 {:id="ListPicker.ItemTextColor" .color} *ItemTextColor*
 : The text color of the ListPicker items.
+
+{:id="ListPicker.Name" .text .ro .bo} *Name*
+: Gets the name of the ListPicker.
 
 {:id="ListPicker.Selection" .text} *Selection*
 : The selected item. When directly changed by the programmer, the [`SelectionIndex`](#ListPicker.SelectionIndex)
@@ -679,6 +697,9 @@ This is a visible component that allows to place a list of text elements in your
 : Specifies the `ListView`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
 
+{:id="ListView.Name" .text .ro .bo} *Name*
+: Gets the name of the ListView.
+
 {:id="ListView.Selection" .text} *Selection*
 : Returns the text in the `ListView` at the position of [`SelectionIndex`](#ListView.SelectionIndex).
 
@@ -739,6 +760,9 @@ The Notifier component displays alert messages and creates Android log entries t
 
 {:id="Notifier.BackgroundColor" .color .wo} *BackgroundColor*
 : Specifies the background color for alerts (not dialogs).
+
+{:id="Notifier.Name" .text .ro .bo} *Name*
+: Gets the name of the Notifier.
 
 {:id="Notifier.NotifierLength" .number .do} *NotifierLength*
 : Specifies the length of time that the alert is shown -- either "short" or "long".
@@ -874,6 +898,9 @@ Users enter passwords in a password text box component, which hides the text tha
 {:id="PasswordTextBox.Hint" .text} *Hint*
 : `PasswordTextBox` hint for the user.
 
+{:id="PasswordTextBox.Name" .text .ro .bo} *Name*
+: Gets the name of the PasswordTextBox.
+
 {:id="PasswordTextBox.PasswordVisible" .boolean .bo} *PasswordVisible*
 : Specifies whether the password is hidden (default) or shown.
 
@@ -977,6 +1004,9 @@ Top-level component containing all other components in the program.
 : The image used for your App's display icon should be a square png or jpeg image with dimensions
  up to 1024x1024 pixels. Larger images may cause compiling or installing the app to fail.
  The build server will generate images of standard dimensions for Android devices.
+
+{:id="Screen.Name" .text .ro .bo} *Name*
+: Gets the name of the Screen.
 
 {:id="Screen.OpenScreenAnimation" .text} *OpenScreenAnimation*
 : The animation for switching to another screen. Valid options are `default`, `fade`, `zoom`,
@@ -1109,8 +1139,17 @@ Top-level component containing all other components in the program.
  in your [`Initialize`](#Screen.Initialize) event unless access to that permission is critical to the
  behavior of your app and is needed up front, such as location services for a navigation app.
 
+{:id="Screen.GetComponent" class="method returns component"} <i/> GetComponent(*name*{:.text})
+: Gets the component with the given name. If no such component exists, then the
+ [`ErrorOccurred`](#Screen.ErrorOccurred) event will be run to indicate this.
+
 {:id="Screen.HideKeyboard" class="method"} <i/> HideKeyboard()
 : Hide the soft keyboard
+
+{:id="Screen.NameForComponent" class="method returns text"} <i/> NameForComponent(*component*{:.component})
+: Gets the name for the given component. This can be used in place of the
+ any component blocks for the Name property if the type of the component is
+ not known at compile time.
 
 ## Slider  {#Slider}
 
@@ -1164,6 +1203,9 @@ This class is used to display a `Slider`.
  Setting `MinValue` resets the thumb position to halfway between `MinValue`
  and [`MaxValue`](#Slider.MaxValue) and signals the [`PositionChanged`](#Slider.PositionChanged)`
  event.
+
+{:id="Slider.Name" .text .ro .bo} *Name*
+: Gets the name of the Slider.
 
 {:id="Slider.ThumbEnabled" .boolean} *ThumbEnabled*
 : Whether or not the slider thumb is being be shown.
@@ -1225,6 +1267,9 @@ A `Spinner` component that displays a dialog with a list of elements. These elem
 {:id="Spinner.HeightPercent" .number .wo .bo} *HeightPercent*
 : Specifies the `Spinner`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
+
+{:id="Spinner.Name" .text .ro .bo} *Name*
+: Gets the name of the Spinner.
 
 {:id="Spinner.Prompt" .text} *Prompt*
 : Specifies the text used for the title of the Spinner window.
@@ -1305,6 +1350,9 @@ A `Spinner` component that displays a dialog with a list of elements. These elem
 {:id="Switch.HeightPercent" .number .wo .bo} *HeightPercent*
 : Specifies the `Switch`'s vertical height as a percentage
  of the [`Screen`'s `Height`](userinterface.html#Screen.Height).
+
+{:id="Switch.Name" .text .ro .bo} *Name*
+: Gets the name of the Switch.
 
 {:id="Switch.On" .boolean} *On*
 : True if the switch is in the On state, false otherwise.
@@ -1428,6 +1476,9 @@ Users enter text in a text box component.
  pressing Done hides the keyboard. The app should call the HideKeyboard method to hide the
  keyboard for a mutiline text box.
 
+{:id="TextBox.Name" .text .ro .bo} *Name*
+: Gets the name of the TextBox.
+
 {:id="TextBox.NumbersOnly" .boolean} *NumbersOnly*
 : If true, then this `TextBox`` accepts only numbers as keyboard input. Numbers can include a
  decimal point and an optional leading minus sign. This applies to keyboard input only. Even
@@ -1541,6 +1592,9 @@ A button that, when clicked on, opens a dialog to allow the user to select a tim
 {:id="TimePicker.Minute" .number .ro .bo} *Minute*
 : Returns the hour of the time that was last picked using the `TimePicker`.
  The time returned is always in the 24hour format.
+
+{:id="TimePicker.Name" .text .ro .bo} *Name*
+: Gets the name of the TimePicker.
 
 {:id="TimePicker.Shape" .number .do} *Shape*
 : Specifies the shape of the `TimePicker`. The valid values for this property are `0` (default),
@@ -1687,6 +1741,9 @@ Component for viewing Web pages.
 {:id="WebViewer.IgnoreSslErrors" .boolean} *IgnoreSslErrors*
 : Determine whether or not to ignore SSL errors. Set to `true`{:.logic.block} to ignore errors.
  Use this to accept self signed certificates from websites.
+
+{:id="WebViewer.Name" .text .ro .bo} *Name*
+: Gets the name of the WebViewer.
 
 {:id="WebViewer.PromptforPermission" .boolean} *PromptforPermission*
 : Determine if the user should be prompted for permission to use the geolocation API while in

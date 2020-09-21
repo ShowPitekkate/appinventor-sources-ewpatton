@@ -180,6 +180,8 @@ gravity.</li>
  in milliseconds.
  Once the phone starts being shaken, all further <a href="#AccelerometerSensor.Shaking"><code class="highlighter-rouge">Shaking</code></a> events will be ignored
  until the interval has elapsed.</dd>
+  <dt id="AccelerometerSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the AccelerometerSensor.</dd>
   <dt id="AccelerometerSensor.Sensitivity" class="number"><em>Sensitivity</em></dt>
   <dd>Specifies the sensitivity of the accelerometer. Valid values are: <code class="highlighter-rouge">1</code> (weak), <code class="highlighter-rouge">2</code> (moderate),
  and <code class="highlighter-rouge">3</code> (strong).</dd>
@@ -214,6 +216,8 @@ gravity.</li>
 <h3 id="BarcodeScanner-Properties">Properties</h3>
 
 <dl class="properties">
+  <dt id="BarcodeScanner.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the BarcodeScanner.</dd>
   <dt id="BarcodeScanner.Result" class="text ro bo"><em>Result</em></dt>
   <dd>Gets the text result of the previous scan.</dd>
   <dt id="BarcodeScanner.UseExternalScanner" class="boolean"><em>UseExternalScanner</em></dt>
@@ -254,6 +258,8 @@ gravity.</li>
   <dd>Specifies whether the sensor should generate events.  If <code class="logic block highlighter-rouge">true</code>,
  the sensor will generate events.  Otherwise, no events are
  generated.</dd>
+  <dt id="Barometer.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Barometer.</dd>
   <dt id="Barometer.RefreshTime" class="number"><em>RefreshTime</em></dt>
   <dd>The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.</dd>
 </dl>
@@ -309,6 +315,8 @@ created using the <a href="#Clock.MakeInstant"><code class="highlighter-rouge">M
 <h3 id="Clock-Properties">Properties</h3>
 
 <dl class="properties">
+  <dt id="Clock.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Clock.</dd>
   <dt id="Clock.TimerAlwaysFires" class="boolean"><em>TimerAlwaysFires</em></dt>
   <dd>Will fire even when application is not showing on the screen if true</dd>
   <dt id="Clock.TimerEnabled" class="boolean"><em>TimerEnabled</em></dt>
@@ -419,6 +427,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>Indicates whether a gyroscope sensor is available.</dd>
   <dt id="GyroscopeSensor.Enabled" class="boolean"><em>Enabled</em></dt>
   <dd>Enabled property getter method.</dd>
+  <dt id="GyroscopeSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the GyroscopeSensor.</dd>
   <dt id="GyroscopeSensor.XAngularVelocity" class="number ro bo"><em>XAngularVelocity</em></dt>
   <dd>The angular velocity around the X axis, in degrees per second.</dd>
   <dt id="GyroscopeSensor.YAngularVelocity" class="number ro bo"><em>YAngularVelocity</em></dt>
@@ -456,6 +466,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>Returns the relative ambient humidity as a percentage.
  The sensor must be enabled and available 
  to return meaningful values.</dd>
+  <dt id="Hygrometer.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Hygrometer.</dd>
   <dt id="Hygrometer.RefreshTime" class="number"><em>RefreshTime</em></dt>
   <dd>The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.</dd>
 </dl>
@@ -490,6 +502,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dt id="LightSensor.Lux" class="number ro bo"><em>Lux</em></dt>
   <dd>Returns the last measured brightness in lux.
  The sensor must be enabled and available to return meaningful values.</dd>
+  <dt id="LightSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the LightSensor.</dd>
   <dt id="LightSensor.RefreshTime" class="number"><em>RefreshTime</em></dt>
   <dd>The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.</dd>
 </dl>
@@ -588,6 +602,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>The most recent available longitude value in degrees reported to 5 decimal places.
  If no value is available, 0 will be returned.
  Longitude is a value between 180 (east) and -180 (west), where 0 marks the Prime Meridian.</dd>
+  <dt id="LocationSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the LocationSensor.</dd>
   <dt id="LocationSensor.ProviderLocked" class="boolean bo"><em>ProviderLocked</em></dt>
   <dd>The device will not change the service provider.
 
@@ -645,6 +661,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
   <dd>Indicates whether or not the magnetic field sensor is enabled and working.</dd>
   <dt id="MagneticFieldSensor.MaximumRange" class="number ro bo"><em>MaximumRange</em></dt>
   <dd>Indicates the maximum range the magnetic sensor can reach.</dd>
+  <dt id="MagneticFieldSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the MagneticFieldSensor.</dd>
   <dt id="MagneticFieldSensor.XStrength" class="number ro bo"><em>XStrength</em></dt>
   <dd>Indicates the field’s strength in the X-axis.</dd>
   <dt id="MagneticFieldSensor.YStrength" class="number ro bo"><em>YStrength</em></dt>
@@ -679,6 +697,8 @@ Valid values for the month field are 1-12 and 1-31 for the day field.</dd>
 <dl class="properties">
   <dt id="NearField.LastMessage" class="text ro bo"><em>LastMessage</em></dt>
   <dd>Returns the content of the most recently received tag.</dd>
+  <dt id="NearField.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the NearField.</dd>
   <dt id="NearField.ReadMode" class="boolean"><em>ReadMode</em></dt>
   <dd>Specifies whether the NFC hardware should operate in read mode (<code class="logic block highlighter-rouge">true</code>) or
  write mode (<code class="logic block highlighter-rouge">false</code>).</dd>
@@ -747,6 +767,8 @@ etc.</li>
  is tilted. It gives the magnitude of the force that would be felt
  by a ball rolling on the surface of the device. For the angle of
  tilt, use <a href="#OrientationSensor.Angle"><code class="highlighter-rouge">Angle</code></a>.</dd>
+  <dt id="OrientationSensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the OrientationSensor.</dd>
   <dt id="OrientationSensor.Pitch" class="number ro bo"><em>Pitch</em></dt>
   <dd>Returns the pitch angle of the device.
  To return meaningful values the sensor must be enabled.</dd>
@@ -777,6 +799,8 @@ etc.</li>
   <dd>Returns the approximate distance traveled in meters.</dd>
   <dt id="Pedometer.ElapsedTime" class="number ro bo"><em>ElapsedTime</em></dt>
   <dd>Returns the time elapsed in milliseconds since the pedometer has started.</dd>
+  <dt id="Pedometer.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Pedometer.</dd>
   <dt id="Pedometer.SimpleSteps" class="number ro bo"><em>SimpleSteps</em></dt>
   <dd>Returns the number of simple steps taken since the pedometer has started.</dd>
   <dt id="Pedometer.StopDetectionTimeout" class="number"><em>StopDetectionTimeout</em></dt>
@@ -841,6 +865,8 @@ etc.</li>
  that represent “near” or “far.” In this case, the sensor usually reports
  its maximum range value in the far state and a lesser value in the near state.
  Typically, the far value is a value &gt; 5 cm, but this can vary from sensor to sensor.</dd>
+  <dt id="ProximitySensor.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the ProximitySensor.</dd>
 </dl>
 
 <h3 id="ProximitySensor-Events">Events</h3>
@@ -868,6 +894,8 @@ etc.</li>
   <dd>Specifies whether the sensor should generate events.  If <code class="logic block highlighter-rouge">true</code>,
  the sensor will generate events.  Otherwise, no events are
  generated.</dd>
+  <dt id="Thermometer.Name" class="text ro bo"><em>Name</em></dt>
+  <dd>Gets the name of the Thermometer.</dd>
   <dt id="Thermometer.RefreshTime" class="number"><em>RefreshTime</em></dt>
   <dd>The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.</dd>
   <dt id="Thermometer.Temperature" class="number ro bo"><em>Temperature</em></dt>

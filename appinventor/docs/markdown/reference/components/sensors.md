@@ -61,6 +61,9 @@ Non-visible component that can detect shaking and measure acceleration approxima
  Once the phone starts being shaken, all further [`Shaking`](#AccelerometerSensor.Shaking) events will be ignored
  until the interval has elapsed.
 
+{:id="AccelerometerSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the AccelerometerSensor.
+
 {:id="AccelerometerSensor.Sensitivity" .number} *Sensitivity*
 : Specifies the sensitivity of the accelerometer. Valid values are: `1` (weak), `2` (moderate),
  and `3` (strong).
@@ -102,6 +105,9 @@ Component for scanning a QR code and getting back the resulting string.
 ### Properties  {#BarcodeScanner-Properties}
 
 {:.properties}
+
+{:id="BarcodeScanner.Name" .text .ro .bo} *Name*
+: Gets the name of the BarcodeScanner.
 
 {:id="BarcodeScanner.Result" .text .ro .bo} *Result*
 : Gets the text result of the previous scan.
@@ -148,6 +154,9 @@ Physical world component that can measure the ambient air pressure if
 : Specifies whether the sensor should generate events.  If `true`{:.logic.block},
  the sensor will generate events.  Otherwise, no events are
  generated.
+
+{:id="Barometer.Name" .text .ro .bo} *Name*
+: Gets the name of the Barometer.
 
 {:id="Barometer.RefreshTime" .number} *RefreshTime*
 : The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.
@@ -205,6 +214,9 @@ None
 ### Properties  {#Clock-Properties}
 
 {:.properties}
+
+{:id="Clock.Name" .text .ro .bo} *Name*
+: Gets the name of the Clock.
 
 {:id="Clock.TimerAlwaysFires" .boolean} *TimerAlwaysFires*
 : Will fire even when application is not showing on the screen if true
@@ -354,6 +366,9 @@ Component providing data from the device's gyroscope sensor.
 {:id="GyroscopeSensor.Enabled" .boolean} *Enabled*
 : Enabled property getter method.
 
+{:id="GyroscopeSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the GyroscopeSensor.
+
 {:id="GyroscopeSensor.XAngularVelocity" .number .ro .bo} *XAngularVelocity*
 : The angular velocity around the X axis, in degrees per second.
 
@@ -400,6 +415,9 @@ Physical world component that can measure the relative ambient air
  The sensor must be enabled and available 
  to return meaningful values.
 
+{:id="Hygrometer.Name" .text .ro .bo} *Name*
+: Gets the name of the Hygrometer.
+
 {:id="Hygrometer.RefreshTime" .number} *RefreshTime*
 : The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.
 
@@ -441,6 +459,9 @@ Physical world component that can measure the light level.
 {:id="LightSensor.Lux" .number .ro .bo} *Lux*
 : Returns the last measured brightness in lux.
  The sensor must be enabled and available to return meaningful values.
+
+{:id="LightSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the LightSensor.
 
 {:id="LightSensor.RefreshTime" .number} *RefreshTime*
 : The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.
@@ -551,6 +572,9 @@ Non-visible component providing location information, including [`Latitude`](#Lo
  If no value is available, 0 will be returned.
  Longitude is a value between 180 (east) and -180 (west), where 0 marks the Prime Meridian.
 
+{:id="LocationSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the LocationSensor.
+
 {:id="LocationSensor.ProviderLocked" .boolean .bo} *ProviderLocked*
 : The device will not change the service provider.
 
@@ -616,6 +640,9 @@ Component for MagneticFieldSensor
 {:id="MagneticFieldSensor.MaximumRange" .number .ro .bo} *MaximumRange*
 : Indicates the maximum range the magnetic sensor can reach.
 
+{:id="MagneticFieldSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the MagneticFieldSensor.
+
 {:id="MagneticFieldSensor.XStrength" .number .ro .bo} *XStrength*
 : Indicates the field's strength in the X-axis.
 
@@ -656,6 +683,9 @@ Non-visible component to provide NFC capabilities. For now this component suppor
 
 {:id="NearField.LastMessage" .text .ro .bo} *LastMessage*
 : Returns the content of the most recently received tag.
+
+{:id="NearField.Name" .text .ro .bo} *Name*
+: Gets the name of the NearField.
 
 {:id="NearField.ReadMode" .boolean} *ReadMode*
 : Specifies whether the NFC hardware should operate in read mode (`true`{:.logic.block}) or
@@ -735,6 +765,9 @@ None
  by a ball rolling on the surface of the device. For the angle of
  tilt, use [`Angle`](#OrientationSensor.Angle).
 
+{:id="OrientationSensor.Name" .text .ro .bo} *Name*
+: Gets the name of the OrientationSensor.
+
 {:id="OrientationSensor.Pitch" .number .ro .bo} *Pitch*
 : Returns the pitch angle of the device.
  To return meaningful values the sensor must be enabled.
@@ -771,6 +804,9 @@ This component keeps count of steps using the accelerometer.
 
 {:id="Pedometer.ElapsedTime" .number .ro .bo} *ElapsedTime*
 : Returns the time elapsed in milliseconds since the pedometer has started.
+
+{:id="Pedometer.Name" .text .ro .bo} *Name*
+: Gets the name of the Pedometer.
 
 {:id="Pedometer.SimpleSteps" .number .ro .bo} *SimpleSteps*
 : Returns the number of simple steps taken since the pedometer has started.
@@ -848,6 +884,9 @@ A sensor component that can measure the proximity of an object (in cm) relative 
  its maximum range value in the far state and a lesser value in the near state.
  Typically, the far value is a value > 5 cm, but this can vary from sensor to sensor.
 
+{:id="ProximitySensor.Name" .text .ro .bo} *Name*
+: Gets the name of the ProximitySensor.
+
 ### Events  {#ProximitySensor-Events}
 
 {:.events}
@@ -879,6 +918,9 @@ Physical world component that can measure the ambient air temperature if
 : Specifies whether the sensor should generate events.  If `true`{:.logic.block},
  the sensor will generate events.  Otherwise, no events are
  generated.
+
+{:id="Thermometer.Name" .text .ro .bo} *Name*
+: Gets the name of the Thermometer.
 
 {:id="Thermometer.RefreshTime" .number} *RefreshTime*
 : The requested minimum time in milliseconds between changes in readings being reported. Android is not guaranteed to honor the request. Setting this property has no effect on pre-Gingerbread devices.
