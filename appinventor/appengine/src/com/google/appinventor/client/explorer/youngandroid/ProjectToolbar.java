@@ -14,6 +14,7 @@ import com.google.appinventor.client.boxes.ProjectListBox;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.widgets.Toolbar;
 import com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard;
+import com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2;
 import com.google.appinventor.shared.rpc.RpcResult;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -52,6 +53,8 @@ public class ProjectToolbar extends Toolbar {
 
     addButton(new ToolbarItem(WIDGET_NAME_NEW, MESSAGES.newProjectMenuItem(),
         new NewAction(this)));
+    addButton(new ToolbarItem("New From Text", "Project from Description",
+        new NewFromDescription(this)));
 
     addButton(new ToolbarItem(WIDGET_NAME_DELETE, MESSAGES.deleteProjectButton(),
         new MoveToTrashAction()));
@@ -109,6 +112,19 @@ public class ProjectToolbar extends Toolbar {
       new NewYoungAndroidProjectWizard(parent).center();
       // The wizard will switch to the design view when the new
       // project is created.
+    }
+  }
+
+  private static class NewFromDescription implements Command {
+    ProjectToolbar parent;
+
+    public NewFromDescription(ProjectToolbar parent) {
+      this.parent = parent;
+    }
+
+    @Override
+    public void execute() {
+      new NewYoungAndroidProjectWizard2(parent).center();
     }
   }
 
