@@ -57,7 +57,8 @@ public final class NewYoungAndroidProjectWizard2 extends NewProjectWizard {
   }
 
   private void loadProject(String url) {
-    TemplateUploadWizard.openProjectFromTemplate(url, new NewProjectCommand() {
+    TemplateUploadWizard.openProjectFromTemplate("http://localhost:"
+        + Ode.getSystemConfig().getAptlyPort() + url, new NewProjectCommand() {
       @Override
       public void execute(Project project) {
         Ode.getInstance().openYoungAndroidProjectInDesigner(project);
@@ -71,7 +72,7 @@ public final class NewYoungAndroidProjectWizard2 extends NewProjectWizard {
     var handler = function(e) {
       var msg = e.data;
       if (msg.open) {
-        self.@com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2::loadProject(*)('http://localhost:5000' + msg.open);
+        self.@com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2::loadProject(*)(msg.open);
       }
     }
     self.@com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2::handler = handler;
