@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -78,6 +79,15 @@ public class UserInfoServiceImpl extends OdeRemoteServiceServlet implements User
     config.setGalleryEnabled(Flag.createFlag("gallery.enabled", false).get());
     config.setGalleryReadOnly(Flag.createFlag("gallery.readonly", false).get());
     config.setGalleryLocation(Flag.createFlag("gallery.location", "").get());
+    try {
+      String envPort = System.getenv("APTLY_PORT");
+      if (envPort == null) {
+        envPort = "5000";
+      }
+      config.setAptlyPort(Integer.parseInt(envPort));
+    } catch (NumberFormatException e) {
+      LOG.log(Level.SEVERE, "Unable to parse Aptly port", e);
+    }
 
     if (!Flag.createFlag("build2.server.host", "").get().isEmpty()) {
       config.setSecondBuildserver(true);

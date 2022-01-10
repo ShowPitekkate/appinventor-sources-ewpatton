@@ -22,7 +22,8 @@ public final class NewYoungAndroidProjectWizard2 extends NewProjectWizard {
     super(MESSAGES.newYoungAndroidProjectWizardCaption());
 
     IFrameElement frame = Document.get().createIFrameElement();
-    frame.setSrc("http://localhost:5000/");
+    frame.setSrc("http://localhost:" + Ode.getSystemConfig().getAptlyPort()
+        + "/");
     frame.getStyle().setWidth(800, Style.Unit.PX);
     frame.getStyle().setHeight(350, Style.Unit.PX);
     frame.getStyle().setBorderWidth(0, Style.Unit.PX);

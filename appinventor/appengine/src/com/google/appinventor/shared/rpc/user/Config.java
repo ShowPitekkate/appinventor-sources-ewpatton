@@ -44,6 +44,7 @@ public class Config implements IsSerializable, Serializable {
   private boolean galleryReadOnly;
   private List<String> tutorialUrlAllowed;
   private boolean serverExpired;
+  private int aptlyPort = 5000;
 
   public Config() {
   }
@@ -238,6 +239,14 @@ public class Config implements IsSerializable, Serializable {
 
   public void setServerExpired(boolean value) {
     serverExpired = value;
+  }
+
+  public void setAptlyPort(int port) {
+    aptlyPort = port;
+  }
+
+  public int getAptlyPort() {
+    return aptlyPort;
   }
 
 }
