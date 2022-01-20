@@ -80,6 +80,6 @@ public final class NewYoungAndroidProjectWizard2 extends NewProjectWizard {
   }-*/;
 
   private native void unsetupJavascript()/*-{
-    $wnd.removeEventListener('message', self.@com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2::handler);
+    $wnd.removeEventListener('message', this.@com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard2::handler);
   }-*/;
 }
