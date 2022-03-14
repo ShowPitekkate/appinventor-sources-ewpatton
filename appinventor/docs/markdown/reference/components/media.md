@@ -16,6 +16,7 @@ Table of Contents:
 * [SoundRecorder](#SoundRecorder)
 * [SpeechRecognizer](#SpeechRecognizer)
 * [TextToSpeech](#TextToSpeech)
+* [Translator](#Translator)
 * [VideoPlayer](#VideoPlayer)
 * [YandexTranslate](#YandexTranslate)
 
@@ -503,6 +504,53 @@ The `TextToSpeech` component speaks a given text aloud. You can set the pitch
 
 {:id="TextToSpeech.Speak" class="method"} <i/> Speak(*message*{:.text})
 : Speaks the given message.
+
+## Translator  {#Translator}
+
+Use this component to translate words and sentences between
+ different languages. This component needs Internet access, as it
+ will request translations from a server at MIT (which in turn will
+ request translations from a commercial translation service).
+ Specify the source and target language in the form source-target
+ using two letter language codes.  So "en-es" will translate from
+ English to Spanish while "es-ru" will translate from Spanish to
+ Russian. If you leave out the source language, the service will
+ attempt to detect the source language. So providing just "es" will
+ attempt to detect the source language and translate it to Spanish.
+
+ **Note:** Translation happens asynchronously in the background. When the translation is complete,
+ the [`GotTranslation`](#Translator.GotTranslation) event is triggered.
+
+
+
+### Properties  {#Translator-Properties}
+
+{:.properties}
+
+{:id="Translator.ApiKey" .text .wo} *ApiKey*
+: The API Key to use. MIT App Inventor will automatically fill this
+ value in. You should not need to change it.
+
+### Events  {#Translator-Events}
+
+{:.events}
+
+{:id="Translator.GotTranslation"} GotTranslation(*responseCode*{:.text},*translation*{:.text})
+: Event indicating that a request has finished and has returned data (translation).
+
+### Methods  {#Translator-Methods}
+
+{:.methods}
+
+{:id="Translator.RequestTranslation" class="method"} <i/> RequestTranslation(*languageToTranslateTo*{:.text},*textToTranslate*{:.text})
+: By providing a target language to translate to (for instance, 'es' for Spanish, 'en' for
+ English, or 'ru' for Russian), and a word or sentence to translate, this method will request
+ a translation. Once the text is translated by the external
+ service, the event [`GotTranslation`](#Translator.GotTranslation) will be executed.
+
+   **Note:** Translator will attempt to detect the source language. You can also specify
+ prepending it to the language translation, e.g., es-ru will specify Spanish to Russian
+ translation.
 
 ## VideoPlayer  {#VideoPlayer}
 
