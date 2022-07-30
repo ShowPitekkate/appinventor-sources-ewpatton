@@ -30,6 +30,7 @@ target 'SchemeKit' do
     pod 'GEOSwift', '~> 3.1.0'
     pod 'PSSRedisClient', :git => 'git@github.com:mit-cml/PSSRedisClient.git', :commit => '344302b'
     pod 'Zip', '~> 2.1'
+    pod 'GoogleAPIClientForREST/Sheets'
 
     target 'AIComponentKitTests' do
     end

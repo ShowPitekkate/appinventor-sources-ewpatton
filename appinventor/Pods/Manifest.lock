@@ -10,6 +10,14 @@ PODS:
   - geos (3.7.1)
   - GEOSwift (3.1.0):
     - geos (= 3.7.1)
+  - GoogleAPIClientForREST/Core (2.0.0):
+    - GTMSessionFetcher/Full (< 3.0, >= 1.6.1)
+  - GoogleAPIClientForREST/Sheets (2.0.0):
+    - GoogleAPIClientForREST/Core
+    - GTMSessionFetcher/Full (< 3.0, >= 1.6.1)
+  - GTMSessionFetcher/Core (2.0.0)
+  - GTMSessionFetcher/Full (2.0.0):
+    - GTMSessionFetcher/Core
   - KTVJSONWebToken (2.1.0)
   - PSSRedisClient (0.1.14):
     - CocoaAsyncSocket (>= 7.6.1)
@@ -29,6 +37,7 @@ DEPENDENCIES:
   - Base58Swift (~> 2.1.0)
   - GCDWebServer (~> 3.4.1)
   - GEOSwift (~> 3.1.0)
+  - GoogleAPIClientForREST/Sheets
   - KTVJSONWebToken (from `https://github.com/kreactive/JSONWebToken.git`, commit `d2e37fa`)
   - "PSSRedisClient (from `git@github.com:mit-cml/PSSRedisClient.git`, commit `344302b`)"
   - SQLite.swift (~> 0.11.5)
@@ -47,6 +56,8 @@ SPEC REPOS:
     - GCDWebServer
     - geos
     - GEOSwift
+    - GoogleAPIClientForREST
+    - GTMSessionFetcher
     - SQLite.swift
     - SwiftProtobuf
     - SwiftSVG
@@ -83,6 +94,8 @@ SPEC CHECKSUMS:
   GCDWebServer: 8d67ee9f634b4bb91eb4b8aee440318a5fc6debd
   geos: 4f86329dc270f513bc220c77d9079aef38c5960d
   GEOSwift: 663f79f312f61dbc50ea7d233b8d04642f9aa1fb
+  GoogleAPIClientForREST: 2abe83bae1085d28f94ccc30a49fc7950d721fb9
+  GTMSessionFetcher: 681175626052e03fdde7952f7e9c7a9785719506
   KTVJSONWebToken: c3cc06e26876d63c62a5c40c5e89939899de48cf
   PSSRedisClient: 1b8e9d807999f0ee3d1f09e5b80da4367ba41550
   SQLite.swift: 6e5356850bb1791459f8c16d6ee9195b28714a2e
@@ -92,6 +105,6 @@ SPEC CHECKSUMS:
   Zip: 414f59909701fda9a84ab774ebe0f5449b1082cc
   ZXingObjC: ec0306e7c8dac717f653e165f1c4fd0e69fde99f
 
-PODFILE CHECKSUM: 861ff4c17bf6c095f34cfce17417044abe9edf37
+PODFILE CHECKSUM: ac4056c96e8bb65628854db093b8b6026597b809
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
