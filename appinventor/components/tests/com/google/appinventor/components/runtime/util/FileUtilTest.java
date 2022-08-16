@@ -22,6 +22,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.Shadows;
 import org.robolectric.shadows.ShadowEnvironment;
 
+import java.io.File;
+import java.io.IOException;
+
 @RunWith(RobolectricTestRunner.class)
 public class FileUtilTest extends RobolectricTestBase {
 
@@ -238,5 +241,29 @@ public class FileUtilTest extends RobolectricTestBase {
         new ScopedFile(FileScope.Private, "test.txt")));
     assertTrue(FileUtil.needsExternalStorage(getForm(),
         new ScopedFile(FileScope.Shared, "test.txt")));
+  }
+
+  @Test
+  public void testGetFileCreatesDir() throws IOException {
+    // This test only makes sense when the external storage is mounted and the app can write it.
+    ShadowEnvironment.setExternalStorageState(Environment.MEDIA_MOUNTED);
+    Shadows.shadowOf(getForm()).grantPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+    File sample = FileUtil.getRecordingFile(getForm(), "3gp");
+    File parent = sample.getParentFile();
+    assertTrue(parent.exists());
+    assertTrue(parent.isDirectory());
+
+    // Delete the parent directory and try again
+    assertTrue(parent.delete());
+    assertFalse(parent.exists());
+
+    // Get a new sample file
+    sample = FileUtil.getRecordingFile(getForm(), "3gp");
+    assertEquals(parent, sample.getParentFile());
+
+    // Verify the directory exists
+    assertTrue(parent.exists());
+    assertTrue(parent.isDirectory());
   }
 }
