@@ -565,9 +565,11 @@ public class YaVersion {
   // - CHART_COMPONENT_VERSION was introduced
   // - CHART_DATA_2D_COMPONENT_VERSION was introduced
   // - DATA_FILE_COMPONENT_VERSION was introduced
-  // - BLUETOOTH_CLIENT_COMPONENT_VERSION was incremented to 7
+  // - BLUETOOTHCLIENT_COMPONENT_VERSION was incremented to 7
+  // For YOUNG_ANDROID_VERSION 220:
+  // - BLUETOOTHCLIENT_COMPONENT_VERSION was incremented to 8
 
-  public static final int YOUNG_ANDROID_VERSION = 219;
+  public static final int YOUNG_ANDROID_VERSION = 220;
 
   // ............................... Blocks Language Version Number ...............................
 
@@ -756,8 +758,10 @@ public class YaVersion {
   // - The BluetoothClient.Secure property was added.
   // For BLUETOOTHCLIENT_COMPONENT_VERSION 6:
   // - The BluetoothClient.DisconnectOnError property was added.
-  // For BLUETOOTH_CLIENT_COMPONENT_VERSION 7:
-  // - The BluuetoothClient.PollingRate property was added.
+  // For BLUETOOTHCLIENT_COMPONENT_VERSION 7:
+  // - The BluetoothClient.PollingRate property was added.
+  // For BLUETOOTHCLIENT_COMPONENT_VERSION 8:
+  // - The BluetoothClient.NoLocationNeeded property was added.
   public static final int BLUETOOTHCLIENT_COMPONENT_VERSION = 7;
 
   // For BLUETOOTHSERVER_COMPONENT_VERSION 2:
