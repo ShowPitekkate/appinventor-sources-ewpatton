@@ -5,6 +5,9 @@
              ui:generateLocales="default">
   <ui:with field="messages" type="com.google.appinventor.client.OdeMessages" />
   <g:FlowPanel styleName="ode-StatusPanel" ui:field="footer">
+    <g:HTMLPanel>
+      <g:Image url="/static/images/coolthink.png" />
+    </g:HTMLPanel>
     <g:Anchor text="{messages.privacyTermsLink}" target="_blank" ui:field="tosLink" />
   </g:FlowPanel>
 </ui:UiBinder>

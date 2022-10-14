@@ -138,7 +138,7 @@ div.StatusPanel {
 
 .ode-ContextMenuItem-selected {
   color: #ffffff;
-  background: #99CC00;
+  background: #5d3fd4;
 }
 
 .ode-ContextMenuItem-disabled {
@@ -159,7 +159,7 @@ div.StatusPanel {
 }
 
 .ode-Box-header {
-  background: rgba(102, 153, 0, 0.3);
+  background-color: #5d3fd4;
   height: 31px;
   border: 1px solid;
   border-color: #d2d2d2 #d2d2d2 #b0b2a7 #d2d2d2;
@@ -174,7 +174,7 @@ div.StatusPanel {
 }
 
 .ode-Box-header-caption {
-  color: #555;
+  color: #fff;
 }
 
 .ode-Box-header-caption-highlighted {
@@ -559,7 +559,8 @@ div.StatusPanel {
   font-size: 12px;
   color: #888;
   padding: 4px 12px;
-  background: url(../images/toolbarBG.png) repeat;
+  background: url(../images/toolbarBG.png);
+  background-size: 100%;
   border: 1px;
   border-bottom: 1px solid #bbccff;
   width: 100%;
@@ -662,13 +663,13 @@ div.StatusPanel {
 
 .gwt-Tree .gwt-TreeItem span:hover,
 .gwt-Tree .gwt-TreeItem-selected span {
-  background-color: #d2e0a6;
+  background-color: #f8eb01;
 }
 
 /* Young Android Toolbar */
 
 .ya-Toolbar {
-  background-color: #8fc202;
+  background-color: #1f00a0;
   margin-bottom: 4px;
   padding: 2px;
 }
@@ -818,7 +819,7 @@ div.StatusPanel {
 .gwt-StackPanelItem div {
   border-top: 1px solid #d2d2d2;
   border-bottom: 1px solid #d2d2d2;
-  background-color: #eef2e0;
+  background-color: #d3cfe5;
   font-size: 13px;
   cursor: pointer;
   height: 14px;
@@ -915,7 +916,7 @@ div.StatusPanel {
 }
 
 .ode-PropertiesPanel {
-  background-color: #f7f9f2;
+  background-color: #f2f2f9;
   padding-left: 9px;
   padding-right: 9px;
   padding-bottom: 9px;
@@ -927,7 +928,7 @@ div.StatusPanel {
 }
 
 .ode-PropertiesComponentName {
-  background-color: #eef2e0;
+  background-color: #d3cfe5;
   color: #555;
   font-size: 13px;
   border-bottom: 1px solid #d2d2d2;
@@ -1280,16 +1281,16 @@ path.ode-SimpleMockMapFeature-selected {
 
 .ode-ComponentHelpPopup {
   background-color: white;
-  border-left: 4px solid #8fc202;
-  border-right: 4px solid #8fc202;
-  border-bottom: 4px solid #8fc202;
+  border-left: 4px solid #1f00a0;
+  border-right: 4px solid #1f00a0;
+  border-bottom: 4px solid #1f00a0;
   width: 20%;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.065);
   z-index: 1000;
 }
 
 .ode-ComponentHelpPopup-TitleBar {
-  background-color: #8fc202;
+  background-color: #1f00a0;
   color: white;
   font-weight: bold;
   font-size: 13px;
@@ -1505,9 +1506,9 @@ path.ode-SimpleMockMapFeature-selected {
 
 .ode-DialogBox {
   background-color: white;
-  border-left: 4px solid #8fc202;
-  border-right: 4px solid #8fc202;
-  border-bottom: 4px solid #8fc202;
+  border-left: 4px solid #1f00a0;
+  border-right: 4px solid #1f00a0;
+  border-bottom: 4px solid #1f00a0;
   z-index: 1000;
 }
 
@@ -1527,11 +1528,11 @@ path.ode-SimpleMockMapFeature-selected {
 }
 
 .ode-DialogBox .dialogTop {
-  background-color: #8fc202;
+  background-color: #1f00a0;
 }
 
 .ode-DialogBox .Caption {
-  background-color: #8fc202;
+  background-color: #1f00a0;
   color: white;
   font-weight: bold;
   font-size: 13px;
