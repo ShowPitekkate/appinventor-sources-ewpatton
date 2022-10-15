@@ -8,15 +8,20 @@ package edu.mit.appinventor.ble;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.BLUETOOTH;
 import static android.Manifest.permission.BLUETOOTH_ADMIN;
+import static android.Manifest.permission.BLUETOOTH_ADVERTISE;
+import static android.Manifest.permission.BLUETOOTH_CONNECT;
+import static android.Manifest.permission.BLUETOOTH_SCAN;
 
 import android.app.Activity;
 
 import android.content.pm.PackageManager;
 
+import android.os.Build;
 import android.util.Log;
 
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
+import com.google.appinventor.components.annotations.PermissionConstraint;
 import com.google.appinventor.components.annotations.PropertyCategory;
 import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
@@ -33,7 +38,9 @@ import com.google.appinventor.components.runtime.ComponentContainer;
 import com.google.appinventor.components.runtime.Deleteable;
 import com.google.appinventor.components.runtime.EventDispatcher;
 import com.google.appinventor.components.runtime.Form;
+import com.google.appinventor.components.runtime.PermissionResultHandler;
 import com.google.appinventor.components.runtime.util.ErrorMessages;
+import com.google.appinventor.components.runtime.util.SUtil;
 import com.google.appinventor.components.runtime.util.SdkLevel;
 import com.google.appinventor.components.runtime.util.YailList;
 import edu.mit.appinventor.ble.BluetoothLEint.DeviceCallback;
@@ -70,7 +77,10 @@ import java.util.UUID;
     helpUrl = "http://iot.appinventor.mit.edu/#/bluetoothle/bluetoothleintro",
     iconName = "images/bluetooth.png")
 @SimpleObject(external = true)
-@UsesPermissions({ BLUETOOTH, BLUETOOTH_ADMIN, ACCESS_FINE_LOCATION })
+@UsesPermissions(constraints = {
+    @PermissionConstraint(name = BLUETOOTH, maxSdkVersion = 30),
+    @PermissionConstraint(name = BLUETOOTH_ADMIN, maxSdkVersion = 30)
+})
 public class BluetoothLE extends AndroidNonvisibleComponent implements Component, Deleteable {
   public static final int ERROR_DEVICE_INDEX_OOB = 9101;
   public static final int ERROR_SERVICE_INDEX_OOB = 9102;
@@ -178,21 +188,41 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
     return inner.getConnectionTimeout();
   }
 
+  @SimpleProperty(category = PropertyCategory.BEHAVIOR, userVisible = false,
+      description = "")
+  @DesignerProperty(editorType = PropertyTypeConstants.PROPERTY_TYPE_BOOLEAN,
+      defaultValue = "False")
+  @UsesPermissions(constraints = {
+      @PermissionConstraint(name = BLUETOOTH_SCAN, usesPermissionFlags = "neverForLocation")
+  })
+  public void NoLocationNeeded(boolean setting) {
+  }
+
   /**
    * Starts scanning for Bluetooth low energy devices.
    */
   @SimpleFunction
+  @UsesPermissions(BLUETOOTH_SCAN)
   public void StartScanning() {
     if (inner != null) {
-      if (SDK26Helper.shouldAskForPermission(form)) {
-        SDK26Helper.askForPermission(this, new Runnable() {
-          public void run() {
-            inner.StartScanning();
-          }
-        });
+      String permNeeded;
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        permNeeded = BLUETOOTH_SCAN;
       } else {
-        inner.StartScanning();
+        permNeeded = ACCESS_FINE_LOCATION;
       }
+      if (!SUtil.requestPermissionsForS(permNeeded, form, this, "StartScanning", new PermissionResultHandler() {
+        @Override
+        public void HandlePermissionResponse(String permission, boolean granted) {
+          if (granted) {
+            inner.StartScanning();
+          } else {
+            form.dispatchPermissionDeniedEvent(BluetoothLE.this, "StartScanning", permission);
+          }
+        }
+      })) {
+        inner.StartScanning();
+      };
     }
   }
 
@@ -232,8 +262,21 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    * @param index The index of the target device, which must be between 1 and the length of the list.
    */
   @SimpleFunction
-  public void Connect(int index) {
+  @UsesPermissions(BLUETOOTH_CONNECT)
+  public void Connect(final int index) {
     if (inner != null) {
+      if (SUtil.requestPermissionsForS(BLUETOOTH_CONNECT, form, this, "Connect", new PermissionResultHandler() {
+        @Override
+        public void HandlePermissionResponse(String permission, boolean granted) {
+          if (granted) {
+            Connect(index);
+          } else {
+            form.dispatchPermissionDeniedEvent(BluetoothLE.this, "Connect", permission);
+          }
+        }
+      })) {
+        return;
+      }
       try {
         inner.Connect(index);
       } catch(IndexOutOfBoundsException e) {
@@ -258,8 +301,21 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    * @param address The MAC address of the target device, of the form "12:34:56:78:90:ab"
    */
   @SimpleFunction
-  public void ConnectWithAddress(String address) {
+  @UsesPermissions(BLUETOOTH_CONNECT)
+  public void ConnectWithAddress(final String address) {
     if (inner != null) {
+      if (SUtil.requestPermissionsForS(BLUETOOTH_CONNECT, form, this, "ConnectWithAddress", new PermissionResultHandler() {
+        @Override
+        public void HandlePermissionResponse(String permission, boolean granted) {
+          if (granted) {
+            ConnectWithAddress(address);
+          } else {
+            form.dispatchPermissionDeniedEvent(BluetoothLE.this, "ConnectWithAddress", permission);
+          }
+        }
+      })) {
+        return;
+      }
       inner.ConnectWithAddress(address);
     }
   }
@@ -997,7 +1053,18 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
   @SimpleFunction
   public void StartAdvertising(String inData, String serviceUuid) {
     if (inner != null) {
-      inner.StartAdvertising(inData, serviceUuid);
+      if (!SUtil.requestPermissionsForS(BLUETOOTH_ADVERTISE, form, this, "StartAdvertising", new PermissionResultHandler() {
+        @Override
+        public void HandlePermissionResponse(String permission, boolean granted) {
+          if (granted) {
+            inner.StartAdvertising(inData, serviceUuid);
+          } else {
+            form.dispatchPermissionDeniedEvent(BluetoothLE.this, "StartAdvertising", permission));
+          }
+        }
+      })) {
+        inner.StartAdvertising(inData, serviceUuid);
+      }
     }
   }
 
@@ -1685,18 +1752,35 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    */
   @SimpleFunction
   public void ScanForDevice(final BLEDevice device) {
-    if (inner == null) return;
-    if (SDK26Helper.shouldAskForPermission(form)) {
-      SDK26Helper.askForPermission(this, new Runnable() {
-        public void run() {
-          inner.StartScanningForService("ScanForDevice",
-              device.GetBroadcastUUID(), null);
+    if (inner == null) {
+      return;
+    }
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S && form.isDeniedPermission(ACCESS_FINE_LOCATION)) {
+      form.askPermission(ACCESS_FINE_LOCATION, new PermissionResultHandler() {
+        @Override
+        public void HandlePermissionResponse(String permission, boolean granted) {
+          if (granted) {
+            ScanForDevice(device);
+          } else {
+            form.dispatchPermissionDeniedEvent(BluetoothLE.this, "ScanForDevice", permission);
+          }
         }
       });
-    } else {
-      inner.StartScanningForService("ScanForDevice",
-          device.GetBroadcastUUID(), null);
+      return;
     }
+    if (SUtil.requestPermissionsForS(BLUETOOTH_SCAN, form, this, "ScanForDevice", new PermissionResultHandler() {
+      @Override
+      public void HandlePermissionResponse(String permission, boolean granted) {
+        if (granted) {
+          ScanForDevice(device);
+        } else {
+          form.dispatchPermissionDeniedEvent(BluetoothLE.this, "ScanForDevice", permission);
+        }
+      }
+    })) {
+      return;
+    }
+    inner.StartScanningForService("ScanForDevice", device.GetBroadcastUUID(), null);
   }
 
   /**
@@ -1714,17 +1798,20 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    */
   @SimpleFunction
   public void ScanForService(final String serviceUuid) {
-    if (inner == null) return;
+    if (inner == null) {
+      return;
+    }
     final UUID uuid = BLEUtil.bleStringToUuid(serviceUuid);
-    if (SDK26Helper.shouldAskForPermission(form)) {
-      SDK26Helper.askForPermission(this, new Runnable() {
-        @Override
-        public void run() {
-          inner.StartScanningForService("ScanForService", uuid, null);
-        }
-      });
+    final Runnable continuation = new Runnable() {
+      @Override
+      public void run() {
+        inner.StartScanningForService("ScanForService", uuid, null);
+      }
+    };
+    if (PermissionHelper.askForPermission(BLUETOOTH_SCAN, form, this, "ScanForService", continuation)) {
+      return;
     } else {
-      inner.StartScanningForService("ScanForService", uuid, null);
+      continuation.run();
     }
   }
 
@@ -1743,24 +1830,49 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    * @param name the name advertised by the desired device
    */
   @SimpleFunction
+  @UsesPermissions(BLUETOOTH_CONNECT)
   public void ConnectToDeviceType(final BLEDevice device, final String name) {
-    if (inner == null) return;
-    if (SDK26Helper.shouldAskForPermission(form)) {
-      SDK26Helper.askForPermission(this, new Runnable() {
-        @Override
-        public void run() {
-          inner.StartScanningForService("ConnectToDeviceType",
-              device.GetBroadcastUUID(),
-              new DeviceCallback() {
-                @Override
-                public boolean foundDevice(String devname, String mac) {
-                  Log.i(LOG_TAG, "devname = " + devname + ", name = " + name);
-                  return devname.equals(name);
-                }
-              });
-        }
-      });
+    if (inner == null) {
+      return;
     }
+    final Runnable continuation = new Runnable() {
+      @Override
+      public void run() {
+        inner.StartScanningForService("ConnectToDeviceType",
+            device.GetBroadcastUUID(),
+            new DeviceCallback() {
+              @Override
+              public boolean foundDevice(String devname, String mac) {
+                Log.i(LOG_TAG, "devname = " + devname + ", name = " + name);
+                return devname.equals(name);
+              }
+            });
+      }
+    };
+    if (PermissionHelper.askForPermission(new String[] { BLUETOOTH_CONNECT, BLUETOOTH_SCAN }, form, this, "ConnectToDeviceType", ))
+    if (SUtil.requestPermissionsForS(new String[] {
+        BLUETOOTH_CONNECT, BLUETOOTH_SCAN
+    }, form, this, "ConnectToDeviceType", new PermissionResultHandler() {
+      @Override
+      public void HandlePermissionResponse(String permission, boolean granted) {
+        if (granted) {
+          ConnectToDeviceType(device, name);
+        } else {
+          form.dispatchPermissionDeniedEvent(BluetoothLE.this, "ConnectToDeviceType", permission);
+        }
+      }
+    })) {
+      return;
+    }
+    inner.StartScanningForService("ConnectToDeviceType",
+        device.GetBroadcastUUID(),
+        new DeviceCallback() {
+          @Override
+          public boolean foundDevice(String devname, String mac) {
+            Log.i(LOG_TAG, "devname = " + devname + ", name = " + name);
+            return devname.equals(name);
+          }
+        });
   }
 
   /**
@@ -1780,23 +1892,31 @@ public class BluetoothLE extends AndroidNonvisibleComponent implements Component
    * @param name        the name advertised by the desired device
    */
   @SimpleFunction
+  @UsesPermissions(BLUETOOTH_CONNECT)
   public void ConnectToDeviceWithServiceAndName(final String serviceUuid, final String name) {
-    if (inner == null) return;
-    if (SDK26Helper.shouldAskForPermission(form)) {
-      SDK26Helper.askForPermission(this, new Runnable() {
-        @Override
-        public void run() {
-          inner.StartScanningForService("ConnectToDeviceWithServiceAndName",
-              BLEUtil.bleStringToUuid(serviceUuid),
-              new DeviceCallback() {
-                @Override
-                public boolean foundDevice(String devname, String mac) {
-                  return devname.equals(name);
-                }
-              });
-        }
-      });
+    if (inner == null) {
+      return;
     }
+    if (SUtil.requestPermissionsForS(new String[]{
+        BLUETOOTH_CONNECT, BLUETOOTH_SCAN
+    }, form, this, "ConnectoToDeviceWithServiceAndName", new PermissionResultHandler() {
+      @Override
+      public void HandlePermissionResponse(String permission, boolean granted) {
+        if (granted) {
+          ConnectToDeviceWithServiceAndName(serviceUuid, name);
+        } else {
+          form.dispatchPermissionDeniedEvent(BluetoothLE.this, "ConnectToDeviceWithServiceAndName", permission);
+        }
+      }
+    }))
+    inner.StartScanningForService("ConnectToDeviceWithServiceAndName",
+        BLEUtil.bleStringToUuid(serviceUuid),
+        new DeviceCallback() {
+          @Override
+          public boolean foundDevice(String devname, String mac) {
+            return devname.equals(name);
+          }
+        });
   }
 
   /**
