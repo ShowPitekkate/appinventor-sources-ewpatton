@@ -61,9 +61,12 @@
 
 goog.provide('Blockly.Blocks.procedures');
 
-goog.require('Blockly.Blocks.Utilities');
-goog.require('goog.dom');
 goog.require('AI.Blockly.FieldProcedureName');
+goog.require('Blockly.Blocks.Utilities');
+goog.require('Blockly.FieldProcedure');
+goog.require('Blockly.NameSet');
+goog.require('Blockly.Substitution');
+goog.require('goog.dom');
 
 Blockly.Blocks['procedures_defnoreturn'] = {
   // Define a procedure with no return value.

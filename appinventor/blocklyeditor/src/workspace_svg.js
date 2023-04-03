@@ -13,6 +13,11 @@
 
 goog.provide('AI.Blockly.WorkspaceSvg');
 
+goog.require('AI.Blockly.SaveFile');
+goog.require('AI.Blockly.Versioning');
+goog.require('AI.Blockly.WarningHandler');
+goog.require('AI.Blockly.WarningIndicator');
+goog.require('AI.Blockly.Workspace');
 goog.require('Blockly.WorkspaceSvg');
 
 /**

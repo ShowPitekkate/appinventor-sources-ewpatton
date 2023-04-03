@@ -22,11 +22,11 @@
 'use strict';
 
 goog.provide('AI.Blockly.Versioning');
+goog.provide('Blockly.Versioning');
 
+goog.require('Blockly.Substitution');
 goog.require('goog.dom');
 goog.require('goog.dom.xml');
-
-if (Blockly.Versioning === undefined) Blockly.Versioning = {};
 
 Blockly.Versioning.loggingFlag = true;
 

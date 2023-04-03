@@ -14,6 +14,7 @@
 'use strict';
 
 goog.provide('AI.Blockly.FieldFlydown');
+goog.provide('Blockly.FieldFlydown');
 
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.Options');

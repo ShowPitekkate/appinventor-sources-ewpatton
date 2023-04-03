@@ -76,7 +76,11 @@ function myStringify (obj) {
 'use strict';
 
 goog.provide('Blockly.Blocks.lexicalvariables');
+
+goog.require('AI.Blockly.FieldGlobalFlydown');
 goog.require('Blockly.Blocks.Utilities');
+goog.require('Blockly.NameSet');
+goog.require('Blockly.Substitution');
 goog.require('goog.dom');
 
 /**

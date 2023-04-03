@@ -1,6 +1,8 @@
 // -*- mode: java; c-basic-offset: 2; -*-
 // Copyright © 2020 Massachusetts Institute of Technology. All rights reserved.
 
+goog.require('Blockly.RenderedConnection');
+
 /**
  * @license
  * @fileoverview Visual blocks editor for MIT App Inventor

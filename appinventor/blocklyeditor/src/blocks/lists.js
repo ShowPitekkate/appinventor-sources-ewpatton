@@ -13,6 +13,7 @@
 goog.provide('Blockly.Blocks.lists');
 
 goog.require('Blockly.Blocks.Utilities');
+goog.require('Blockly.NameSet');
 
 Blockly.Blocks['lists_create_with'] = {
   // Create a list with any number of elements of any type.

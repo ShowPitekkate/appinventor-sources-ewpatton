@@ -19,12 +19,6 @@
 
   <property name="release" value="false"/>
 
-  <condition property="blockly.config"
-             value="ploverConfig.js"
-             else="ploverConfig-dev.js">
-    <equals arg1="${release}" arg2="true"/>
-  </condition>
-
   <target name="all"
           depends="BlocklyTranslationGenerator">
   </target>
@@ -117,8 +111,19 @@
 		      description="For now, compiling the Blockly editor means cat-ing its javascript together with the relevant javascript in the Blockly library"
 		      depends="init,CheckBlocklyCompile"
                       unless="BlocklyCompile.uptodate">
-		<java failonerror="true" fork="true" jar="${lib.dir}/plovr/plovr-eba786b34df9.jar">
-			<arg line="build ${blockly.config}" />
+          <condition property="mode" value="SIMPLE" else="BUNDLE">
+            <equals arg1="${release}" arg2="true" />
+          </condition>
+		<java failonerror="true" fork="true" jar="${lib.dir}/closure-compiler/closure-compiler-v20211201.jar">
+		  <arg value="--compilation_level=${mode}" />
+                  <arg value="--js_output_file=${public.build.dir}/blockly-all.js" />
+                  <arg value="--language_in=STABLE" />
+                  <arg value="--language_out=ECMASCRIPT5" />
+                  <arg value="--entry_point=AI.Blockly.BlocklyEditor" />
+                  <arg value="--force_inject_library=base" />
+                  <arg value="../lib/closure-library/closure/goog/**.js" />
+                  <arg value="../lib/blockly/core/**.js" />
+                  <arg value="src/**.js" />
 		</java>
 	</target>
 

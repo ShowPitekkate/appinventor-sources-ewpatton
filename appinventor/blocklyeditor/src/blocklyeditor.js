@@ -15,7 +15,39 @@
 
 goog.provide('AI.Blockly.BlocklyEditor');
 
+goog.require('goog.ui.HsvaPalette');
+goog.require('Blockly');
+goog.require('Blockly.ExportBlocksImage');
+goog.require('AI.Blockly');
+goog.require('AI.Blockly.Backpack');
+goog.require('AI.Blockly.BlockSvg');
+goog.require('AI.Blockly.ComponentDatabase');
+goog.require('AI.Blockly.ConnectionDB');
 goog.require('AI.Blockly.Drawer');
+goog.require('AI.Events');
+goog.require('AI.Blockly.Field');
+goog.require('AI.Blockly.Flydown');
+goog.require('AI.Blockly.ProcedureDatabase');
+goog.require('AI.Blockly.ReplMgr');
+goog.require('AI.Blockly.ScrollbarPair');
+goog.require('AI.Blockly.Trashcan');
+goog.require('AI.Blockly.VariableDatabase');
+goog.require('AI.Blockly.Warning');
+goog.require('AI.Blockly.WorkspaceSvg');
+goog.require('AI.Blockly.Xml');
+
+// App Inventor Blocks
+goog.require('Blockly.Blocks.color');
+goog.require('AI.Blockly.Blocks.components');
+goog.require('Blockly.Blocks.control');
+goog.require('Blockly.Blocks.dictionaries');
+goog.require('Blockly.Blocks.helpers');
+goog.require('Blockly.Blocks.lexicalvariables');
+goog.require('Blockly.Blocks.lists');
+goog.require('Blockly.Blocks.logic');
+goog.require('Blockly.Blocks.math');
+goog.require('Blockly.Blocks.procedures');
+goog.require('Blockly.Blocks.text');
 
 // App Inventor extensions to Blockly
 goog.require('Blockly.TypeBlock');
