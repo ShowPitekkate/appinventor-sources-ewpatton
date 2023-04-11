@@ -27,6 +27,8 @@
 		060A83D51E004E1E00C6B7D9 /* JsonUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060A83D41E004E1E00C6B7D9 /* JsonUtil.swift */; };
 		06159D8C1DEFE20A00593D30 /* TextBoxBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06159D8B1DEFE20A00593D30 /* TextBoxBase.swift */; };
 		06159D8E1DEFF0C600593D30 /* PasswordTextBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06159D8D1DEFF0C600593D30 /* PasswordTextBox.swift */; };
+		06164DB029E57DA00065CCC3 /* TabArrangement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06164DAF29E57DA00065CCC3 /* TabArrangement.swift */; };
+		06164DB229E57DAA0065CCC3 /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06164DB129E57DAA0065CCC3 /* Tab.swift */; };
 		0618A28D1D8CF4EE0013A191 /* AIComponentKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0618A2841D8CF4EE0013A191 /* AIComponentKit.framework */; };
 		0618A2921D8CF4EE0013A191 /* AIComponentKitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0618A2911D8CF4EE0013A191 /* AIComponentKitTests.swift */; };
 		0618A2941D8CF4EE0013A191 /* AIComponentKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 0618A2861D8CF4EE0013A191 /* AIComponentKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -252,6 +254,8 @@
 		060A83D41E004E1E00C6B7D9 /* JsonUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JsonUtil.swift; sourceTree = "<group>"; };
 		06159D8B1DEFE20A00593D30 /* TextBoxBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBoxBase.swift; sourceTree = "<group>"; };
 		06159D8D1DEFF0C600593D30 /* PasswordTextBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordTextBox.swift; sourceTree = "<group>"; };
+		06164DAF29E57DA00065CCC3 /* TabArrangement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabArrangement.swift; sourceTree = "<group>"; };
+		06164DB129E57DAA0065CCC3 /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		0618A26D1D8CE3750013A191 /* AIComponentKit-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AIComponentKit-Bridging-Header.h"; sourceTree = "<group>"; };
 		0618A26E1D8CE3750013A191 /* Form.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
 		0618A2701D8CE50A0013A191 /* Component.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Component.swift; sourceTree = "<group>"; };
@@ -338,7 +342,7 @@
 		06B216031DB95146000B3366 /* Notifier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notifier.swift; sourceTree = "<group>"; };
 		06B216051DB95155000B3366 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		06B216071DB954A5000B3366 /* ColorUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorUtil.swift; sourceTree = "<group>"; };
-		06B2161E1DBDA4B4000B3366 /* runtime.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.scm; path = components-ios/src/runtime.scm; sourceTree = SOURCE_ROOT; };
+		06B2161E1DBDA4B4000B3366 /* runtime.scm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = runtime.scm; path = "components-ios/src/runtime.scm"; sourceTree = SOURCE_ROOT; };
 		06B3747B1DC06F6B003888CB /* GCDWebServer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GCDWebServer.framework; path = "Pods/../build/Release-iphoneos/GCDWebServer/GCDWebServer.framework"; sourceTree = "<group>"; };
 		06B3747C1DC06F6B003888CB /* Pods_AIComponentKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_AIComponentKit.framework; path = "Pods/../build/Release-iphoneos/Pods_AIComponentKit.framework"; sourceTree = "<group>"; };
 		06B3747D1DC06F6B003888CB /* SchemeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SchemeKit.framework; path = "build/Release-iphoneos/SchemeKit.framework"; sourceTree = "<group>"; };
@@ -566,7 +570,7 @@
 				DE5CBD271FE36C8B00F5EDDE /* webviewer.js */,
 				06678E31233956EE00BD3F19 /* main.swift */,
 			);
-			path = components-ios/src;
+			path = "components-ios/src";
 			sourceTree = "<group>";
 		};
 		0618A2901D8CF4EE0013A191 /* components-ios/tests */ = {
@@ -587,7 +591,7 @@
 				0653CBD71F9719920052065A /* RuntimeTests.swift */,
 				0653CBD91F971BA70052065A /* TestFailure.swift */,
 			);
-			path = components-ios/tests;
+			path = "components-ios/tests";
 			sourceTree = "<group>";
 		};
 		06D151911DC4646000FC981E /* ui */ = {
@@ -622,12 +626,14 @@
 		06D151921DC464AB00FC981E /* layout */ = {
 			isa = PBXGroup;
 			children = (
-				06B215F91DB950F6000B3366 /* HorizontalArrangement.swift */,
 				06D151E91DC6ED5200FC981E /* HVArrangement.swift */,
-				06B215FB1DB95109000B3366 /* VerticalArrangement.swift */,
-				0680ED581E012A2100732883 /* TableArrangement.swift */,
-				C4D38CC6230DCDF300D09FE3 /* VerticalScrollArrangement.swift */,
+				06B215F91DB950F6000B3366 /* HorizontalArrangement.swift */,
 				C4D38CC8230DCF9400D09FE3 /* HorizontalScrollArrangement.swift */,
+				06164DB129E57DAA0065CCC3 /* Tab.swift */,
+				06164DAF29E57DA00065CCC3 /* TabArrangement.swift */,
+				0680ED581E012A2100732883 /* TableArrangement.swift */,
+				06B215FB1DB95109000B3366 /* VerticalArrangement.swift */,
+				C4D38CC6230DCDF300D09FE3 /* VerticalScrollArrangement.swift */,
 			);
 			name = layout;
 			sourceTree = "<group>";
@@ -1309,6 +1315,7 @@
 				041758532009417D007D2C31 /* String+ChopAffix.swift in Sources */,
 				0650F5181F1F1B7A00D4E6FA /* HMAC.swift in Sources */,
 				CBC787022032272E005363A3 /* String+Replace.swift in Sources */,
+				06164DB229E57DAA0065CCC3 /* Tab.swift in Sources */,
 				062832981DBE95A7009605D5 /* Layout.swift in Sources */,
 				06D1519C1DC4736900FC981E /* NSString_SHA1.m in Sources */,
 				04248DD6201927C700688ED0 /* TimePicker.swift in Sources */,
@@ -1341,6 +1348,7 @@
 				06B216001DB95122000B3366 /* TinyDB.swift in Sources */,
 				06DA9F541D8CFBA200389B04 /* ComponentConstants.swift in Sources */,
 				DECA138720D85D8F001C6273 /* Circle.swift in Sources */,
+				06164DB029E57DA00065CCC3 /* TabArrangement.swift in Sources */,
 				703C389B22B059C6000EA56A /* UIBezierPath+EllipticalArc.swift in Sources */,
 				06E59EAA1D92C7E800C42804 /* NetworkUtils.m in Sources */,
 				C41392922280708000DBA8C6 /* Switch.swift in Sources */,
@@ -1434,7 +1442,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/prebuilts/$(PLATFORM_NAME)/WebRTC.framework/Headers",
 				);
-				INFOPLIST_FILE = components-ios/src/Info.plist;
+				INFOPLIST_FILE = "components-ios/src/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1521,7 +1529,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/prebuilts/$(PLATFORM_NAME)/WebRTC.framework/Headers",
 				);
-				INFOPLIST_FILE = components-ios/src/Info.plist;
+				INFOPLIST_FILE = "components-ios/src/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -1612,7 +1620,7 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/geos/geos.framework/Headers\"",
 					"$(PROJECT_DIR)/prebuilts/$(PLATFORM_NAME)/WebRTC.framework/Headers",
 				);
-				INFOPLIST_FILE = components-ios/tests/Info.plist;
+				INFOPLIST_FILE = "components-ios/tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1679,7 +1687,7 @@
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = components-ios/tests/Info.plist;
+				INFOPLIST_FILE = "components-ios/tests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
