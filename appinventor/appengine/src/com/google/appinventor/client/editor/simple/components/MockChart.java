@@ -31,7 +31,7 @@ import org.pepstock.charba.client.resources.ResourcesType;
  * <p>The class extends from McokContainer due to the Chart component
  * holding ChartData components as children.
  */
-public final class MockChart extends MockContainer {
+public final class MockChart extends MockContainer<MockChartLayout> {
   public static final String TYPE = "Chart";
 
   private static final String PROPERTY_NAME_TYPE = "Type";
@@ -87,7 +87,7 @@ public final class MockChart extends MockContainer {
     // (this happens upon initializing the Chart which has child components)
     if (!childrenReattached) {
       // Attach all children MockComponents
-      for (Object child : children) {
+      for (MockComponent child : children) {
         if (child instanceof MockChartData) {
           // Re-add Data Components to the Mock Chart
           ((MockChartData) child).addToChart(MockChart.this);
@@ -276,7 +276,7 @@ public final class MockChart extends MockContainer {
     // This is needed since the properties of the MockChart
     // are set after the Data components are attached to
     // the Chart, and thus they need to be re-attached.
-    for (Object child : children) {
+    for (MockComponent child : children) {
       ((MockChartData) child).addToChart(this);
     }
   }
