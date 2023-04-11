@@ -185,7 +185,7 @@ Use a tab component to add a new tab in a tab arrangement.
 
 {:id="Tab.AlignVertical" .number} *AlignVertical*
 : A number that encodes how the contents of the `Tab` are aligned vertically. The choices
- are: `1` = aligned at the top, `2` = aligned at the bottom, `3` = vertically centered.
+ are: `1` = aligned at the top, `2` = vertically centered, `3` = aligned at the bottom.
  Alignment has no effect if the `Tab`'s [`Height`](#Tab.Height) is `Automatic`.
 
 {:id="Tab.BackgroundColor" .color} *BackgroundColor*
