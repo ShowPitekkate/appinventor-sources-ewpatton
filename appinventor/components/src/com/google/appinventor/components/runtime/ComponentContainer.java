@@ -10,6 +10,8 @@ import android.app.Activity;
 import android.view.View;
 import org.w3c.dom.Text;
 
+import java.util.List;
+
 /**
  * Components that can contain other components need to implement this
  * interface.
@@ -45,6 +47,8 @@ public interface ComponentContainer {
   void setChildWidth(AndroidViewComponent<? extends View> component, int width);
 
   void setChildHeight(AndroidViewComponent<? extends View> component, int height);
+
+  List<? extends Component> getChildren();
 
   int Width();
 

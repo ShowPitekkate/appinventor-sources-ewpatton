@@ -12,6 +12,7 @@ import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
 import com.google.appinventor.components.annotations.SimpleProperty;
 import com.google.appinventor.components.common.ComponentCategory;
+import com.google.appinventor.components.common.ComponentConstants;
 import com.google.appinventor.components.common.PropertyTypeConstants;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.components.runtime.util.MediaUtil;
@@ -48,7 +49,7 @@ public class Tab extends HVArrangement<ViewGroup> implements Component, Componen
    * @param container  container, component will be placed in
    */
   public Tab (TabArrangement container) {
-    super(container, HVArrangement.LAYOUT_ORIENTATION_VERTICAL, new FrameLayout(container.$context()));
+    super(container, ComponentConstants.LAYOUT_ORIENTATION_VERTICAL, new FrameLayout(container.$context()));
     container.addTab(this);
   }
   

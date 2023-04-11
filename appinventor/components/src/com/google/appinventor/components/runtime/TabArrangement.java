@@ -25,6 +25,7 @@ import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.components.runtime.util.PaintUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -184,7 +185,12 @@ public class TabArrangement extends AndroidViewComponent<LinearLayout> implement
   @Override
   public void setChildHeight(AndroidViewComponent<? extends View> component, int height) {
   }
-  
+
+  @Override
+  public List<? extends Component> getChildren() {
+    return Collections.unmodifiableList(tabs);
+  }
+
   @SimpleEvent
   public void ShowTab(Tab tab) {
     EventDispatcher.dispatchEvent(this, "ShowTab", tab);
