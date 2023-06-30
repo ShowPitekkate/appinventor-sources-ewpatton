@@ -139,4 +139,12 @@ public final class AppInventorFeatures {
   public static boolean enableFutureFeatures() {
     return false;
   }
+
+  /**
+   * If set to true, detailed version information from git will be shown in the
+   * status panel.
+   */
+  public static boolean showGitVersionInfo() {
+    return false;
+  }
 }

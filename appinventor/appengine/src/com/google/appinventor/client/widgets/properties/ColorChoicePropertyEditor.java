@@ -6,10 +6,11 @@
 
 package com.google.appinventor.client.widgets.properties;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
 import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.widgets.DropDownButton;
 import com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
-import com.google.common.collect.Lists;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -21,9 +22,8 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
 
 /**
  * Property editor for color properties.
@@ -168,7 +168,7 @@ public abstract class ColorChoicePropertyEditor extends PropertyEditor {
     }
 
     // Initialize UI
-    List<DropDownItem> choices = Lists.newArrayList();
+    List<DropDownItem> choices = new ArrayList<>();
     for (final Color color : colors) {
       final String description = color.argbValue == 0 ?
           Color.getHtmlDescription(this.defaultValue, color.name) : color.getHtmlDescription();

@@ -2911,8 +2911,8 @@ public final class Compiler {
         file.setExecutable(true);
         file.deleteOnExit();
         file.getParentFile().mkdirs();
-        Files.copy(Resources.newInputStreamSupplier(Compiler.class.getResource(resourcePath)),
-            file);
+        Resources.asByteSource(Compiler.class.getResource(resourcePath))
+            .copyTo(Files.asByteSink(file));
         resources.put(resourcePath, file);
       }
       return file.getAbsolutePath();
@@ -2931,7 +2931,8 @@ public final class Compiler {
       }
       File tmpLibDir = new File(tempdir);
       tmpLibDir.mkdirs();
-      Files.copy(Resources.newInputStreamSupplier(Compiler.class.getResource(resource)), outFile);
+      Resources.asByteSource(Compiler.class.getResource(resource))
+          .copyTo(Files.asByteSink(outFile));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

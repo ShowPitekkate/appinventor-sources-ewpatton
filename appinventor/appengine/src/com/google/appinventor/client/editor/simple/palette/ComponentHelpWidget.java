@@ -6,10 +6,12 @@
 
 package com.google.appinventor.client.editor.simple.palette;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
 import com.google.appinventor.client.ComponentsTranslation;
 import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.utils.PZAwarePositionCallback;
-import com.google.common.base.Strings;
+import com.google.appinventor.common.utils.StringUtils;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.resources.client.ImageResource;
@@ -18,8 +20,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
 
 /**
  * Defines a widget that has the appearance of a question mark and
@@ -77,7 +77,7 @@ public final class ComponentHelpWidget extends AbstractPaletteItemWidget {
           }
         }
         version = scd.getVersion();
-      } else if (!Strings.isNullOrEmpty(referenceComponentsUrl)) {
+      } else if (!StringUtils.isNullOrEmpty(referenceComponentsUrl)) {
         if (!referenceComponentsUrl.endsWith("/")) {
           referenceComponentsUrl += "/";
         }

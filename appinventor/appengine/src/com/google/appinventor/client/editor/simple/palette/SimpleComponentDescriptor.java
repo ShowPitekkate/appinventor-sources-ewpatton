@@ -15,9 +15,9 @@ import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.components.MockBall;
 import com.google.appinventor.client.editor.simple.components.MockButton;
 import com.google.appinventor.client.editor.simple.components.MockCanvas;
-import com.google.appinventor.client.editor.simple.components.MockChatBot;
 import com.google.appinventor.client.editor.simple.components.MockChart;
 import com.google.appinventor.client.editor.simple.components.MockChartData2D;
+import com.google.appinventor.client.editor.simple.components.MockChatBot;
 import com.google.appinventor.client.editor.simple.components.MockCheckBox;
 import com.google.appinventor.client.editor.simple.components.MockCircle;
 import com.google.appinventor.client.editor.simple.components.MockCloudDB;
@@ -29,7 +29,6 @@ import com.google.appinventor.client.editor.simple.components.MockEmailPicker;
 import com.google.appinventor.client.editor.simple.components.MockFeatureCollection;
 import com.google.appinventor.client.editor.simple.components.MockFirebaseDB;
 import com.google.appinventor.client.editor.simple.components.MockFusionTablesControl;
-import com.google.appinventor.client.editor.simple.components.MockSpreadsheet;
 import com.google.appinventor.client.editor.simple.components.MockHorizontalArrangement;
 import com.google.appinventor.client.editor.simple.components.MockImage;
 import com.google.appinventor.client.editor.simple.components.MockImageBot;
@@ -51,6 +50,7 @@ import com.google.appinventor.client.editor.simple.components.MockScrollHorizont
 import com.google.appinventor.client.editor.simple.components.MockScrollVerticalArrangement;
 import com.google.appinventor.client.editor.simple.components.MockSlider;
 import com.google.appinventor.client.editor.simple.components.MockSpinner;
+import com.google.appinventor.client.editor.simple.components.MockSpreadsheet;
 import com.google.appinventor.client.editor.simple.components.MockSwitch;
 import com.google.appinventor.client.editor.simple.components.MockTableArrangement;
 import com.google.appinventor.client.editor.simple.components.MockTextBox;
@@ -62,13 +62,12 @@ import com.google.appinventor.client.editor.simple.components.MockWebViewer;
 
 import com.google.appinventor.shared.storage.StorageUtil;
 
-import com.google.common.collect.Maps;
-
 import com.google.gwt.resources.client.ImageResource;
 
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -121,7 +120,7 @@ public final class SimpleComponentDescriptor {
    * for mock non-visible components.
    */
   private static final Images images = Ode.getImageBundle();
-  private static final Map<String, ImageResource> bundledImages = Maps.newHashMap();
+  private static final Map<String, ImageResource> bundledImages = new HashMap<>();
   private static boolean imagesInitialized = false;
 
   private static void initBundledImages() {

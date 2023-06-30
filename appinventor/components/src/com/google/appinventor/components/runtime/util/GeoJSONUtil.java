@@ -5,6 +5,20 @@
 
 package com.google.appinventor.components.runtime.util;
 
+import static com.google.appinventor.components.runtime.Component.COLOR_BLACK;
+import static com.google.appinventor.components.runtime.Component.COLOR_BLUE;
+import static com.google.appinventor.components.runtime.Component.COLOR_CYAN;
+import static com.google.appinventor.components.runtime.Component.COLOR_DKGRAY;
+import static com.google.appinventor.components.runtime.Component.COLOR_GRAY;
+import static com.google.appinventor.components.runtime.Component.COLOR_GREEN;
+import static com.google.appinventor.components.runtime.Component.COLOR_LTGRAY;
+import static com.google.appinventor.components.runtime.Component.COLOR_MAGENTA;
+import static com.google.appinventor.components.runtime.Component.COLOR_ORANGE;
+import static com.google.appinventor.components.runtime.Component.COLOR_PINK;
+import static com.google.appinventor.components.runtime.Component.COLOR_RED;
+import static com.google.appinventor.components.runtime.Component.COLOR_WHITE;
+import static com.google.appinventor.components.runtime.Component.COLOR_YELLOW;
+
 import android.text.TextUtils;
 import android.util.Log;
 import com.google.appinventor.components.runtime.LineString;
@@ -18,7 +32,6 @@ import com.google.appinventor.components.runtime.util.MapFactory.MapFeatureType;
 import com.google.appinventor.components.runtime.util.MapFactory.MapLineString;
 import com.google.appinventor.components.runtime.util.MapFactory.MapMarker;
 import com.google.appinventor.components.runtime.util.MapFactory.MapPolygon;
-import com.google.common.annotations.VisibleForTesting;
 import gnu.lists.FString;
 import gnu.lists.LList;
 import gnu.lists.Pair;
@@ -35,8 +48,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.google.appinventor.components.runtime.Component.*;
 
 /**
  * Utility class to process data from GeoJSON.
@@ -215,8 +226,15 @@ public final class GeoJSONUtil {
 
   private GeoJSONUtil() {}
 
-  @VisibleForTesting
-  static int parseColor(final String value) {
+  /**
+   * Parses a color from the given value. Valid formats start with either #
+   * or &H and can be either 4 bit channel RGB, 8 bit channel RGB, or 8 bit
+   * channel ARGB.
+   *
+   * @param value
+   * @return
+   */
+  public static int parseColor(final String value) {
     String lcValue = value.toLowerCase();
     Integer result = colors.get(lcValue);
     if (result != null) {
@@ -230,8 +248,7 @@ public final class GeoJSONUtil {
     }
   }
 
-  @VisibleForTesting
-  static int parseColorHex(final String value) {
+  public static int parseColorHex(final String value) {
     int argb = 0;
     if (value.length() == 3) {
       // 4-bit RGB
@@ -262,7 +279,6 @@ public final class GeoJSONUtil {
     return argb;
   }
 
-  @VisibleForTesting
   static int charToHex(char c) {
     if ( '0' <= c && c <= '9' ) {
       return c - '0';
@@ -413,7 +429,6 @@ public final class GeoJSONUtil {
     }
   }
 
-  @VisibleForTesting
   static boolean parseBooleanOrString(Object value) {
     if (value instanceof Boolean) {
       return (Boolean) value;
@@ -426,7 +441,6 @@ public final class GeoJSONUtil {
     }
   }
 
-  @VisibleForTesting
   static int parseIntegerOrString(Object value) {
     if (value instanceof Number) {
       return ((Number) value).intValue();
@@ -439,7 +453,6 @@ public final class GeoJSONUtil {
     }
   }
 
-  @VisibleForTesting
   static float parseFloatOrString(Object value) {
     if (value instanceof Number) {
       return ((Number) value).floatValue();

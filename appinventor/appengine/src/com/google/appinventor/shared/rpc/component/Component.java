@@ -7,8 +7,6 @@ package com.google.appinventor.shared.rpc.component;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-import com.google.common.primitives.Longs;
-
 /**
  * Component stored in the server
  */
@@ -63,10 +61,15 @@ public class Component implements IsSerializable {
       throw new IllegalArgumentException("text should have 4 parts.");
     }
 
-    Long id = Longs.tryParse(parts[0]);
+    Long id = Long.parseLong(parts[0]);
     String authorId = parts[1];
     String fullyQualifiedName = parts[2];
-    Long version = Longs.tryParse(parts[3]);
+    Long version;
+    try {
+      version = Long.parseLong(parts[3]);
+    } catch (NumberFormatException e) {
+      version = null;
+    }
     if (id == null) {
       throw new IllegalArgumentException("id is not parsable.");
     }

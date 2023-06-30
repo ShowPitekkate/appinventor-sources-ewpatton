@@ -19,7 +19,6 @@ import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.settings.user.BlocksSettings;
 import com.google.appinventor.components.common.YaVersion;
 import com.google.appinventor.shared.settings.SettingsConstants;
-import com.google.common.collect.Sets;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.JavaScriptException;
@@ -38,6 +37,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -118,7 +118,7 @@ public class BlocklyPanel extends HTMLPanel {
   /**
    * Objects registered to listen for workspace changes.
    */
-  private final Set<BlocklyWorkspaceChangeListener> listeners = Sets.newHashSet();
+  private final Set<BlocklyWorkspaceChangeListener> listeners = new HashSet<>();
 
   /**
    * Reference to the native Blockly.WorkspaceSvg.

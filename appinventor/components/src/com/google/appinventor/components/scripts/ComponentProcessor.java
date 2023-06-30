@@ -6,6 +6,8 @@
 
 package com.google.appinventor.components.scripts;
 
+import static java.util.Arrays.asList;
+
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.IsColor;
@@ -39,10 +41,6 @@ import com.google.appinventor.components.annotations.androidmanifest.ProviderEle
 import com.google.appinventor.components.annotations.androidmanifest.PathPermissionElement;
 import com.google.appinventor.components.annotations.androidmanifest.GrantUriPermissionElement;
 import com.google.appinventor.components.common.PropertyTypeConstants;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -147,7 +145,8 @@ public abstract class ComponentProcessor extends AbstractProcessor {
       "Found use of boxed type %s. Please use the primitive type %s instead";
 
   // Returned by getSupportedAnnotationTypes()
-  private static final Set<String> SUPPORTED_ANNOTATION_TYPES = ImmutableSet.of(
+  private static final Set<String> SUPPORTED_ANNOTATION_TYPES =
+      Collections.unmodifiableSet(new HashSet<>(asList(
       "com.google.appinventor.components.annotations.DesignerComponent",
       "com.google.appinventor.components.annotations.DesignerProperty",
       "com.google.appinventor.components.annotations.SimpleEvent",
@@ -167,7 +166,7 @@ public abstract class ComponentProcessor extends AbstractProcessor {
       "com.google.appinventor.components.annotations.UsesPermissions",
       "com.google.appinventor.components.annotations.UsesQueries",
       "com.google.appinventor.components.annotations.UsesServices",
-      "com.google.appinventor.components.annotations.UsesContentProviders");
+      "com.google.appinventor.components.annotations.UsesContentProviders")));
 
   // Returned by getRwString()
   private static final String READ_WRITE = "read-write";
@@ -222,14 +221,14 @@ public abstract class ComponentProcessor extends AbstractProcessor {
    * values are the corresponding {@link ComponentProcessor.ComponentInfo} objects.
    * This is constructed by {@link #process} for use in {@link #outputResults()}.
    */
-  protected final SortedMap<String, ComponentInfo> components = Maps.newTreeMap();
+  protected final SortedMap<String, ComponentInfo> components = new TreeMap<>();
 
   /**
    * Information about every option list helper block. Keys are simple names, and values are the
    * corresponding {@link ComponentProcessor.OptionList} objects. This is constructed as a side
    * effect of {@link #process} for use in {@link #outputResults()}.
    */
-  protected final Map<String, OptionList> optionLists = Maps.newTreeMap();
+  protected final Map<String, OptionList> optionLists = new TreeMap<>();
 
   /**
    * A list of asset filters, which are in fact lists of strings. This gets intialized with an empty
@@ -237,7 +236,7 @@ public abstract class ComponentProcessor extends AbstractProcessor {
    */
   protected List<List<String>> filters;
 
-  private final List<String> componentTypes = Lists.newArrayList();
+  private final List<String> componentTypes = new ArrayList<>();
 
   /**
    * A set of visited types in the class hierarchy. This is used to reduce the complexity of
@@ -551,7 +550,7 @@ public abstract class ComponentProcessor extends AbstractProcessor {
     protected ParameterizedFeature(String name, String description, String longDescription,
         String feature, boolean userVisible, boolean deprecated) {
       super(name, description, longDescription, feature, userVisible, deprecated);
-      parameters = Lists.newArrayList();
+      parameters = new ArrayList<>();
     }
 
     /**
@@ -1248,31 +1247,31 @@ public abstract class ComponentProcessor extends AbstractProcessor {
       type = element.asType().toString();
       displayName = getDisplayNameForComponentType(name);
 
-      conditionalBroadcastReceivers = Maps.newTreeMap();
-      conditionalContentProviders = Maps.newTreeMap();
-      conditionalPermissionConstraints = Maps.newTreeMap();
-      conditionalPermissions = Maps.newTreeMap();
-      conditionalQueries = Maps.newTreeMap();
-      conditionalServices = Maps.newTreeMap();
+      conditionalBroadcastReceivers = new TreeMap<>();
+      conditionalContentProviders = new TreeMap<>();
+      conditionalPermissionConstraints = new TreeMap<>();
+      conditionalPermissions = new TreeMap<>();
+      conditionalQueries = new TreeMap<>();
+      conditionalServices = new TreeMap<>();
 
-      assets = Sets.newHashSet();
-      activities = Sets.newHashSet();
-      activityMetadata = Sets.newHashSet();
-      broadcastReceivers = Sets.newHashSet();
-      classNameAndActionsBR = Sets.newHashSet();
-      contentProviders = Sets.newHashSet();
-      libraries = Sets.newHashSet();
-      metadata = Sets.newHashSet();
-      nativeLibraries = Sets.newHashSet();
-      permissionConstraints = Maps.newTreeMap();
-      permissions = Sets.newHashSet();
-      queries = Sets.newHashSet();
-      services = Sets.newHashSet();
+      assets = new HashSet<>();
+      activities = new HashSet<>();
+      activityMetadata = new HashSet<>();
+      broadcastReceivers = new HashSet<>();
+      classNameAndActionsBR = new HashSet<>();
+      contentProviders = new HashSet<>();
+      libraries = new HashSet<>();
+      metadata = new HashSet<>();
+      nativeLibraries = new HashSet<>();
+      permissionConstraints = new TreeMap<>();
+      permissions = new HashSet<>();
+      queries = new HashSet<>();
+      services = new HashSet<>();
 
-      designerProperties = Maps.newTreeMap();
-      properties = Maps.newTreeMap();
-      methods = Maps.newTreeMap();
-      events = Maps.newTreeMap();
+      designerProperties = new TreeMap<>();
+      properties = new TreeMap<>();
+      methods = new TreeMap<>();
+      events = new TreeMap<>();
       abstractClass = element.getModifiers().contains(Modifier.ABSTRACT);
       external = false;
       versionName = null;
@@ -1554,7 +1553,7 @@ public abstract class ComponentProcessor extends AbstractProcessor {
     }
 
     // Remove non-components before calling outputResults.
-    List<String> removeList = Lists.newArrayList();
+    List<String> removeList = new ArrayList<>();
     for (Map.Entry<String, ComponentInfo> entry : components.entrySet()) {
       ComponentInfo component = entry.getValue();
       if (component.abstractClass || !component.designerComponent) {
@@ -2116,7 +2115,7 @@ public abstract class ComponentProcessor extends AbstractProcessor {
   
     // Create a map of enum const names -> values. This is used to filter the below elements
     // returned by getEnclosedElements().
-    Map<String, String> namesToValues = Maps.newTreeMap();
+    Map<String, String> namesToValues = new TreeMap<>();
     Object[] constants = clazz.getEnumConstants();
     if (constants == null) {
       throw new IllegalArgumentException("Class: " + className + " should be an enum and declare "

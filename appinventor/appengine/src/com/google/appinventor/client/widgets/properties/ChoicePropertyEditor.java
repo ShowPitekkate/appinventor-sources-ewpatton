@@ -10,9 +10,9 @@ import static com.google.appinventor.client.Ode.MESSAGES;
 import static com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
 
 import com.google.appinventor.client.widgets.DropDownButton;
-import com.google.common.collect.Lists;
 import com.google.gwt.user.client.Command;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,8 +84,8 @@ public class ChoicePropertyEditor extends PropertyEditor {
   public ChoicePropertyEditor(Choice[] choices) {
     // Initialize UI
     this.choices = choices;
-    List<DropDownItem> items = Lists.newArrayList();
-    for(final Choice choice : choices) {
+    List<DropDownItem> items = new ArrayList<>();
+    for (final Choice choice : choices) {
       items.add(new DropDownItem("Choice Property Editor", choice.caption, new Command() {
         @Override
         public void execute() {
@@ -109,11 +109,12 @@ public class ChoicePropertyEditor extends PropertyEditor {
    */
   public ChoicePropertyEditor(String[] choiceNames) {
     this.choices = new Choice[choiceNames.length];
-    for (int idx = 0; idx < choiceNames.length; idx += 1)
+    for (int idx = 0; idx < choiceNames.length; idx += 1) {
       this.choices[idx] = new Choice(choiceNames[idx], choiceNames[idx]);
+    }
 
-    List<DropDownItem> items = Lists.newArrayList();
-    for(final Choice choice : choices) {
+    List<DropDownItem> items = new ArrayList<>();
+    for (final Choice choice : choices) {
       items.add(new DropDownItem("Choice Property Editor", choice.caption, new Command() {
         @Override
         public void execute() {

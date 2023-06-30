@@ -6,7 +6,6 @@
 
 package com.google.appinventor.client.explorer.commands;
 
-import com.google.common.base.Preconditions;
 import com.google.appinventor.client.utils.Downloader;
 import com.google.appinventor.shared.rpc.ServerLayout;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
@@ -31,7 +30,9 @@ public class DownloadProjectOutputCommand extends ChainableCommand {
     // Since we don't know when the download is finished, we can't support a
     // command after this one.
     super(null); // no next command
-    Preconditions.checkNotNull(target);
+    if (target == null) {
+      throw new NullPointerException();
+    }
     this.target = target;
   }
 

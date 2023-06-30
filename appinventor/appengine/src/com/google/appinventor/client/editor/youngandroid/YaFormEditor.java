@@ -54,16 +54,10 @@ import com.google.appinventor.shared.rpc.project.ChecksumedLoadFile;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidFormNode;
 import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.appinventor.shared.youngandroid.YoungAndroidSourceAnalyzer;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Maps;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JsArrayString;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DockPanel;
@@ -306,7 +300,7 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
 
   @Override
   public Map<String, MockComponent> getComponents() {
-    Map<String, MockComponent> map = Maps.newHashMap();
+    Map<String, MockComponent> map = new HashMap<>();
     if (loadComplete) {
       populateComponentsMap(form, map);
     }
@@ -646,7 +640,9 @@ public final class YaFormEditor extends SimpleEditor implements FormChangeListen
     // Instantiate a mock component for the visual designer
     MockComponent mockComponent;
     if (componentType.equals(MockForm.TYPE)) {
-      Preconditions.checkArgument(parent == null);
+      if (parent == null) {
+        throw new NullPointerException();
+      }
 
       // Instantiate new root component
       mockComponent = new MockForm(this);

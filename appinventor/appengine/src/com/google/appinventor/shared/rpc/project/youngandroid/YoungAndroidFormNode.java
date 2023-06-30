@@ -6,7 +6,6 @@
 
 package com.google.appinventor.shared.rpc.project.youngandroid;
 
-import com.google.common.base.Preconditions;
 import com.google.appinventor.shared.storage.StorageUtil;
 import com.google.appinventor.shared.youngandroid.YoungAndroidSourceAnalyzer;
 

@@ -18,7 +18,6 @@ import com.google.appinventor.client.settings.project.ProjectSettings;
 import com.google.appinventor.shared.rpc.BlocksTruncatedException;
 import com.google.appinventor.shared.rpc.project.FileDescriptorWithContent;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
-import com.google.common.collect.Maps;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 
@@ -68,7 +67,7 @@ public final class EditorManager {
    * Creates the editor manager.
    */
   public EditorManager() {
-    openProjectEditors = Maps.newHashMap();
+    openProjectEditors = new HashMap<>();
 
     dirtyProjectSettings = new HashSet<ProjectSettings>();
     dirtyFileEditors = new HashSet<FileEditor>();

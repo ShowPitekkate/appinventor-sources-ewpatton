@@ -3,6 +3,7 @@
 // Copyright © 2011-2016 Massachusetts Institute of Technology, All rights reserved
 // Released under the Apache License, Version 2.0
 // http://www.apache.org/licenses/LICENSE-2.0
+
 package com.google.appinventor.client.editor.youngandroid;
 
 import com.google.appinventor.client.ErrorReporter;
@@ -41,11 +42,9 @@ import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidFormNo
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjectNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 import com.google.appinventor.shared.youngandroid.YoungAndroidSourceAnalyzer;
-import com.google.common.collect.Maps;
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArrayString;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Command;
@@ -85,7 +84,7 @@ public final class YaBlocksEditor extends FileEditor
   // Keep a map from projectid_formname -> YaBlocksEditor for handling blocks workspace changed
   // callbacks from the BlocklyPanel objects. This has to be static because it is used by
   // static methods that are called from the Javascript Blockly world.
-  private static final Map<String, YaBlocksEditor> formToBlocksEditor = Maps.newHashMap();
+  private static final Map<String, YaBlocksEditor> formToBlocksEditor = new HashMap<>();
 
   // projectid_formname for this blocks editor. Our index into the static formToBlocksEditor map.
   private String fullFormName;

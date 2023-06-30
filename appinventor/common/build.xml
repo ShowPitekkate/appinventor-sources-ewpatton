@@ -41,9 +41,6 @@
 
     <ai.javac destdir="${CommonUtils-class.dir}">
       <include name="${common.pkg}/utils/*.java" />
-      <classpath>
-        <pathelement location="${lib.dir}/guava/guava-27.1-android.jar" />
-      </classpath>
     </ai.javac>
 
     <jar destfile="${public.build.dir}/CommonUtils.jar">
@@ -66,7 +63,6 @@
 
   <path id="libsForCommonUtilsTests.path">
     <pathelement location="${public.build.dir}/CommonUtils.jar" />
-    <pathelement location="${lib.dir}/guava/guava-27.1-android.jar" />
     <pathelement location="${lib.dir}/junit/junit-4.8.2.jar" />
   </path>
 

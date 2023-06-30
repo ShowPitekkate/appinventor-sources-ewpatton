@@ -52,6 +52,7 @@ import com.google.appinventor.client.wizards.NewProjectWizard.NewProjectCommand;
 
 import com.google.appinventor.client.wizards.TemplateUploadWizard;
 
+import com.google.appinventor.common.utils.StringUtils;
 import com.google.appinventor.common.version.AppInventorFeatures;
 
 import com.google.appinventor.components.common.YaVersion;
@@ -81,8 +82,6 @@ import com.google.appinventor.shared.rpc.user.UserInfoService;
 import com.google.appinventor.shared.rpc.user.UserInfoServiceAsync;
 
 import com.google.appinventor.shared.settings.SettingsConstants;
-
-import com.google.common.annotations.VisibleForTesting;
 
 import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.EntryPoint;
@@ -1467,26 +1466,6 @@ public class Ode implements EntryPoint {
   }
 
   /**
-   * Compares two locales and determines if they are equal. We consider oldLocale value
-   * of null to be equal to the empty string to handle default values.
-   * @param oldLocale one locale
-   * @param newLocale another locale
-   * @param defaultValue the default locale
-   * @return  true if the locale ISO strings are equal modulo case or if both
-   *          are empty, otherwise false
-   */
-  @VisibleForTesting
-  static boolean compareLocales(String oldLocale, String newLocale, String defaultValue) {
-    if ((oldLocale == null || oldLocale.isEmpty()) && (newLocale == null || newLocale.isEmpty())) {
-      return true;
-    } else if (oldLocale == null || oldLocale.isEmpty()) {
-      return defaultValue.equalsIgnoreCase(newLocale);
-    } else {
-      return oldLocale.equalsIgnoreCase(newLocale);
-    }
-  }
-
-  /**
    * Check the user's locale against the currently requested locale. No locale
    * is specified in the query string, then we redirect to the user's previous
    * locale. English, the default locale, won't redirect in this scenario to
@@ -1497,7 +1476,7 @@ public class Ode implements EntryPoint {
   public static boolean handleUserLocale() {
     String locale = Window.Location.getParameter("locale");
     String lastUserLocale = userSettings.getSettings(SettingsConstants.USER_GENERAL_SETTINGS).getPropertyValue(SettingsConstants.USER_LAST_LOCALE);
-    if (!compareLocales(locale, lastUserLocale, "en")) {
+    if (!StringUtils.compareLocales(locale, lastUserLocale, "en")) {
       if (locale == null) {
         Window.Location.assign(Window.Location.createUrlBuilder().setParameter("locale", lastUserLocale).buildString());
         return false;

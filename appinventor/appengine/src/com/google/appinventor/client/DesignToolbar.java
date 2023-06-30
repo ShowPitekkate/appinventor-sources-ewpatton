@@ -29,9 +29,6 @@ import com.google.appinventor.shared.rpc.RpcResult;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
 import com.google.gwt.core.client.Scheduler;
 
 import com.google.gwt.user.client.Command;
@@ -39,6 +36,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +86,7 @@ public class DesignToolbar extends Toolbar {
     public DesignProject(String name, long projectId) {
       this.name = name;
       this.projectId = projectId;
-      screens = Maps.newHashMap();
+      screens = new HashMap<>();
       // Screen1 is initial screen by default
       currentScreen = YoungAndroidSourceNode.SCREEN1_FORM_NAME;
       // Let BlocklyPanel know which screen to send Yail for
@@ -148,7 +147,7 @@ public class DesignToolbar extends Toolbar {
 
   // Map of project id to project info for all projects we've ever shown
   // in the Designer in this session.
-  public Map<Long, DesignProject> projectMap = Maps.newHashMap();
+  public Map<Long, DesignProject> projectMap = new HashMap<>();
 
   // Stack of screens switched to from the Companion
   // We implement screen switching in the Companion by having it tell us
@@ -157,7 +156,7 @@ public class DesignToolbar extends Toolbar {
   // a screen. If we switch projects in the browser UI, we clear this
   // list of screens as we are effectively running a different application
   // on the device.
-  public static LinkedList<String> pushedScreens = Lists.newLinkedList();
+  public static LinkedList<String> pushedScreens = new LinkedList<>();
 
   // Is the Gallery Enabled (new gallery)?
   private boolean galleryEnabled = false;
@@ -182,7 +181,7 @@ public class DesignToolbar extends Toolbar {
         MESSAGES.toggleTutorialButton(), new ToogleTutorialAction()));
     setButtonVisible(WIDGET_NAME_TUTORIAL_TOGGLE, false); // Don't show unless needed
 
-    List<DropDownItem> screenItems = Lists.newArrayList();
+    List<DropDownItem> screenItems = new ArrayList<>();
     addDropDownButton(WIDGET_NAME_SCREENS_DROPDOWN, MESSAGES.screensButton(), screenItems);
 
     if (AppInventorFeatures.allowMultiScreenApplications() && !isReadOnly) {

@@ -14,13 +14,9 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.google.common.io.ByteSource;
 import com.google.common.io.Files;
-import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
-
-import org.codehaus.jettison.json.JSONArray;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -44,6 +39,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
+
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 
 /**
  * Provides support for building Young Android projects.
@@ -242,13 +241,12 @@ public final class ProjectBuilder {
       File extractedFile = new File(projectRoot, zipEntry.getName());
       LOG.info("extracting " + extractedFile.getAbsolutePath() + " from input zip");
       Files.createParentDirs(extractedFile); // Do I need this?
-      Files.copy(
-          new InputSupplier<InputStream>() {
-            public InputStream getInput() throws IOException {
-              return extractedInputStream;
-            }
-          },
-          extractedFile);
+      new ByteSource() {
+        @Override
+        public InputStream openStream() throws IOException {
+          return extractedInputStream;
+        }
+      }.copyTo(Files.asByteSink(extractedFile));
       projectFileNames.add(extractedFile.getPath());
     }
     return projectFileNames;

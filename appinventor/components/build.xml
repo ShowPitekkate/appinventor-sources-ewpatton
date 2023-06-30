@@ -140,7 +140,6 @@
     <copy toFile="${public.deps.dir}/twitter4j.jar" file="${lib.dir}/twitter/twitter4j-core-3.0.5.jar" />
     <copy toFile="${public.deps.dir}/twitter4jmedia.jar" file="${lib.dir}/twitter/twitter4j-media-support-3.0.5.jar" />
     <copy toFile="${public.deps.dir}/httpmime.jar" file="${lib.dir}/apache-http/httpmime-4.3.4.jar" />
-    <copy toFile="${public.deps.dir}/fusiontables.jar" file="${lib.dir}/fusiontables/fusiontables.jar" />
     <copy toFile="${public.deps.dir}/firebase.jar" file="${lib.dir}/firebase/firebase-client-android-2.5.0.jar" />
     <!-- Google Sheets Component -->
     <copy toFile="${public.deps.dir}/googlesheets.jar" file="${lib.dir}/googlesheets/googlesheets.jar" />
@@ -338,7 +337,6 @@
       <classpath>
         <pathelement location="${public.build.dir}/CommonConstants.jar" />
         <pathelement location="${build.dir}/common/CommonUtils.jar" />
-        <pathelement location="${lib.dir}/guava/guava-27.1-android.jar" />
         <pathelement location="${lib.dir}/json/json.jar" />
       </classpath>
     </ai.javac>
@@ -353,7 +351,6 @@
          destfile="${local.build.dir}/AnnotationProcessors.jar" >
       <zipfileset src="${public.build.dir}/CommonConstants.jar"/>
       <zipfileset src="${build.dir}/common/CommonUtils.jar" />
-      <zipfileset src="${lib.dir}/guava/guava-27.1-android.jar" />
       <zipfileset src="${lib.dir}/json/json.jar" />
       <fileset dir="${src.dir}">
         <include name="META-INF/**/*"/>

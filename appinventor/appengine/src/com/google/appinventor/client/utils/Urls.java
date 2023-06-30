@@ -6,7 +6,7 @@
 
 package com.google.appinventor.client.utils;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 /**
  * Utility class for working with URLs.

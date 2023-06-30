@@ -6,8 +6,6 @@
 
 package com.google.appinventor.common.utils;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Helper class for working with filenames.
  *
@@ -24,7 +22,9 @@ public class FilenameUtils {
    * @return  extension of filename
    */
   public static String getExtension(String filename) {
-    Preconditions.checkNotNull(filename);
+    if (filename == null) {
+      throw new NullPointerException();
+    }
 
     // Separate filename from rest of pathname
     filename = filename.substring(filename.lastIndexOf('/') + 1);

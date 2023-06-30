@@ -6,9 +6,6 @@
 
 package com.google.appinventor.common.utils;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Preconditions;
-
 import java.util.Arrays;
 import java.util.Set;
 
@@ -21,16 +18,26 @@ public final class StringUtils {
   }
 
   /**
-   * A {@link CharMatcher} that matches valid filename characters:
-   * [0-9],[a-z],[A-Z],'_','.', and '-'
+   * Filters the input filename by removing any non-valid filename characters.
+   *
+   * @param filename the original filename
+   * @return a filtered string containing only characters in [A-Za-z0-9_.-]
    */
-  public static final CharMatcher VALID_FILENAME_CHARS =
-      CharMatcher.inRange('0', '9')
-      .or(CharMatcher.inRange('a', 'z'))
-      .or(CharMatcher.inRange('A', 'Z'))
-      .or(CharMatcher.is('_'))
-      .or(CharMatcher.is('.'))
-      .or(CharMatcher.is('-'));
+  public static String filterFilename(final String filename) {
+    // Ideally we would use Java's Pattern class, but this class is used in the
+    // GWT code and GWT does not emulate the Java regex classes.
+    StringBuilder sb = new StringBuilder(filename.length());
+    char[] content = filename.toCharArray();
+    for (char c : content) {
+      if (('0' <= c && c <= '9')
+          || ('a' <= c && c <= 'z')
+          || ('A' <= c && c <= 'Z')
+          || c == '_' || c == '.' || c == '-') {
+        sb.append(c);
+      }
+    }
+    return sb.toString();
+  }
 
   /**
    * Returns the given string enclosed with quotation marks.
@@ -118,8 +125,8 @@ public final class StringUtils {
    * @return  string created of joined string array elements
    */
   public static String join(String delimiter, Iterable<String> strings) {
-    Preconditions.checkNotNull(delimiter);
-    Preconditions.checkNotNull(strings);
+    checkNotNull(delimiter);
+    checkNotNull(strings);
 
     StringBuilder sb = new StringBuilder();
     String separator = "";
@@ -140,9 +147,9 @@ public final class StringUtils {
    * @param items The items to join
    */
   public static void join(StringBuilder sb, String delimiter, String... items) {
-    Preconditions.checkNotNull(sb);
-    Preconditions.checkNotNull(delimiter);
-    Preconditions.checkNotNull(items);
+    checkNotNull(sb);
+    checkNotNull(delimiter);
+    checkNotNull(items);
 
     String separator = "";
     for (String string : items) {
@@ -249,13 +256,13 @@ public final class StringUtils {
    * compatability for most operating systems.
    */
   public static String normalizeForFilename(String str) {
-    String normalized = VALID_FILENAME_CHARS.retainFrom(str);
+    String normalized = filterFilename(str);
     if (!normalized.isEmpty()) {
-      while (normalized.length() > 2 &&
-             !CharMatcher.javaLetter().matches(normalized.charAt(0))) {
+      while (normalized.length() > 2
+          && !Character.isLetter(normalized.charAt(0))) {
         normalized = normalized.substring(1);
       }
-      if (CharMatcher.javaLetter().matches(normalized.charAt(0))) {
+      if (Character.isLetter(normalized.charAt(0))) {
         return normalized;
       }
     }
@@ -345,5 +352,36 @@ public final class StringUtils {
    */
   public static boolean isNullOrEmpty(final String text) {
      return text == null || text.isEmpty();
+  }
+
+  /**
+   * Checks that the given object is not null.
+   *
+   * @param object the object to validate
+   * @throws NullPointerException if the argument is null
+   */
+  public static void checkNotNull(Object object) {
+    if (object == null) {
+      throw new NullPointerException();
+    }
+  }
+
+  /**
+   * Compares two locales and determines if they are equal. We consider oldLocale value
+   * of null to be equal to the empty string to handle default values.
+   * @param oldLocale one locale
+   * @param newLocale another locale
+   * @param defaultValue the default locale
+   * @return  true if the locale ISO strings are equal modulo case or if both
+   *          are empty, otherwise false
+   */
+  public static boolean compareLocales(String oldLocale, String newLocale, String defaultValue) {
+    if ((oldLocale == null || oldLocale.isEmpty()) && (newLocale == null || newLocale.isEmpty())) {
+      return true;
+    } else if (oldLocale == null || oldLocale.isEmpty()) {
+      return defaultValue.equalsIgnoreCase(newLocale);
+    } else {
+      return oldLocale.equalsIgnoreCase(newLocale);
+    }
   }
 }

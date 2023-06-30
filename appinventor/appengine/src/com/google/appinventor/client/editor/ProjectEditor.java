@@ -10,10 +10,9 @@ import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.settings.Settings;
-import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.appinventor.client.settings.project.ProjectSettings;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
-import com.google.common.collect.Maps;
+import com.google.appinventor.shared.settings.SettingsConstants;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DeckPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -47,12 +46,12 @@ public abstract class ProjectEditor extends Composite {
   // in fileIds and the FileEditor should be in deckPanel. If selectedFileEditor
   // is non-null, it is one of the file editors in openFileEditors and the 
   // one currently showing in deckPanel. 
-  private final Map<String, FileEditor> openFileEditors;
-  protected final List<String> fileIds; 
+  private final Map<String, FileEditor> openFileEditors = new HashMap<>();
+  protected final List<String> fileIds = new ArrayList<String>();
   private final HashMap<String,String> locationHashMap = new HashMap<String,String>();
-  private final DeckPanel deckPanel;
-  private FileEditor selectedFileEditor;
+  private final DeckPanel deckPanel = new DeckPanel();
   private final TreeMap<String, Boolean> screenHashMap = new TreeMap<String, Boolean>();
+  private FileEditor selectedFileEditor;
 
   /**
    * Creates a {@code ProjectEditor} instance.
@@ -63,11 +62,6 @@ public abstract class ProjectEditor extends Composite {
     this.projectRootNode = projectRootNode;
     projectId = projectRootNode.getProjectId();
     project = Ode.getInstance().getProjectManager().getProject(projectId);
-
-    openFileEditors = Maps.newHashMap();
-    fileIds = new ArrayList<String>();
-
-    deckPanel = new DeckPanel();
 
     VerticalPanel panel = new VerticalPanel();
     panel.add(deckPanel);

@@ -6,15 +6,17 @@
 
 package com.google.appinventor.client.editor.simple.components;
 
+import static java.util.Arrays.asList;
+
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.palette.SimplePaletteItem;
 import com.google.appinventor.client.widgets.dnd.DragSource;
-import com.google.common.collect.Sets;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -30,7 +32,8 @@ public final class MockCanvas extends MockContainer {
    */
   public static final String TYPE = "Canvas";
 
-  public static final Set<String> ACCEPTABLE_TYPES = Collections.unmodifiableSet(Sets.newHashSet(MockBall.TYPE, MockImageSprite.TYPE));
+  public static final Set<String> ACCEPTABLE_TYPES =
+      Collections.unmodifiableSet(new HashSet<>(asList(MockBall.TYPE, MockImageSprite.TYPE)));
 
   // UI components
   private final AbsolutePanel canvasWidget;

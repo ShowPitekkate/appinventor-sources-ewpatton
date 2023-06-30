@@ -8,8 +8,6 @@ package com.google.appinventor.shared.rpc.project;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-import com.google.common.base.Preconditions;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -85,7 +83,9 @@ public abstract class ProjectNode implements Serializable, IsSerializable {
    * @param child  child to be removed from this node
    */
   public void removeChild(ProjectNode child) {
-    Preconditions.checkNotNull(children);
+    if (children == null) {
+      throw new NullPointerException();
+    }
     children.remove(child);
   }
 

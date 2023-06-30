@@ -10,7 +10,6 @@ import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.palette.SimplePaletteItem;
 import com.google.appinventor.client.widgets.dnd.DragSource;
 import com.google.appinventor.client.widgets.dnd.DropTarget;
-import com.google.common.base.Preconditions;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -292,7 +291,9 @@ public abstract class MockContainer extends MockVisibleComponent implements Drop
 
   @Override
   public final void onDrop(DragSource source, int x, int y, int offsetX, int offsetY) {
-    Preconditions.checkArgument(acceptableSource(source));
+    if (!acceptableSource(source)) {
+      throw new IllegalArgumentException();
+    }
 
     MockComponent sourceComponent;
     if (source instanceof MockComponent) {

@@ -6,13 +6,14 @@
 
 package com.google.appinventor.client;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
 import com.google.appinventor.client.boxes.ProjectListBox;
 import com.google.appinventor.client.editor.youngandroid.BlocklyPanel;
 import com.google.appinventor.client.editor.youngandroid.YaBlocksEditor;
 import com.google.appinventor.client.explorer.commands.BuildCommand;
 import com.google.appinventor.client.explorer.commands.ChainableCommand;
 import com.google.appinventor.client.explorer.commands.CopyYoungAndroidProjectCommand;
-import com.google.appinventor.client.explorer.commands.DownloadProjectOutputCommand;
 import com.google.appinventor.client.explorer.commands.GenerateYailCommand;
 import com.google.appinventor.client.explorer.commands.SaveAllEditorsCommand;
 import com.google.appinventor.client.explorer.commands.ShowBarcodeCommand;
@@ -25,23 +26,26 @@ import com.google.appinventor.client.tracking.Tracking;
 import com.google.appinventor.client.utils.Downloader;
 import com.google.appinventor.client.widgets.DropDownButton;
 import com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
+import com.google.appinventor.client.wizards.ComponentImportWizard;
+import com.google.appinventor.client.wizards.ComponentUploadWizard;
 import com.google.appinventor.client.wizards.DownloadUserSourceWizard;
 import com.google.appinventor.client.wizards.KeystoreUploadWizard;
 import com.google.appinventor.client.wizards.ProjectUploadWizard;
 import com.google.appinventor.client.wizards.TemplateUploadWizard;
-import com.google.appinventor.client.wizards.ComponentImportWizard;
-import com.google.appinventor.client.wizards.ComponentUploadWizard;
 import com.google.appinventor.client.wizards.youngandroid.NewYoungAndroidProjectWizard;
+
+import com.google.appinventor.common.utils.StringUtils;
 import com.google.appinventor.common.version.AppInventorFeatures;
 import com.google.appinventor.common.version.GitBuildId;
+
 import com.google.appinventor.components.common.YaVersion;
+
 import com.google.appinventor.shared.rpc.ServerLayout;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjectNode;
 import com.google.appinventor.shared.rpc.user.Config;
 import com.google.appinventor.shared.storage.StorageUtil;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -57,8 +61,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
 
 
 /**
@@ -223,7 +225,7 @@ public class TopToolbar extends Composite {
   }
 
   private void createProjectsMenu() {
-    List<DropDownItem> fileItems = Lists.newArrayList();
+    List<DropDownItem> fileItems = new ArrayList<>();
     fileItems.add(new DropDownItem(WIDGET_NAME_MY_PROJECTS, MESSAGES.projectMenuItem(),
         new SwitchToProjectAction()));
     fileItems.add(null);
@@ -266,7 +268,7 @@ public class TopToolbar extends Composite {
   }
 
   private void createConnectMenu() {
-    List<DropDownItem> connectItems = Lists.newArrayList();
+    List<DropDownItem> connectItems = new ArrayList<>();
     connectItems.add(new DropDownItem(WIDGET_NAME_WIRELESS_BUTTON,
         MESSAGES.AICompanionMenuItem(), new WirelessAction()));
     if (iamChromebook) {
@@ -292,7 +294,7 @@ public class TopToolbar extends Composite {
   }
 
   private void createBuildMenu() {
-    List<DropDownItem> buildItems = Lists.newArrayList();
+    List<DropDownItem> buildItems = new ArrayList<>();
     buildItems.add(new DropDownItem(WIDGET_NAME_BUILD_ANDROID_APK, MESSAGES.showExportAndroidApk(),
         new BarcodeAction(false, false)));
     buildItems.add(new DropDownItem(WIDGET_NAME_BUILD_ANDROID_AAB, MESSAGES.showExportAndroidAab(),
@@ -329,7 +331,7 @@ public class TopToolbar extends Composite {
   }
 
   private void createSettingsMenu() {
-    List<DropDownItem> settingsItems = Lists.newArrayList();
+    List<DropDownItem> settingsItems = new ArrayList<>();
     if (Ode.getUserAutoloadProject()) {
       settingsItems.add(new DropDownItem(WIDGET_NAME_AUTOLOAD, MESSAGES.disableAutoload(),
           new DisableAutoloadAction()));
@@ -348,44 +350,44 @@ public class TopToolbar extends Composite {
   }
 
   private void createHelpMenu() {
-    List<DropDownItem> helpItems = Lists.newArrayList();
+    List<DropDownItem> helpItems = new ArrayList<>();
     helpItems.add(new DropDownItem(WIDGET_NAME_ABOUT, MESSAGES.aboutMenuItem(),
         new AboutAction()));
     helpItems.add(null);
     Config config = Ode.getSystemConfig();
     String libraryUrl = config.getLibraryUrl();
-    if (!Strings.isNullOrEmpty(libraryUrl)) {
+    if (!StringUtils.isNullOrEmpty(libraryUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_LIBRARY, MESSAGES.libraryMenuItem(),
           new WindowOpenAction(libraryUrl)));
     }
     String getStartedUrl = config.getGetStartedUrl();
-    if (!Strings.isNullOrEmpty(getStartedUrl)) {
+    if (!StringUtils.isNullOrEmpty(getStartedUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_GETSTARTED, MESSAGES.getStartedMenuItem(),
           new WindowOpenAction(getStartedUrl)));
     }
     String extensionsUrl = config.getExtensionsUrl();
-    if (!Strings.isNullOrEmpty(extensionsUrl)) {
+    if (!StringUtils.isNullOrEmpty(extensionsUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_EXTENSIONS, MESSAGES.extensionsMenuItem(),
           new WindowOpenAction(extensionsUrl)));
     }
     String tutorialsUrl = config.getTutorialsUrl();
-    if (!Strings.isNullOrEmpty(tutorialsUrl)) {
+    if (!StringUtils.isNullOrEmpty(tutorialsUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_TUTORIALS, MESSAGES.tutorialsMenuItem(),
           new WindowOpenAction(tutorialsUrl)));
     }
     String troubleshootingUrl = config.getTroubleshootingUrl();
-    if (!Strings.isNullOrEmpty(troubleshootingUrl)) {
+    if (!StringUtils.isNullOrEmpty(troubleshootingUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_TROUBLESHOOTING, MESSAGES.troubleshootingMenuItem(),
           new WindowOpenAction(troubleshootingUrl)));
     }
     String forumsUrl = config.getForumsUrl();
-    if (!Strings.isNullOrEmpty(forumsUrl)) {
+    if (!StringUtils.isNullOrEmpty(forumsUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_FORUMS, MESSAGES.forumsMenuItem(),
           new WindowOpenAction(forumsUrl)));
     }
     helpItems.add(null);
     String feedbackUrl = config.getFeedbackUrl();
-    if (!Strings.isNullOrEmpty(feedbackUrl)) {
+    if (!StringUtils.isNullOrEmpty(feedbackUrl)) {
       helpItems.add(new DropDownItem(WIDGET_NAME_FEEDBACK, MESSAGES.feedbackMenuItem(),
           new WindowOpenAction(feedbackUrl)));
       helpItems.add(null);
@@ -403,7 +405,7 @@ public class TopToolbar extends Composite {
     if (adminDropDown == null) {
       return;  // the button won't exist if the user isn't an admin
     }
-    List<DropDownItem> adminItems = Lists.newArrayList();
+    List<DropDownItem> adminItems = new ArrayList<>();
     adminItems.add(new DropDownItem(WIDGET_NAME_DOWNLOAD_USER_SOURCE,
         MESSAGES.downloadUserSourceMenuItem(), new DownloadUserSourceAction()));
     adminItems.add(new DropDownItem(WIDGET_NAME_SWITCH_TO_DEBUG,
@@ -854,12 +856,12 @@ public class TopToolbar extends Composite {
           "<BR/>" + MESSAGES.targetSdkVersion(YaVersion.TARGET_SDK_VERSION, YaVersion.TARGET_ANDROID_VERSION);
       Config config = Ode.getInstance().getSystemConfig();
       String releaseNotesUrl = config.getReleaseNotesUrl();
-      if (!Strings.isNullOrEmpty(releaseNotesUrl)) {
+      if (!StringUtils.isNullOrEmpty(releaseNotesUrl)) {
         html += "<BR/><BR/>Please see <a href=\"" + releaseNotesUrl +
             "\" target=\"_blank\">release notes</a>";
       }
       String tosUrl = config.getTosUrl();
-      if (!Strings.isNullOrEmpty(tosUrl)) {
+      if (!StringUtils.isNullOrEmpty(tosUrl)) {
         html += "<BR/><BR/><a href=\"" + tosUrl +
             "\" target=\"_blank\">" + MESSAGES.privacyTermsLink() + "</a>";
       }

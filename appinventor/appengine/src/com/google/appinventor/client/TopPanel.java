@@ -6,6 +6,8 @@
 
 package com.google.appinventor.client;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
 import com.google.appinventor.client.boxes.MotdBox;
 import com.google.appinventor.client.boxes.ProjectListBox;
 
@@ -14,14 +16,14 @@ import com.google.appinventor.client.explorer.commands.SaveAllEditorsCommand;
 
 import com.google.appinventor.client.tracking.Tracking;
 
-import com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
 import com.google.appinventor.client.widgets.DropDownButton;
+import com.google.appinventor.client.widgets.DropDownButton.DropDownItem;
 import com.google.appinventor.client.widgets.TextButton;
 
+import com.google.appinventor.common.utils.StringUtils;
 import com.google.appinventor.shared.rpc.project.ProjectRootNode;
 import com.google.appinventor.shared.rpc.user.Config;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -39,10 +41,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
 
 /**
  * The top panel, which contains the main menu, various links plus ads.
@@ -145,7 +146,7 @@ public class TopPanel extends Composite {
 
     Config config = ode.getSystemConfig();
     String guideUrl = config.getGuideUrl();
-    if (!Strings.isNullOrEmpty(guideUrl)) {
+    if (!StringUtils.isNullOrEmpty(guideUrl)) {
       TextButton guideLink = new TextButton(MESSAGES.guideTabName());
       guideLink.addClickHandler(new WindowOpenClickHandler(guideUrl));
       guideLink.setStyleName("ode-TopPanelButton");
@@ -154,7 +155,7 @@ public class TopPanel extends Composite {
 
     // Feedback Link
     String feedbackUrl = config.getFeedbackUrl();
-    if (!Strings.isNullOrEmpty(feedbackUrl)) {
+    if (!StringUtils.isNullOrEmpty(feedbackUrl)) {
       TextButton feedbackLink = new TextButton(MESSAGES.feedbackTabName());
       feedbackLink.addClickHandler(
         new WindowOpenClickHandler(feedbackUrl));
@@ -171,7 +172,7 @@ public class TopPanel extends Composite {
     account.setStyleName("ode-TopPanelAccount");
 
     // Account Drop Down Button
-    List<DropDownItem> userItems = Lists.newArrayList();
+    List<DropDownItem> userItems = new ArrayList<>();
 
     // Sign Out
     userItems.add(new DropDownItem(WIDGET_NAME_SIGN_OUT, MESSAGES.signOutLink(), new SignOutAction()));
@@ -184,7 +185,7 @@ public class TopPanel extends Composite {
     accountButton.setStyleName("ode-TopPanelButton");
 
     // Language
-    List<DropDownItem> languageItems = Lists.newArrayList();
+    List<DropDownItem> languageItems = new ArrayList<>();
     String[] localeNames = LocaleInfo.getAvailableLocaleNames();
     String nativeName;
     for (String localeName : localeNames) {
@@ -238,7 +239,7 @@ public class TopPanel extends Composite {
     logo.setSize("180px", "40px");
     logo.setStyleName("ode-Logo");
     String logoUrl = ode.getSystemConfig().getLogoUrl();
-    if (!Strings.isNullOrEmpty(logoUrl)) {
+    if (!StringUtils.isNullOrEmpty(logoUrl)) {
       logo.addClickHandler(new WindowOpenClickHandler(logoUrl));
     }
     panel.add(logo);

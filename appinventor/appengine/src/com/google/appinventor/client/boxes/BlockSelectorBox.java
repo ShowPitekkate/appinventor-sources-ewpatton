@@ -2,6 +2,8 @@
 
 package com.google.appinventor.client.boxes;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
 import com.google.appinventor.client.ComponentsTranslation;
 import com.google.appinventor.client.Images;
 import com.google.appinventor.client.Ode;
@@ -12,7 +14,6 @@ import com.google.appinventor.client.explorer.SourceStructureExplorerItem;
 import com.google.appinventor.client.output.OdeLog;
 import com.google.appinventor.client.widgets.boxes.Box;
 import com.google.appinventor.shared.settings.SettingsConstants;
-import com.google.common.collect.Maps;
 import com.google.gwt.dom.client.NativeEvent;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
@@ -24,12 +25,11 @@ import com.google.gwt.user.client.ui.TreeItem;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
 
 /**
  * Box implementation for block selector. Shows a tree containing the built-in
@@ -82,7 +82,7 @@ public final class BlockSelectorBox extends Box {
           "Variables", "Procedures"));
 
   private static final Images images = Ode.getImageBundle();
-  private static final Map<String, ImageResource> bundledImages = Maps.newHashMap();
+  private static final Map<String, ImageResource> bundledImages = new HashMap<>();
 
   // Source structure explorer (for components and built-in blocks)
   private final SourceStructureExplorer sourceStructureExplorer;
@@ -220,7 +220,7 @@ public final class BlockSelectorBox extends Box {
    * @return tree item for this form
    */
   public TreeItem getGenericComponentsTree(MockForm form) {
-    Map<String, String> typesAndIcons = Maps.newHashMap();
+    Map<String, String> typesAndIcons = new HashMap<>();
     form.collectTypesAndIcons(typesAndIcons);
     TreeItem advanced = new TreeItem(new HTML("<span>" + MESSAGES.anyComponentLabel() + "</span>"));
     List<String> typeList = new ArrayList<String>(typesAndIcons.keySet());

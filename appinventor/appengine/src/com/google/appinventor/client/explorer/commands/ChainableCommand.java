@@ -10,7 +10,6 @@ import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.tracking.Tracking;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
-import com.google.common.base.Preconditions;
 import com.google.gwt.core.client.Duration;
 import com.google.gwt.user.client.Command;
 
@@ -128,7 +127,9 @@ public abstract class ChainableCommand {
     // If you are calling startExecuteChain with null for the node parameter, maybe you should
     // question why you are using a ChainableCommand at all. ChainableCommands were designed to
     // perform an operation on a ProjectNode.
-    Preconditions.checkNotNull(node);
+    if (node == null) {
+      throw new NullPointerException();
+    }
 
     setFinallyCommand(finallyCommand);
     initTrackingInformation(actionName, new Duration());

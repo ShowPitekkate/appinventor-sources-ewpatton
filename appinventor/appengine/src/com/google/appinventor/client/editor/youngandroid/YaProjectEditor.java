@@ -41,7 +41,6 @@ import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidProjec
 import com.google.appinventor.shared.rpc.project.youngandroid.YoungAndroidSourceNode;
 import com.google.appinventor.shared.storage.StorageUtil;
 import com.google.appinventor.shared.youngandroid.YoungAndroidSourceAnalyzer;
-import com.google.common.collect.Maps;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.json.client.JSONException;
@@ -80,7 +79,7 @@ public final class YaProjectEditor extends ProjectEditor implements ProjectChang
   }
 
   // Maps form name -> editors for this form
-  private final HashMap<String, EditorSet> editorMap = Maps.newHashMap();
+  private final HashMap<String, EditorSet> editorMap = new HashMap<>();
   
   // List of External Components
   private final List<String> externalComponents = new ArrayList<String>();

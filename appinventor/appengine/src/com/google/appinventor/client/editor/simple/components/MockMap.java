@@ -6,13 +6,13 @@
 package com.google.appinventor.client.editor.simple.components;
 
 import static com.google.appinventor.client.Ode.MESSAGES;
+import static java.util.Arrays.asList;
 
 import com.google.appinventor.client.ErrorReporter;
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.editor.simple.palette.SimplePaletteItem;
 import com.google.appinventor.client.widgets.dnd.DragSource;
 import com.google.appinventor.components.common.ComponentConstants;
-import com.google.common.collect.Sets;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.user.client.Event;
@@ -25,7 +25,11 @@ import java.util.Set;
 
 public final class MockMap extends MockContainer {
   public static final String TYPE = "Map";
-  public static final Set<String> ACCEPTABLE_TYPES = Collections.unmodifiableSet(Sets.newHashSet(MockMarker.TYPE, MockLineString.TYPE, MockPolygon.TYPE, MockRectangle.TYPE, MockCircle.TYPE, MockFeatureCollection.TYPE));
+  public static final Set<String> ACCEPTABLE_TYPES =
+      Collections.unmodifiableSet(new HashSet<>(asList(
+          MockMarker.TYPE, MockLineString.TYPE, MockPolygon.TYPE, MockRectangle.TYPE,
+          MockCircle.TYPE, MockFeatureCollection.TYPE)));
+
   protected static final String PROPERTY_NAME_LATITUDE = "Latitude";
   protected static final String PROPERTY_NAME_LONGITUDE = "Longitude";
   protected static final String PROPERTY_NAME_MAP_TYPE = "MapType";

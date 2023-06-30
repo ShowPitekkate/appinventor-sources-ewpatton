@@ -3,15 +3,19 @@
 // Copyright 2011-2019 MIT, All rights reserved
 // Released under the Apache License, Version 2.0
 // http://www.apache.org/licenses/LICENSE-2.0
+
 package com.google.appinventor.components.runtime;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.util.Log;
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
-import com.google.api.client.json.JsonFactory;
 import com.google.api.client.http.HttpTransport;
-import com.google.api.services.fusiontables.Fusiontables;
-import com.google.api.services.fusiontables.Fusiontables.Query.Sql;
+import com.google.api.client.json.JsonFactory;
 import com.google.appinventor.components.annotations.DesignerComponent;
 import com.google.appinventor.components.annotations.DesignerProperty;
 import com.google.appinventor.components.annotations.PropertyCategory;
@@ -19,7 +23,6 @@ import com.google.appinventor.components.annotations.SimpleEvent;
 import com.google.appinventor.components.annotations.SimpleFunction;
 import com.google.appinventor.components.annotations.SimpleObject;
 import com.google.appinventor.components.annotations.SimpleProperty;
-import com.google.appinventor.components.annotations.UsesLibraries;
 import com.google.appinventor.components.annotations.UsesPermissions;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.components.common.PropertyTypeConstants;
@@ -30,14 +33,15 @@ import com.google.appinventor.components.runtime.util.IClientLoginHelper;
 import com.google.appinventor.components.runtime.util.MediaUtil;
 import com.google.appinventor.components.runtime.util.OAuth2Helper;
 import com.google.appinventor.components.runtime.util.SdkLevel;
-
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.util.Log;
-
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Collections;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -50,16 +54,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Appinventor fusiontables control.
@@ -134,17 +128,6 @@ import java.util.Collections;
     "android.permission.USE_CREDENTIALS," +
     "android.permission.WRITE_EXTERNAL_STORAGE," +
     "android.permission.READ_EXTERNAL_STORAGE")
-@UsesLibraries(libraries =
-    "fusiontables.jar," +
-    "google-api-client.jar," +
-    "google-api-client-android2-beta.jar," +
-    "google-http-client.jar," +
-    "google-http-client-android2-beta.jar," +
-    "google-http-client-android3-beta.jar," +
-    "google-oauth-client.jar," +
-    "guava.jar," +
-    "gson-2.1.jar")
-
 public class FusiontablesControl extends AndroidNonvisibleComponent implements Component {
   private static final String LOG_TAG = "FUSION";
 

@@ -5,10 +5,11 @@
 
 package com.google.appinventor.client.widgets.properties;
 
+import static com.google.appinventor.client.Ode.MESSAGES;
+
+import com.google.appinventor.client.ComponentsTranslation;
 import com.google.appinventor.client.Ode;
 import com.google.appinventor.client.editor.simple.SimpleComponentDatabase;
-import static com.google.appinventor.client.Ode.MESSAGES;
-import com.google.appinventor.client.ComponentsTranslation;
 import com.google.appinventor.client.editor.youngandroid.YaProjectEditor;
 import com.google.appinventor.client.explorer.project.Project;
 import com.google.appinventor.client.explorer.project.ProjectChangeListener;
@@ -18,7 +19,6 @@ import com.google.appinventor.common.utils.StringUtils;
 import com.google.appinventor.components.common.ComponentCategory;
 import com.google.appinventor.shared.rpc.project.ProjectNode;
 import com.google.appinventor.shared.simple.ComponentDatabaseInterface;
-import com.google.common.collect.Lists;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.client.JsArray;
 import com.google.gwt.dom.client.Element;
@@ -51,7 +51,7 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -72,12 +72,7 @@ public class SubsetJSONPropertyEditor  extends PropertyEditor
     file.addChangeHandler(new ChangeHandler() {
       @Override
       public void onChange(ChangeEvent changeEvent) {
-        if (customPopupShowing) {
-          loadJSONfile(file, false);
-        }
-        else {
-          loadJSONfile(file, true);
-        }
+        loadJSONfile(file, !customPopupShowing);
       }
     });
 
@@ -89,31 +84,35 @@ public class SubsetJSONPropertyEditor  extends PropertyEditor
     invisibleFilePanel.setVisible(false);
     invisibleFilePanel.show();
 
-    List<DropDownButton.DropDownItem> items = Lists.newArrayList();
+    List<DropDownButton.DropDownItem> items = new ArrayList<>();
     items.add(new DropDownButton.DropDownItem("Subset Property Editor", MESSAGES.allButton(), new Command() {
       @Override
       public void execute() {
         property.setValue("");
         updateValue();
-      }}));
+      }
+    }));
     items.add(new DropDownButton.DropDownItem("Subset Property Editor", MESSAGES.matchProjectButton(), new Command() {
       @Override
       public void execute() {
         matchProject();
         property.setValue(createJSONString());
         updateValue();
-      }}));
+      }
+    }));
     items.add(new DropDownButton.DropDownItem("Subset Property Editor", MESSAGES.fileUploadWizardCaption(), new Command() {
       @Override
       public void execute() {
         file.click();
-      }}));
+      }
+    }));
 
     items.add(new DropDownButton.DropDownItem("Subset Property Editor", MESSAGES.viewAndModifyButton(), new Command() {
       @Override
       public void execute() {
         showCustomSubsetPanel();
-      }}));
+      }
+    }));
     dropDownButton = new DropDownButton("Subset Property Editor", "", items, false);
     dropDownButton.setStylePrimaryName("ode-ChoicePropertyEditor");
     initWidget(dropDownButton);
@@ -122,7 +121,7 @@ public class SubsetJSONPropertyEditor  extends PropertyEditor
   }
 
   protected void showCustomSubsetPanel() {
-    if (property.getValue() != "") {
+    if (!StringUtils.isNullOrEmpty(property.getValue())) {
       JSONObject jsonSet = JSONParser.parseStrict(property.getValue()).isObject();
       loadComponents(jsonSet);
       loadGlobalBlocks(jsonSet);
@@ -130,13 +129,13 @@ public class SubsetJSONPropertyEditor  extends PropertyEditor
       clearSelections();
     }
 
-    if (customPopup.getTitle() != MESSAGES.blocksToolkitTitle()) {
+    if (!customPopup.getTitle().equals(MESSAGES.blocksToolkitTitle())) {
       final DockLayoutPanel treePanel = new DockLayoutPanel(Style.Unit.PCT);
       VerticalPanel componentPanel = new VerticalPanel();
       VerticalPanel blockPanel = new VerticalPanel();
-      HorizontalPanel buttonPanel = new HorizontalPanel();
+      final HorizontalPanel buttonPanel = new HorizontalPanel();
       final ScrollPanel componentScroll = new ScrollPanel(componentPanel);
-      ScrollPanel blockScroll = new ScrollPanel(blockPanel);
+      final ScrollPanel blockScroll = new ScrollPanel(blockPanel);
 
       componentPanel.add(new Label(MESSAGES.sourceStructureBoxCaption()));
       componentPanel.add(componentTree);

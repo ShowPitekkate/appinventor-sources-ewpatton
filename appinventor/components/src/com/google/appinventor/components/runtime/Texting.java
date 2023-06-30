@@ -165,8 +165,7 @@ import org.json.JSONObject;
   "google-http-client.jar," +
   "google-http-client-android2-beta.jar," +
   "google-http-client-android3-beta.jar," +
-  "google-oauth-client.jar," +
-  "guava.jar")
+  "google-oauth-client.jar")
 public class Texting extends AndroidNonvisibleComponent
   implements Component, OnResumeListener, OnPauseListener, OnInitializeListener, OnStopListener,
     Deleteable, ActivityResultListener {

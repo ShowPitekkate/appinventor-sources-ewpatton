@@ -6,12 +6,15 @@
 
 package com.google.appinventor.client;
 
-import com.google.common.base.Strings;
+import static com.google.appinventor.client.Ode.MESSAGES;
+
+import com.google.appinventor.common.utils.StringUtils;
+import com.google.appinventor.common.version.AppInventorFeatures;
+import com.google.appinventor.common.version.GitBuildId;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-
-import static com.google.appinventor.client.Ode.MESSAGES;
+import com.google.gwt.user.client.ui.Label;
 
 
 /**
@@ -26,21 +29,23 @@ public class StatusPanel extends Composite {
     HorizontalPanel hpanel = new HorizontalPanel();
     hpanel.setWidth("100%");
     hpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
-    String tosUrl = Ode.getInstance().getSystemConfig().getTosUrl();
-    if (!Strings.isNullOrEmpty(tosUrl)) {
+    String tosUrl = Ode.getSystemConfig().getTosUrl();
+    if (!StringUtils.isNullOrEmpty(tosUrl)) {
       String appInventorFooter =
           "<a href=\"" + tosUrl + "\" target=\"_blank\">" + MESSAGES.privacyTermsLink() + "</a>";
       hpanel.add(new HTML(appInventorFooter));
     }
 
-    // This shows the git version and the date of the build
-//    String version = GitBuildId.getVersion();
-//    String date = GitBuildId.getDate();
-//    if (version != null && date != null) {
-//      Label buildId = new Label(MESSAGES.gitBuildId(date, version));
-//      hpanel.add(buildId);
-//      hpanel.setCellHorizontalAlignment(buildId, HorizontalPanel.ALIGN_RIGHT);
-//    }
+    if (AppInventorFeatures.showGitVersionInfo()) {
+      // This shows the git version and the date of the build
+      String version = GitBuildId.getVersion();
+      String date = GitBuildId.getDate();
+      if (version != null && date != null) {
+        Label buildId = new Label(MESSAGES.gitBuildId(date, version));
+        hpanel.add(buildId);
+        hpanel.setCellHorizontalAlignment(buildId, HorizontalPanel.ALIGN_RIGHT);
+      }
+    }
 
     initWidget(hpanel);
     setStyleName("ode-StatusPanel");

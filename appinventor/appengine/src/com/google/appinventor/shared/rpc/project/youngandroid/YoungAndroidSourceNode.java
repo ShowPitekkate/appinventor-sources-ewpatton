@@ -6,7 +6,6 @@
 
 package com.google.appinventor.shared.rpc.project.youngandroid;
 
-import com.google.common.base.Preconditions;
 import com.google.appinventor.shared.rpc.project.SourceNode;
 import com.google.appinventor.shared.storage.StorageUtil;
 import com.google.appinventor.shared.youngandroid.YoungAndroidSourceAnalyzer;
@@ -52,11 +51,13 @@ public abstract class YoungAndroidSourceNode extends SourceNode {
    * @return  qualified name
    */
   public static String getQualifiedName(String sourceFileId) {
-    Preconditions.checkArgument(sourceFileId.startsWith(SRC_PREFIX) && (
-        sourceFileId.endsWith(YoungAndroidSourceAnalyzer.FORM_PROPERTIES_EXTENSION) ||
-        sourceFileId.endsWith(YoungAndroidSourceAnalyzer.CODEBLOCKS_SOURCE_EXTENSION) ||
-        sourceFileId.endsWith(YoungAndroidSourceAnalyzer.BLOCKLY_SOURCE_EXTENSION) ||
-        sourceFileId.endsWith(YoungAndroidSourceAnalyzer.YAIL_FILE_EXTENSION)));
+    if (!(sourceFileId.startsWith(SRC_PREFIX) && (
+        sourceFileId.endsWith(YoungAndroidSourceAnalyzer.FORM_PROPERTIES_EXTENSION)
+            || sourceFileId.endsWith(YoungAndroidSourceAnalyzer.CODEBLOCKS_SOURCE_EXTENSION)
+            || sourceFileId.endsWith(YoungAndroidSourceAnalyzer.BLOCKLY_SOURCE_EXTENSION)
+            || sourceFileId.endsWith(YoungAndroidSourceAnalyzer.YAIL_FILE_EXTENSION)))) {
+      throw new IllegalArgumentException();
+    }
 
     String name = sourceFileId.substring(SRC_PREFIX.length());
     name = StorageUtil.trimOffExtension(name);

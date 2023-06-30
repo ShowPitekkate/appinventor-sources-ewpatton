@@ -9,7 +9,6 @@ package com.google.appinventor.client.editor.simple.components;
 
 import com.google.appinventor.client.editor.simple.SimpleEditor;
 import com.google.appinventor.client.output.OdeLog;
-import com.google.common.primitives.Ints;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ErrorEvent;
 import com.google.gwt.event.dom.client.ErrorHandler;
@@ -130,8 +129,8 @@ abstract class MockImageBase extends MockVisibleComponent {
       return;
     }
 
-    int frameWidth = Ints.tryParse(width.substring(0, width.indexOf("px")));
-    int frameHeight = Ints.tryParse(height.substring(0, height.indexOf("px")));
+    int frameWidth = Integer.parseInt(width.substring(0, width.indexOf("px")));
+    int frameHeight = Integer.parseInt(height.substring(0, height.indexOf("px")));
 
     if (scalingMode.equals("0")) {
       float ratio = Math.min(frameWidth / (float) getPreferredWidth(),
