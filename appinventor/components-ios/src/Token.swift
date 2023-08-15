@@ -13,7 +13,7 @@
 // limitations under the License.
 import Foundation
 
-public struct Token : Codable {
+public struct OAuth2Token : Codable {
   public var AccessToken : String?
   public var TokenType : String?
   public var ExpiresIn : Int?

@@ -43,7 +43,7 @@ struct ServiceAccountCredentials : Codable {
 }
 
 public class ServiceAccountTokenProvider : TokenProvider {
-  public var token: Token?
+  public var token: OAuth2Token?
   
   var credentials : ServiceAccountCredentials
   var scopes : [String]
@@ -72,7 +72,7 @@ public class ServiceAccountTokenProvider : TokenProvider {
     self.init(credentialsData:credentialsData, scopes:scopes)
   }
   
-  public func withToken(_ callback:@escaping (Token?, Error?) -> Void) throws {
+  public func withToken(_ callback:@escaping (OAuth2Token?, Error?) -> Void) throws {
 
     // leave spare at least one second :)
     if let token = token, token.timeToExpiry() > 1 {
@@ -89,9 +89,12 @@ public class ServiceAccountTokenProvider : TokenProvider {
                                   Expiration: Int(exp.timeIntervalSince1970))
     let jwtHeader = JWTHeader(Algorithm: "RS256",
                               Format: "JWT")
+    let start2 = DispatchTime.now().uptimeNanoseconds
     let msg = try JWT.encodeWithRS256(jwtHeader:jwtHeader,
                                       jwtClaimSet:jwtClaimSet,
                                       rsaKey:rsaKey)
+    let time2 = Double(DispatchTime.now().uptimeNanoseconds - start2) / 1000000.0
+    print("Encoding JWT took \(time2)")
     let json: [String: Any] = ["grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
                            "assertion": msg]
     let data = try JSONSerialization.data(withJSONObject: json)
@@ -100,12 +103,15 @@ public class ServiceAccountTokenProvider : TokenProvider {
     urlRequest.httpMethod = "POST"
     urlRequest.httpBody = data
     urlRequest.setValue("application/json", forHTTPHeaderField:"Content-Type")
-    
+
+    let start = DispatchTime.now().uptimeNanoseconds
     let session = URLSession(configuration: URLSessionConfiguration.default)
     let task: URLSessionDataTask = session.dataTask(with:urlRequest)
     {(data, response, error) -> Void in
+      let x = Double(DispatchTime.now().uptimeNanoseconds - start) / 1000000.0
+      print("URL request took \(x)")
       if let data = data,
-        let token = try? JSONDecoder().decode(Token.self, from: data) {
+        let token = try? JSONDecoder().decode(OAuth2Token.self, from: data) {
         self.token = token
         self.token?.CreationTime = Date()
         callback(self.token, error)

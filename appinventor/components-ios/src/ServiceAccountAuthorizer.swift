@@ -1,32 +1,30 @@
-//
-//  ServiceAccountAuthorizer.swift
-//  AIComponentKit
-//
-//  Created by Evan Patton on 8/13/23.
-//  Copyright © 2023 Massachusetts Institute of Technology. All rights reserved.
-//
+// -*- mode: swift; swift-mode:basic-offset: 2; -*-
+// Copyright 2023 MIT, All rights reserved
+// Released under the Apache License, Version 2.0
+// http://www.apache.org/licenses/LICENSE-2.0
 
 import Foundation
 import GTMSessionFetcher
-import AuthLibrary
 
-@available(iOS 13.0.0, *)
-@objc class ServiceAccountAuthorizer : NSObject, GTMSessionFetcherAuthorizer {
+@objc class ServiceAccountAuthorizer : NSObject, GTMFetcherAuthorizationProtocol {
 
   let tokenProvider: ServiceAccountTokenProvider
   var request: NSMutableURLRequest? = nil
   var canceled = false
 
-  public init(serviceAccountConfig: Data) {
+  public init(serviceAccountConfig: Data, scopes: [String]) {
+    self.tokenProvider = ServiceAccountTokenProvider(credentialsData: serviceAccountConfig, scopes: scopes)!
     super.init()
-    self.tokenProvider = ServiceAccountTokenProvider(credentialsData: serviceAccountConfig, scopes: [])!
+    self.userEmail = self.tokenProvider.credentials.ClientEmail
   }
 
   func authorizeRequest(_ request: NSMutableURLRequest?, completionHandler handler: @escaping (Error?) -> Void) {
     do {
       self.request = request
       self.canceled = false
+      let start = DispatchTime.now().uptimeNanoseconds
       try tokenProvider.withToken { token, error in
+        print("Time for token = \(Double(DispatchTime.now().uptimeNanoseconds - start)/1000000.0)")
         if let token = token, let accessToken = token.AccessToken, !self.canceled {
           request?.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         }
@@ -41,7 +39,7 @@ import AuthLibrary
 
   func authorizeRequest(_ request: NSMutableURLRequest?, delegate: Any, didFinish sel: Selector) {
     authorizeRequest(request) { error in
-      (delegate as AnyObject).performSelector(onMainThread: sel, with: error, waitUntilDone: true)
+      OAuth2CallbackHelper.doCallback(withDelegate: delegate, selector: sel, authorizer: self, request: request, error: error)
     }
   }
 

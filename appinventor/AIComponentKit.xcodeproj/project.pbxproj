@@ -47,7 +47,7 @@
 		062832981DBE95A7009605D5 /* Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062832971DBE95A7009605D5 /* Layout.swift */; };
 		0633F360297D0AD700C3C3E9 /* tr.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0633F35F297D0AD700C3C3E9 /* tr.pb.swift */; };
 		0633F362297D0B1400C3C3E9 /* Translator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0633F361297D0B1400C3C3E9 /* Translator.swift */; };
-		064326B9289602770001297F /* GoogleSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064326B8289602770001297F /* GoogleSheets.swift */; };
+		064326B9289602770001297F /* Spreadsheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 064326B8289602770001297F /* Spreadsheet.swift */; };
 		0644F6C01F37CAD800642E4D /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0644F6BF1F37CAD800642E4D /* Player.swift */; };
 		0644F6C21F37D20700642E4D /* LifecycleDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0644F6C11F37D20700642E4D /* LifecycleDelegate.swift */; };
 		0644F7031F38EDF200642E4D /* LinearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0644F7021F38EDF200642E4D /* LinearView.swift */; };
@@ -119,6 +119,8 @@
 		06C70BAE2A8BB73600C6C78D /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C70BAC2A8BB73500C6C78D /* Token.swift */; };
 		06C70BAF2A8BB73600C6C78D /* TokenProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C70BAD2A8BB73600C6C78D /* TokenProvider.swift */; };
 		06C70BB12A8BB76B00C6C78D /* ServiceAccountAuthorizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C70BB02A8BB76B00C6C78D /* ServiceAccountAuthorizer.swift */; };
+		06C70BB42A8BCF9D00C6C78D /* OAuth2CallbackHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 06C70BB22A8BCF9D00C6C78D /* OAuth2CallbackHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		06C70BB52A8BCF9D00C6C78D /* OAuth2CallbackHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 06C70BB32A8BCF9D00C6C78D /* OAuth2CallbackHelper.m */; };
 		06C8CE962A3B5EFA00C39EBC /* chat.pb.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C8CE932A3B5EFA00C39EBC /* chat.pb.swift */; };
 		06C8CE982A3B5EFA00C39EBC /* ChatBot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C8CE952A3B5EFA00C39EBC /* ChatBot.swift */; };
 		06C94A391D99D10400341AAE /* EventDispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06C94A381D99D10400341AAE /* EventDispatcher.swift */; };
@@ -299,7 +301,7 @@
 		062832971DBE95A7009605D5 /* Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layout.swift; sourceTree = "<group>"; };
 		0633F35F297D0AD700C3C3E9 /* tr.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = tr.pb.swift; sourceTree = "<group>"; };
 		0633F361297D0B1400C3C3E9 /* Translator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Translator.swift; sourceTree = "<group>"; };
-		064326B8289602770001297F /* GoogleSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSheets.swift; sourceTree = "<group>"; };
+		064326B8289602770001297F /* Spreadsheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spreadsheet.swift; sourceTree = "<group>"; };
 		0644F6BF1F37CAD800642E4D /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		0644F6C11F37D20700642E4D /* LifecycleDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LifecycleDelegate.swift; sourceTree = "<group>"; };
 		0644F7021F38EDF200642E4D /* LinearView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinearView.swift; sourceTree = "<group>"; };
@@ -372,6 +374,8 @@
 		06C70BAC2A8BB73500C6C78D /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		06C70BAD2A8BB73600C6C78D /* TokenProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TokenProvider.swift; sourceTree = "<group>"; };
 		06C70BB02A8BB76B00C6C78D /* ServiceAccountAuthorizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ServiceAccountAuthorizer.swift; sourceTree = "<group>"; };
+		06C70BB22A8BCF9D00C6C78D /* OAuth2CallbackHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAuth2CallbackHelper.h; sourceTree = "<group>"; };
+		06C70BB32A8BCF9D00C6C78D /* OAuth2CallbackHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAuth2CallbackHelper.m; sourceTree = "<group>"; };
 		06C8CE932A3B5EFA00C39EBC /* chat.pb.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = chat.pb.swift; sourceTree = "<group>"; };
 		06C8CE952A3B5EFA00C39EBC /* ChatBot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatBot.swift; sourceTree = "<group>"; };
 		06C94A381D99D10400341AAE /* EventDispatcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventDispatcher.swift; sourceTree = "<group>"; };
@@ -632,6 +636,8 @@
 				06C70BA52A8BB72800C6C78D /* ServiceAccountTokenProvider.swift */,
 				06C70BAC2A8BB73500C6C78D /* Token.swift */,
 				06C70BAD2A8BB73600C6C78D /* TokenProvider.swift */,
+				06C70BB22A8BCF9D00C6C78D /* OAuth2CallbackHelper.h */,
+				06C70BB32A8BCF9D00C6C78D /* OAuth2CallbackHelper.m */,
 			);
 			name = GoogleAuth;
 			sourceTree = "<group>";
@@ -843,7 +849,6 @@
 				06C8CE952A3B5EFA00C39EBC /* ChatBot.swift */,
 				068E0EB01DC251240086FFDA /* Clock.swift */,
 				0417585420098566007D2C31 /* File.swift */,
-				064326B8289602770001297F /* GoogleSheets.swift */,
 				062217F32A37798E00B89562 /* ImageBot.swift */,
 				065E429C2866BC5500479153 /* Navigation.swift */,
 				06E59EA51D92C6C300C42804 /* NonvisibleComponent.swift */,
@@ -854,6 +859,7 @@
 				068E0EB41DC251A20086FFDA /* Sharing.swift */,
 				06E59EAE1D92D14F00C42804 /* Sound.swift */,
 				CBE5DE991FE1C421009A139F /* SoundRecorder.swift */,
+				064326B8289602770001297F /* Spreadsheet.swift */,
 				068E0EB81DC251E90086FFDA /* Texting.swift */,
 				06473B841F327E5400A9A29B /* TextToSpeech.swift */,
 				06B215FF1DB95122000B3366 /* TinyDB.swift */,
@@ -1037,6 +1043,7 @@
 				0618A2941D8CF4EE0013A191 /* AIComponentKit.h in Headers */,
 				06DA9F561D8CFBAB00389B04 /* AIComponentKit-Bridging-Header.h in Headers */,
 				067D1B171D9B398E00A6190E /* RetValManager.h in Headers */,
+				06C70BB42A8BCF9D00C6C78D /* OAuth2CallbackHelper.h in Headers */,
 				06E59EA91D92C7E800C42804 /* NetworkUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1236,6 +1243,7 @@
 				"${BUILT_PRODUCTS_DIR}/Base58Swift/Base58Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/GEOSwift/GEOSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
@@ -1245,6 +1253,7 @@
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSVG/SwiftSVG.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyBase64/SwiftyBase64.framework",
 				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXingObjC/ZXingObjC.framework",
 				"${BUILT_PRODUCTS_DIR}/Zip/Zip.framework",
@@ -1256,6 +1265,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Base58Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GEOSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
@@ -1265,6 +1275,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSVG.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBase64.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXingObjC.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Zip.framework",
@@ -1396,6 +1407,7 @@
 				065E429D2866BC5500479153 /* Navigation.swift in Sources */,
 				DED39C2F2005537D0054B646 /* Camcorder.swift in Sources */,
 				062217F02A37767F00B89562 /* image.pb.swift in Sources */,
+				06C70BB52A8BCF9D00C6C78D /* OAuth2CallbackHelper.m in Sources */,
 				DE91AB931F93FF8F00AB742A /* PhoneNumberPicker.swift in Sources */,
 				DE84293420D3FC6A00094BCB /* GeometryUtil.swift in Sources */,
 				068E0EB11DC251240086FFDA /* Clock.swift in Sources */,
@@ -1404,7 +1416,7 @@
 				068E0EB71DC251BA0086FFDA /* Slider.swift in Sources */,
 				06B215FA1DB950F6000B3366 /* HorizontalArrangement.swift in Sources */,
 				06009FF2227CF5D400E4EC4A /* String+Format.swift in Sources */,
-				064326B9289602770001297F /* GoogleSheets.swift in Sources */,
+				064326B9289602770001297F /* Spreadsheet.swift in Sources */,
 				068E0EB31DC251890086FFDA /* PhoneCall.swift in Sources */,
 				06159D8E1DEFF0C600593D30 /* PasswordTextBox.swift in Sources */,
 				08815DB5210A64CE00FA89F7 /* EvConnection.swift in Sources */,
